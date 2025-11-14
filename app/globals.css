@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Primary Colors */
+  --landing-primary: hsl(177, 70%, 40%);      /* Brand Teal */
+  --landing-accent: hsl(185, 85%, 45%);       /* Accent Cyan */
+  --landing-success: hsl(160, 65%, 45%);      /* Success Green */
+  --landing-warning: hsl(38, 92%, 50%);       /* Warning Amber */
+
+  /* Neutral Light Mode */
+  --landing-bg-base: hsl(210, 25%, 97%);      /* Base Background */
+  --landing-bg-elevated: hsl(210, 20%, 99%);  /* Cards/Elevated */
+  --landing-border: hsl(210, 15%, 88%);       /* Borders */
+  --landing-text-primary: hsl(220, 25%, 15%); /* Primary Text */
+  --landing-text-secondary: hsl(220, 15%, 45%); /* Secondary Text */
+
+  /* Dark Mode */
+  --landing-dark-bg: hsl(220, 40%, 8%);       /* Dark Base */
+  --landing-dark-elevated: hsl(220, 35%, 12%); /* Dark Elevated */
+  --landing-dark-border: hsl(220, 25%, 20%);  /* Dark Borders */
+  --landing-dark-text: hsl(210, 20%, 92%);    /* Dark Text */
+
+  /* Effects */
+  --landing-glow: rgba(31, 181, 173, 0.25);   /* Teal Glow */
+  --landing-shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+  --landing-shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+  --landing-shadow-lg: 0 8px 32px rgba(0,0,0,0.16);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--landing-text-primary);
+  background: var(--landing-bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-snap-type: y mandatory;
+}
+
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+  font-family: 'Vazirmatn', 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
