@@ -22,7 +22,9 @@ const SnapScrollSection = () => {
     isAnimatingRef.current = true;
     activeIndexRef.current = nextIndex;
 
-    target.scrollIntoView({ behavior: "smooth", block: "start" });
+    const rect = target.getBoundingClientRect();
+    const absoluteTop = window.scrollY + rect.top;
+    window.scrollTo({ top: Math.round(absoluteTop), behavior: "smooth" });
 
     if (animationTimeoutRef.current) {
       window.clearTimeout(animationTimeoutRef.current);
@@ -55,6 +57,7 @@ const SnapScrollSection = () => {
       const isScrollingDown = deltaY > 0;
       const firstSlide = slideRefs.current[0];
       const isAtFirstSlide = activeIndexRef.current === 0;
+      const isAtLastSlide = activeIndexRef.current === totalSlides - 1;
 
       if (
         isScrollingDown &&
@@ -73,6 +76,48 @@ const SnapScrollSection = () => {
         }
 
         hasLockedInitialRef.current = true;
+      }
+
+      if (isScrollingDown && isAtLastSlide) {
+        event.preventDefault();
+        if (isAnimatingRef.current) return;
+        const currentSection = containerRef.current as HTMLElement | null;
+        const nextSection = currentSection?.nextElementSibling as HTMLElement | null;
+        if (nextSection) {
+          isAnimatingRef.current = true;
+          const top = Math.round(window.scrollY + nextSection.getBoundingClientRect().top);
+          window.scrollTo({ top, behavior: "smooth" });
+          if (animationTimeoutRef.current) {
+            window.clearTimeout(animationTimeoutRef.current);
+          }
+          animationTimeoutRef.current = window.setTimeout(() => {
+            isAnimatingRef.current = false;
+          }, 650);
+        }
+        return;
+      }
+
+      if (!isScrollingDown && isAtFirstSlide) {
+        const rect = firstSlide?.getBoundingClientRect();
+        const aligned = rect ? Math.abs(rect.top) < 8 : true;
+        if (aligned) {
+          event.preventDefault();
+          if (isAnimatingRef.current) return;
+          const currentSection = containerRef.current as HTMLElement | null;
+          const prevSection = currentSection?.previousElementSibling as HTMLElement | null;
+          if (prevSection) {
+            isAnimatingRef.current = true;
+            const top = Math.round(window.scrollY + prevSection.getBoundingClientRect().top);
+            window.scrollTo({ top, behavior: "smooth" });
+            if (animationTimeoutRef.current) {
+              window.clearTimeout(animationTimeoutRef.current);
+            }
+            animationTimeoutRef.current = window.setTimeout(() => {
+              isAnimatingRef.current = false;
+            }, 650);
+          }
+          return;
+        }
       }
 
       const direction = deltaY > 0 ? 1 : -1;
@@ -135,10 +180,23 @@ const SnapScrollSection = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const setVh = () => {
+      if (typeof window === "undefined") return;
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    };
+    setVh();
+    window.addEventListener("resize", setVh);
+    return () => {
+      window.removeEventListener("resize", setVh);
+    };
+  }, []);
+
   return (
     <section
       ref={containerRef}
-      className="relative isolate w-full overflow-hidden bg-[#010b0f]/70 text-white snap-y snap-mandatory"
+      className="relative isolate w-full overflow-hidden bg-[#010b0f]/70 text-white"
     >
       <div
         aria-hidden
@@ -153,7 +211,8 @@ const SnapScrollSection = () => {
         ref={(el) => {
           slideRefs.current[0] = el;
         }}
-        className="relative z-10 snap-start snap-always min-h-screen"
+        className="relative z-10"
+        style={{ height: "calc(var(--vh, 1vh) * 100)" }}
       >
         <AnimatedNumber_001 />
       </div>
@@ -161,7 +220,8 @@ const SnapScrollSection = () => {
         ref={(el) => {
           slideRefs.current[1] = el;
         }}
-        className="relative z-10 snap-start snap-always min-h-screen"
+        className="relative z-10"
+        style={{ height: "calc(var(--vh, 1vh) * 100)" }}
       >
         <AnimatedNumber_002 />
       </div>
@@ -169,7 +229,8 @@ const SnapScrollSection = () => {
         ref={(el) => {
           slideRefs.current[2] = el;
         }}
-        className="relative z-10 snap-start snap-always min-h-screen"
+        className="relative z-10"
+        style={{ height: "calc(var(--vh, 1vh) * 100)" }}
       >
         <AnimatedNumber_003 />
       </div>
@@ -177,7 +238,8 @@ const SnapScrollSection = () => {
         ref={(el) => {
           slideRefs.current[3] = el;
         }}
-        className="relative z-10 snap-start snap-always min-h-screen"
+        className="relative z-10"
+        style={{ height: "calc(var(--vh, 1vh) * 100)" }}
       >
         <AnimatedNumber_004 />
       </div>
@@ -226,7 +288,7 @@ const AnimatedNumber_001 = () => {
   };
 
   return (
-    <div ref={ref} className="relative z-10 flex h-screen w-full flex-col items-center justify-center px-4 text-slate-100">
+    <div ref={ref} className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100">
       <SlideHalo accent="teal" />
       <div className="top-32 absolute left-1/2 grid -translate-x-1/2 content-start justify-items-center text-center text-slate-100">
         <div className="flex flex-col items-center gap-5">
@@ -329,7 +391,7 @@ export const AnimatedNumber_002 = () => {
   };
 
   return (
-    <div className="relative z-10 flex h-screen w-full flex-col items-center justify-center px-4 text-slate-100">
+    <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100">
       <SlideHalo accent="cyan" />
       <div className="top-32 absolute left-1/2 grid -translate-x-1/2 content-start justify-items-center text-center text-slate-100">
         <div className="flex flex-col items-center gap-5">
@@ -400,7 +462,7 @@ export const AnimatedNumber_003 = () => {
     }, 80);
   };
   return (
-    <div className="relative z-10 flex h-screen w-full flex-col items-center justify-center px-4 text-slate-100">
+    <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100">
       <SlideHalo accent="emerald" />
       <div className="top-32 absolute left-1/2 grid -translate-x-1/2 content-start justify-items-center text-center text-slate-100">
         <div className="flex flex-col items-center gap-5">
@@ -461,7 +523,7 @@ function AnimatedNumber_004() {
   }, [inView, count]);
 
   return (
-    <div className="relative z-10 flex h-screen w-full flex-col items-center justify-center px-4 text-slate-100">
+    <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100">
       <SlideHalo accent="amber" />
       <div className="top-32 absolute left-1/2 grid -translate-x-1/2 content-start justify-items-center text-center text-slate-100">
         <div className="flex flex-col items-center gap-5">
