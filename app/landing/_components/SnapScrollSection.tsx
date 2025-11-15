@@ -196,7 +196,8 @@ const SnapScrollSection = () => {
   return (
     <section
       ref={containerRef}
-      className="relative isolate w-full overflow-hidden bg-[#010b0f]/70 text-white"
+      className="relative isolate w-full overflow-hidden bg-[#010b0f] text-white"
+      style={{ zIndex: 20 }}
     >
       <div
         aria-hidden

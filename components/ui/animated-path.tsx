@@ -16,13 +16,13 @@ interface AnimatedPathProps {
 
 export function AnimatedPath({
   className = "",
-  pathData = "M 298.00 14.00 C 250 80 180 180 125.00 248.00 C 120 300 122 500 128.00 618.00 C 180 700 280 780 356.00 836.00",
+  pathData = "M 353.00 4.00 L 98.00 383.00 Q 98.00 383.00 288.00 671.00 Q 288.00 671.00 858.00 903.00",
   strokeWidth = 14,
-  viewBox = "0 0 400 900",
-  svgWidth = 400,
-  svgHeight = 900,
+  viewBox = "0 0 900 920",
+  svgWidth = 900,
+  svgHeight = 920,
   scrollOffset = ["start 0.6", "end 0.1"],
-  progressRange = [0, 1],
+  progressRange = [0.49, 1],
 }: AnimatedPathProps) {
   const ref = useRef<HTMLDivElement>(null);
   
@@ -40,7 +40,7 @@ export function AnimatedPath({
   const pathLength = useTransform(easedProgress, [0, 1], progressRange);
 
   return (
-    <div ref={ref} className={className}>
+    <div ref={ref} className={className} style={{ width: svgWidth, height: svgHeight }}>
       <svg
         width={svgWidth}
         height={svgHeight}
@@ -48,7 +48,7 @@ export function AnimatedPath({
         fill="none"
         overflow="visible"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full"
+        className="block"
       >
         <defs>
           <linearGradient id="tealStroke" x1="0" y1="0" x2="1" y2="1">

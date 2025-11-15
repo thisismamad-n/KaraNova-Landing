@@ -1,5 +1,6 @@
 import { FeatureSteps } from "@/components/ui/feature-section"
 import { AnimatedPath } from "@/components/ui/animated-path"
+import { SpiderChart } from "@/components/ui/spider-chart"
 
 const featuresFa = [
   {
@@ -34,17 +35,25 @@ interface FeatureStepsDemoProps {
 
 export function FeatureStepsDemo({ language }: FeatureStepsDemoProps) {
   return (
-    <div className="relative">
+    <div className="relative overflow-visible">
       {/* Animated Path - positioned absolutely behind content */}
       <AnimatedPath
-        className="absolute left-1/2 top-20 -translate-x-1/2 pointer-events-none z-0 opacity-15 scale-75 md:scale-90"
-        pathData="M 298.00 14.00 C 250 80 180 180 125.00 248.00 C 120 300 122 500 128.00 618.00 C 180 700 280 780 356.00 836.00"
-        strokeWidth={12}
-        viewBox="0 0 400 900"
-        svgWidth={400}
-        svgHeight={900}
-        scrollOffset={["start 0.7", "end 0.2"]}
+        className="absolute top-[-96px] pointer-events-none z-0 opacity-100 scale-100 md:scale-100 left-[5%] md:left-[-14%] lg:left-[10%]"
+        pathData={"M 353.00 0.00 C 310.50 63.83 108.83 271.17 98.00 383.00 C 87.17 494.83 161.33 551.50 288.00 671.00 C 414.67 790.50 763.00 1028.50 858.00 1100.00"}
+        strokeWidth={14}
+        viewBox="0 0 900 1120"
+        svgWidth={900}
+        svgHeight={1120}
+        scrollOffset={["start 0.6", "end 0.1"]}
         progressRange={[0, 1]}
+      />
+
+      <div 
+        className="absolute top-0 left-0 right-0 pointer-events-none z-[5]"
+        style={{
+          height: '128px',
+          background: 'linear-gradient(to bottom, rgba(3, 37, 43, 1) 0%, rgba(3, 11, 17, 0.95) 16%, rgba(2, 6, 23, 0.62) 46%, rgba(2, 6, 23, 0.28) 76%, transparent 100%)'
+        }}
       />
 
       {/* Feature Steps Content */}
@@ -52,7 +61,20 @@ export function FeatureStepsDemo({ language }: FeatureStepsDemoProps) {
         <FeatureSteps
           features={featuresFa}
           title="سفر کارانوا: از کسب‌وکار گره‌خورده تا اتاق فرمان شفاف"
-          imageHeight="h-[460px] md:h-[500px] lg:h-[540px]"
+          imageHeight="h-[520px] md:h-[560px] lg:h-[600px]"
+          renderCustomVisual={() => (
+            <SpiderChart
+              className="w-full h-full"
+              metrics={[
+                { label: "رشد درآمد", value: 82 },
+                { label: "بهره‌وری", value: 70 },
+                { label: "چابکی", value: 76 },
+                { label: "تعامل تیمی", value: 64 },
+                { label: "پایداری", value: 85 },
+                { label: "نوآوری", value: 90 },
+              ]}
+            />
+          )}
           className="text-slate-100"
         />
       </div>

@@ -23,6 +23,7 @@ interface FeatureStepsProps {
   title?: string
   autoPlayInterval?: number
   imageHeight?: string
+  renderCustomVisual?: (feature: Feature, index: number) => React.ReactNode
 }
 
 export function FeatureSteps({
@@ -30,6 +31,7 @@ export function FeatureSteps({
   className,
   title = "سفر کارانوا در سه گام",
   imageHeight = "h-[400px]",
+  renderCustomVisual,
 }: FeatureStepsProps) {
   const [currentFeature, setCurrentFeature] = useState(0)
   const [completedUntil, setCompletedUntil] = useState(-1)
@@ -108,13 +110,24 @@ export function FeatureSteps({
       
       if (i === 1) {
         // First segment - straight line or curve
-        path += ` L ${curr.x.toFixed(2)} ${curr.y.toFixed(2)}`
+        const prevPrev = prev
+        const next = points[i + 1] ?? curr
+        const t = 1
+        const c1x = prev.x + ((curr.x - prevPrev.x) / 6) * t
+        const c1y = prev.y + ((curr.y - prevPrev.y) / 6) * t
+        const c2x = curr.x - ((next.x - prev.x) / 6) * t
+        const c2y = curr.y - ((next.y - prev.y) / 6) * t
+        path += ` C ${c1x.toFixed(2)} ${c1y.toFixed(2)} ${c2x.toFixed(2)} ${c2y.toFixed(2)} ${curr.x.toFixed(2)} ${curr.y.toFixed(2)}`
       } else {
         // Smooth curve using quadratic bezier
         const prevPrev = points[i - 2]
-        const controlX = prev.x
-        const controlY = prev.y
-        path += ` Q ${controlX.toFixed(2)} ${controlY.toFixed(2)} ${curr.x.toFixed(2)} ${curr.y.toFixed(2)}`
+        const next = points[i + 1] ?? curr
+        const t = 1
+        const c1x = prev.x + ((curr.x - prevPrev.x) / 6) * t
+        const c1y = prev.y + ((curr.y - prevPrev.y) / 6) * t
+        const c2x = curr.x - ((next.x - prev.x) / 6) * t
+        const c2y = curr.y - ((next.y - prev.y) / 6) * t
+        path += ` C ${c1x.toFixed(2)} ${c1y.toFixed(2)} ${c2x.toFixed(2)} ${c2y.toFixed(2)} ${curr.x.toFixed(2)} ${curr.y.toFixed(2)}`
       }
     }
     
@@ -367,14 +380,26 @@ export function FeatureSteps({
                       exit={{ y: -100, opacity: 0, rotateX: 20 }}
                       transition={{ duration: 0.5, ease: "easeInOut" }}
                     >
-                      <Image
-                        src={feature.image}
-                        alt={feature.step}
-                        className="w-full h-full object-cover transition-transform transform"
-                        width={1000}
-                        height={500}
-                      />
-                      <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-background via-background/50 to-transparent" />
+                      {(() => {
+                        const custom = renderCustomVisual?.(feature, index)
+                        if (custom) {
+                          return (
+                            <div className="w-full h-full">{custom}</div>
+                          )
+                        }
+                        return (
+                          <>
+                            <Image
+                              src={feature.image}
+                              alt={feature.step}
+                              className="w-full h-full object-cover transition-transform transform"
+                              width={1000}
+                              height={500}
+                            />
+                            <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-background via-background/50 to-transparent" />
+                          </>
+                        )
+                      })()}
                     </motion.div>
                   ),
               )}

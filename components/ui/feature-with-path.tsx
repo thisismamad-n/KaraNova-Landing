@@ -27,14 +27,14 @@ export function FeatureWithPath({
       {/* Animated Path - positioned absolutely behind content */}
       {showAnimatedPath && (
         <AnimatedPath
-          className="absolute left-1/2 top-0 -translate-x-1/2 pointer-events-none z-0 opacity-20"
-          pathData="M 298.00 14.00 C 250 80 180 180 125.00 248.00 C 120 300 122 500 128.00 618.00 C 180 700 280 780 356.00 836.00"
-          strokeWidth={12}
-          viewBox="0 0 400 900"
-          svgWidth={400}
-          svgHeight={900}
-          scrollOffset={["start 0.7", "end 0.2"]}
-          progressRange={[0, 1]}
+          className="absolute left-[-36%] top-0 pointer-events-none z-0 opacity-100"
+          pathData="M 353.00 4.00 L 98.00 383.00 Q 98.00 383.00 288.00 671.00 Q 288.00 671.00 858.00 903.00"
+          strokeWidth={14}
+          viewBox="0 0 900 920"
+          svgWidth={900}
+          svgHeight={920}
+          scrollOffset={["start 0.6", "end 0.1"]}
+          progressRange={[0.49, 1]}
         />
       )}
 
