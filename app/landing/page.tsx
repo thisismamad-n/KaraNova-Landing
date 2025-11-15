@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { FeatureStepsDemo } from "@/components/ui/demo";
 import HeroStroke from "./_components/HeroStroke";
 import SnapScrollSection from "./_components/SnapScrollSection";
-import ImpactMetrics from "./_components/ImpactMetrics";
-import ThreePillars from "./_components/ThreePillars";
 import AIAgents from "./_components/AIAgents";
 import FeatureGrid from "./_components/FeatureGrid";
 import Testimonials from "./_components/Testimonials";
@@ -18,11 +17,9 @@ export default function LandingPage() {
 
   return (
     <div dir={language === "fa" ? "rtl" : "ltr"} className="overflow-x-hidden">
-      
       <HeroStroke />
       <SnapScrollSection />
-      <ImpactMetrics language={language} />
-      <ThreePillars language={language} />
+      <FeatureStepsDemo language={language} />
       <AIAgents language={language} />
       <FeatureGrid language={language} />
       <Testimonials language={language} />

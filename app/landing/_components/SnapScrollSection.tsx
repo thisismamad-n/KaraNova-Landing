@@ -4,67 +4,123 @@ import NumberFlow from "@number-flow/react";
 import { AnimatePresence, motion, useSpring } from "framer-motion";
 import { animate, useMotionValue } from "framer-motion";
 import { Plus } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
 
 const SnapScrollSection = () => {
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [hasLockedInitial, setHasLockedInitial] = useState(false);
+  const containerRef = useRef<HTMLElement | null>(null);
+  const activeIndexRef = useRef(0);
+  const isAnimatingRef = useRef(false);
+  const hasLockedInitialRef = useRef(false);
+  const animationTimeoutRef = useRef<number | null>(null);
 
-  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
-    // If we're already animating to a slide, ignore extra wheel events
-    if (isAnimating) return;
-
-    const delta = event.deltaY;
-    // Ignore very small deltas (e.g. slight touchpad movement)
-    if (Math.abs(delta) < 10) return;
-
-    // When entering from above, first interaction should lock to the first slide,
-    // not immediately jump to the second one.
-    if (!hasLockedInitial && delta > 0 && activeIndex === 0) {
-      const firstSlide = slideRefs.current[0];
-      if (!firstSlide) return;
-
-      event.preventDefault();
-
-      setIsAnimating(true);
-      setHasLockedInitial(true);
-
-      firstSlide.scrollIntoView({ behavior: "smooth", block: "center" });
-
-      window.setTimeout(() => {
-        setIsAnimating(false);
-      }, 700);
-
-      return;
-    }
-
-    const direction = delta > 0 ? 1 : -1;
-    const lastIndex = slideRefs.current.length - 1;
-
-    const nextIndex = activeIndex + direction;
-
-    // If we're at the edges, let the normal page scroll continue
-    if (nextIndex < 0 || nextIndex > lastIndex) {
-      return;
-    }
-
+  const scrollToSlide = useCallback((nextIndex: number) => {
     const target = slideRefs.current[nextIndex];
     if (!target) return;
 
-    event.preventDefault();
+    isAnimatingRef.current = true;
+    activeIndexRef.current = nextIndex;
 
-    setIsAnimating(true);
-    setActiveIndex(nextIndex);
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
 
-    target.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (animationTimeoutRef.current) {
+      window.clearTimeout(animationTimeoutRef.current);
+    }
 
-    window.setTimeout(() => {
-      setIsAnimating(false);
-    }, 700);
-  };
+    animationTimeoutRef.current = window.setTimeout(() => {
+      isAnimatingRef.current = false;
+    }, 650);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (animationTimeoutRef.current) {
+        window.clearTimeout(animationTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const element = containerRef.current;
+    if (!element) return;
+
+    const handleWheel = (event: WheelEvent) => {
+      const deltaY = event.deltaY;
+      if (Math.abs(deltaY) < 12) return;
+
+      const totalSlides = slideRefs.current.length;
+      if (!totalSlides) return;
+
+      const isScrollingDown = deltaY > 0;
+      const firstSlide = slideRefs.current[0];
+      const isAtFirstSlide = activeIndexRef.current === 0;
+
+      if (
+        isScrollingDown &&
+        isAtFirstSlide &&
+        !hasLockedInitialRef.current &&
+        firstSlide
+      ) {
+        const rect = firstSlide.getBoundingClientRect();
+        const isAlignedToTop = Math.abs(rect.top) < 8;
+
+        if (!isAlignedToTop) {
+          event.preventDefault();
+          scrollToSlide(0);
+          hasLockedInitialRef.current = true;
+          return;
+        }
+
+        hasLockedInitialRef.current = true;
+      }
+
+      const direction = deltaY > 0 ? 1 : -1;
+      const nextIndex = Math.min(
+        totalSlides - 1,
+        Math.max(0, activeIndexRef.current + direction)
+      );
+
+      if (nextIndex === activeIndexRef.current) {
+        return;
+      }
+
+      event.preventDefault();
+
+      if (isAnimatingRef.current) {
+        return;
+      }
+
+      scrollToSlide(nextIndex);
+    };
+
+    element.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      element.removeEventListener("wheel", handleWheel);
+    };
+  }, [scrollToSlide]);
+
+  useEffect(() => {
+    const element = containerRef.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting && entry.boundingClientRect.top > 0) {
+          hasLockedInitialRef.current = false;
+          activeIndexRef.current = 0;
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     if (typeof document === "undefined") return;
@@ -81,14 +137,23 @@ const SnapScrollSection = () => {
 
   return (
     <section
-      className="relative w-full overflow-hidden"
-      onWheel={handleWheel}
+      ref={containerRef}
+      className="relative isolate w-full overflow-hidden bg-[#010b0f]/70 text-white snap-y snap-mandatory"
     >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+      >
+        <div className="absolute inset-0 opacity-60 bg-gradient-to-b from-[#03252b]/50 via-[#030b11]/70 to-[#010203]/80" />
+        <div className="absolute inset-0 opacity-50 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.12),transparent_60%)]" />
+        <div className="absolute inset-0 opacity-45 bg-[radial-gradient(circle_at_bottom,rgba(16,185,129,0.12),transparent_65%)]" />
+        <div className="absolute left-1/2 top-1/2 h-[130%] w-[130%] -translate-x-1/2 -translate-y-1/2 rounded-[45%] border border-white/5 opacity-25 blur-2xl" />
+      </div>
       <div
         ref={(el) => {
           slideRefs.current[0] = el;
         }}
-        className="relative z-10 snap-center snap-always min-h-screen"
+        className="relative z-10 snap-start snap-always min-h-screen"
       >
         <AnimatedNumber_001 />
       </div>
@@ -96,7 +161,7 @@ const SnapScrollSection = () => {
         ref={(el) => {
           slideRefs.current[1] = el;
         }}
-        className="relative z-10 snap-center snap-always min-h-screen"
+        className="relative z-10 snap-start snap-always min-h-screen"
       >
         <AnimatedNumber_002 />
       </div>
@@ -104,7 +169,7 @@ const SnapScrollSection = () => {
         ref={(el) => {
           slideRefs.current[2] = el;
         }}
-        className="relative z-10 snap-center snap-always min-h-screen"
+        className="relative z-10 snap-start snap-always min-h-screen"
       >
         <AnimatedNumber_003 />
       </div>
@@ -112,7 +177,7 @@ const SnapScrollSection = () => {
         ref={(el) => {
           slideRefs.current[3] = el;
         }}
-        className="relative z-10 snap-center snap-always min-h-screen"
+        className="relative z-10 snap-start snap-always min-h-screen"
       >
         <AnimatedNumber_004 />
       </div>
@@ -126,8 +191,10 @@ const AnimatedNumber_001 = () => {
 
   const [count, setCount] = useState(60);
 
+  const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.35 });
+
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || !inView) return;
 
     const id = setInterval(() => {
       setCount((c) => {
@@ -141,7 +208,13 @@ const AnimatedNumber_001 = () => {
     return () => {
       clearInterval(id);
     };
-  }, [isPaused]);
+  }, [isPaused, inView]);
+
+  useEffect(() => {
+    if (!inView) {
+      setCount(60);
+    }
+  }, [inView]);
 
   // Reset timer when resetTrigger changes
   useEffect(() => {
@@ -153,7 +226,8 @@ const AnimatedNumber_001 = () => {
   };
 
   return (
-    <div className="relative z-10 flex h-screen w-full flex-col items-center justify-center px-4 text-slate-100">
+    <div ref={ref} className="relative z-10 flex h-screen w-full flex-col items-center justify-center px-4 text-slate-100">
+      <SlideHalo accent="teal" />
       <div className="top-32 absolute left-1/2 grid -translate-x-1/2 content-start justify-items-center text-center text-slate-100">
         <div className="flex flex-col items-center gap-5">
           <span className="max-w-[28ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-6 py-2 text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
@@ -162,7 +236,11 @@ const AnimatedNumber_001 = () => {
           <div className="h-16 w-px bg-gradient-to-b from-teal-300/90 via-teal-300/40 to-transparent shadow-[0_0_25px_rgba(45,212,191,0.6)]" />
         </div>
       </div>
-      <div className="font-bebas-neue text-[20vw] tracking-tight">
+      <div className="relative font-bebas-neue text-[20vw] tracking-tight">
+        <div aria-hidden className="absolute inset-0 -z-10">
+          <div className="absolute left-1/2 top-1/2 h-[32vw] w-[32vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-400/15 blur-[130px]" />
+          <div className="absolute left-1/2 top-1/2 h-[26vw] w-[26vw] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-35" />
+        </div>
         <NumberFlow value={count} prefix="0:" />
       </div>
       <div className="flex w-fit items-center gap-3">
@@ -212,6 +290,16 @@ const AnimatedNumber_001 = () => {
           <Plus className="h-4 w-4 rotate-45 transition-colors" />
         </button>
       </div>
+      <div className="mt-12 grid w-full max-w-2xl grid-cols-1 gap-4 text-right text-white/80 sm:grid-cols-2">
+        <div className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-xl">
+          <p className="text-lg font-semibold text-white">تاخیر کمتر از ۹۰۰ میلی‌ثانیه</p>
+          <p className="mt-1 text-sm text-white/70">پاسخ‌دهی سامانه در سنگین‌ترین سناریوهای کاری</p>
+        </div>
+        <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-teal-400/15 via-transparent to-transparent px-5 py-4 backdrop-blur-xl">
+          <p className="text-lg font-semibold text-white">پایش ۲۴/۷</p>
+          <p className="mt-1 text-sm text-white/70">مهندسی اعتبار با خودکارسازی گردش‌کارهای حیاتی</p>
+        </div>
+      </div>
     </div>
   );
 };
@@ -226,9 +314,15 @@ export const AnimatedNumber_002 = () => {
     duration: 1000,
   });
 
-  springSubCount.on("change", (value) => {
-    setDisplaySubs(Math.round(value));
-  });
+  useEffect(() => {
+    const unsubscribe = springSubCount.on("change", (value) => {
+      setDisplaySubs(Math.round(value));
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [springSubCount]);
 
   const animateCount = () => {
     springSubCount.set(finalCount);
@@ -236,6 +330,7 @@ export const AnimatedNumber_002 = () => {
 
   return (
     <div className="relative z-10 flex h-screen w-full flex-col items-center justify-center px-4 text-slate-100">
+      <SlideHalo accent="cyan" />
       <div className="top-32 absolute left-1/2 grid -translate-x-1/2 content-start justify-items-center text-center text-slate-100">
         <div className="flex flex-col items-center gap-5">
           <span className="max-w-[30ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-6 py-2 text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
@@ -249,10 +344,24 @@ export const AnimatedNumber_002 = () => {
         onViewportLeave={() => {
           springSubCount.set(0);
         }}
-        className="font-bebas-neue text-[20vw] tracking-tight"
+        className="relative font-bebas-neue text-[20vw] tracking-tight"
       >
+        <div aria-hidden className="absolute inset-0 -z-10">
+          <div className="absolute left-1/2 top-1/2 h-[30vw] w-[30vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/14 blur-[120px]" />
+          <div className="absolute left-1/2 top-1/2 h-[24vw] w-[24vw] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-30" />
+        </div>
         {displaySubs}
       </motion.div>
+      <div className="mt-12 grid w-full max-w-2xl grid-cols-1 gap-4 text-right text-white/80 sm:grid-cols-2">
+        <div className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-xl">
+          <p className="text-lg font-semibold text-white">۵۰۰ مسیر سیگنال سالم</p>
+          <p className="mt-1 text-sm text-white/70">همگام‌سازی خودکار با هاب‌های داده داخلی و ابری</p>
+        </div>
+        <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-cyan-400/15 via-transparent to-transparent px-5 py-4 backdrop-blur-xl">
+          <p className="text-lg font-semibold text-white">پوشش ۳ سکوی کلیدی</p>
+          <p className="mt-1 text-sm text-white/70">آی نوا، تسک ایز و بی‌آی‌کیو در یک داشبورد یکپارچه</p>
+        </div>
+      </div>
     </div>
   );
 };
@@ -292,6 +401,7 @@ export const AnimatedNumber_003 = () => {
   };
   return (
     <div className="relative z-10 flex h-screen w-full flex-col items-center justify-center px-4 text-slate-100">
+      <SlideHalo accent="emerald" />
       <div className="top-32 absolute left-1/2 grid -translate-x-1/2 content-start justify-items-center text-center text-slate-100">
         <div className="flex flex-col items-center gap-5">
           <span className="max-w-[30ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-6 py-2 text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
@@ -300,7 +410,11 @@ export const AnimatedNumber_003 = () => {
           <div className="h-16 w-px bg-gradient-to-b from-teal-300/90 via-teal-300/40 to-transparent shadow-[0_0_25px_rgba(45,212,191,0.6)]" />
         </div>
       </div>
-      <div className="font-bebas-neue text-[20vw] tracking-tight">
+      <div className="relative font-bebas-neue text-[20vw] tracking-tight">
+        <div aria-hidden className="absolute inset-0 -z-10">
+          <div className="absolute left-1/2 top-1/2 h-[34vw] w-[34vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400/14 blur-[150px]" />
+          <div className="absolute left-1/2 top-1/2 h-[25vw] w-[25vw] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-28" />
+        </div>
         <motion.div
           onViewportEnter={animateNumber}
           onViewportLeave={() => {
@@ -311,6 +425,16 @@ export const AnimatedNumber_003 = () => {
         >
           {formatNumber(displayNumber)}
         </motion.div>
+      </div>
+      <div className="mt-12 grid w-full max-w-2xl grid-cols-1 gap-4 text-right text-white/80 sm:grid-cols-2">
+        <div className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-xl">
+          <p className="text-lg font-semibold text-white">۲.۱ میلیون پردازش تأیید شده</p>
+          <p className="mt-1 text-sm text-white/70">پایپ‌لاین داده توزیع‌شده با خطای کمتر از ۰.۱٪</p>
+        </div>
+        <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-emerald-400/15 via-transparent to-transparent px-5 py-4 backdrop-blur-xl">
+          <p className="text-lg font-semibold text-white">۸ لایه اعتبارسنجی</p>
+          <p className="mt-1 text-sm text-white/70">چک‌پوینت‌های هوشمند برای حفظ سلامت شاخص‌ها</p>
+        </div>
       </div>
     </div>
   );
@@ -338,6 +462,7 @@ function AnimatedNumber_004() {
 
   return (
     <div className="relative z-10 flex h-screen w-full flex-col items-center justify-center px-4 text-slate-100">
+      <SlideHalo accent="amber" />
       <div className="top-32 absolute left-1/2 grid -translate-x-1/2 content-start justify-items-center text-center text-slate-100">
         <div className="flex flex-col items-center gap-5">
           <span className="max-w-[26ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-6 py-2 text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
@@ -346,11 +471,74 @@ function AnimatedNumber_004() {
           <div className="h-16 w-px bg-gradient-to-b from-teal-300/90 via-teal-300/40 to-transparent shadow-[0_0_25px_rgba(45,212,191,0.6)]" />
         </div>
       </div>
-      <div ref={ref} className="font-bebas-neue text-[20vw] tracking-tight">
+      <div ref={ref} className="relative font-bebas-neue text-[20vw] tracking-tight">
+        <div aria-hidden className="absolute inset-0 -z-10">
+          <div className="absolute left-1/2 top-1/2 h-[30vw] w-[30vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-400/14 blur-[125px]" />
+          <div className="absolute left-1/2 top-1/2 h-[22vw] w-[22vw] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-26" />
+        </div>
         <NumberFlow value={displayValue} />
+      </div>
+      <div className="mt-12 grid w-full max-w-2xl grid-cols-1 gap-4 text-right text-white/80 sm:grid-cols-2">
+        <div className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-xl">
+          <p className="text-lg font-semibold text-white">بازگشت سرمایه در ۴ ماه</p>
+          <p className="mt-1 text-sm text-white/70">چیدمان هوشمند منابع و حذف هزینه‌های زائد</p>
+        </div>
+        <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-amber-400/15 via-transparent to-transparent px-5 py-4 backdrop-blur-xl">
+          <p className="text-lg font-semibold text-white">پایداری ۹۹٫۳٪</p>
+          <p className="mt-1 text-sm text-white/70">زیرساخت مقاوم با ۳ لایه افزونگی و هشدار سریع</p>
+        </div>
       </div>
     </div>
   );
 }
 
 export default SnapScrollSection;
+
+type SlideHaloProps = {
+  accent: "teal" | "cyan" | "emerald" | "amber";
+};
+
+const HALO_GRADIENTS: Record<SlideHaloProps["accent"], string> = {
+  teal: "from-teal-200/25 via-teal-500/5 to-transparent",
+  cyan: "from-sky-200/25 via-sky-500/5 to-transparent",
+  emerald: "from-emerald-200/25 via-emerald-500/5 to-transparent",
+  amber: "from-amber-100/25 via-amber-500/5 to-transparent",
+};
+
+const RING_COLORS: Record<SlideHaloProps["accent"], string> = {
+  teal: "border-teal-200/20",
+  cyan: "border-sky-200/25",
+  emerald: "border-emerald-200/18",
+  amber: "border-amber-100/25",
+};
+
+const DOT_COLORS: Record<SlideHaloProps["accent"], string> = {
+  teal: "bg-teal-300/18",
+  cyan: "bg-sky-300/18",
+  emerald: "bg-emerald-300/16",
+  amber: "bg-amber-200/18",
+};
+
+function SlideHalo({ accent }: SlideHaloProps) {
+  const gradient = HALO_GRADIENTS[accent];
+  const ring = RING_COLORS[accent];
+  const dot = DOT_COLORS[accent];
+
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0">
+      <div
+        className={`absolute left-1/2 top-1/3 h-[45vh] w-[65vw] -translate-x-1/2 rounded-[50%] bg-gradient-to-r ${gradient} blur-[130px] opacity-75`}
+      />
+      <div
+        className={`absolute left-1/2 top-1/2 h-[48vh] w-[48vh] -translate-x-1/2 -translate-y-1/2 rounded-full ${ring} opacity-45`}
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[length:140px_140px] opacity-20" />
+      <div
+        className={`absolute right-[12%] top-[28%] h-24 w-24 rounded-full ${ring} opacity-30 blur-2xl`}
+      />
+      <div
+        className={`absolute left-[18%] bottom-[20%] h-16 w-16 rounded-full ${dot} blur-[90px] opacity-70`}
+      />
+    </div>
+  );
+}

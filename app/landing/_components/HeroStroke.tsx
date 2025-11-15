@@ -1,15 +1,23 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useInView, useSpring } from "framer-motion";
 import { useRef, useState } from "react";
 import { InovaFeatureCard } from './InovaCard';
 import { TaskEaseFeatureCard } from './TaskEaseCard';
+import { BIQFeatureCard } from './BIQCard';
 
 const Skiper19 = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
+    offset: ["start 0.6", "end 0.1"],
   });
+  const easedProgress = useSpring(scrollYProgress, {
+    stiffness: 80,
+    damping: 30,
+    restDelta: 0.001,
+  });
+  const isInView = useInView(ref, { margin: "-20% 0px -20% 0px" });
   const SHOW_COORDINATE_HELPER = false;
   const [cursorPosition, setCursorPosition] = useState<{ x: number; y: number } | null>(null);
 
@@ -58,18 +66,23 @@ const Skiper19 = () => {
           </div>
         </div>
       )}
-      <div className="absolute inset-0">
-        <InovaFeatureCard left={457} top={1001} width={340} />
-        <TaskEaseFeatureCard left={781} top={1560} width={420} />
-      </div>
+      {isInView && (
+        <>
+          <div className="absolute inset-0">
+            <InovaFeatureCard left={420} top={980} width={380} />
+            <TaskEaseFeatureCard left={700} top={2100} width={460} />
+            <BIQFeatureCard left={720} top={1480} width={520} />
+          </div>
 
-      {/* Ambient glow effects */}
-      <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl" />
-      <div className="absolute top-1/3 right-[-18%] w-[30rem] h-[30rem] bg-cyan-400/14 rounded-full blur-3xl" />
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[22rem] h-[22rem] rounded-full bg-teal-500/12 blur-[120px]" />
-        <div className="absolute w-[28rem] h-[28rem] rounded-full border border-teal-500/15 blur-[60px]" />
-      </div>
+          {/* Ambient glow effects */}
+          <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl" />
+          <div className="absolute top-1/3 right-[-18%] w-[30rem] h-[30rem] bg-cyan-400/14 rounded-full blur-3xl" />
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-[22rem] h-[22rem] rounded-full bg-teal-500/12 blur-[120px]" />
+            <div className="absolute w-[28rem] h-[28rem] rounded-full border border-teal-500/15 blur-[60px]" />
+          </div>
+        </>
+      )}
       
       
       <div dir="rtl" className="relative flex w-full max-w-7xl flex-col items-center justify-center gap-8 text-center pt-[13vh] md:-translate-x-12 lg:-translate-x-20">
@@ -101,31 +114,37 @@ const Skiper19 = () => {
             </button>
           </div>
 
-          <LinePath
-            className="absolute left-[65%] top-0 z-0 -translate-x-1/2 opacity-14 scale-[0.78] md:scale-90 lg:scale-95 pointer-events-none"
-            scrollYProgress={scrollYProgress}
-          />
+          {isInView && (
+            <LinePath
+              className="absolute left-[65%] top-0 z-0 -translate-x-1/2 opacity-14 scale-[0.78] md:scale-90 lg:scale-95 pointer-events-none"
+              scrollYProgress={easedProgress}
+            />
+          )}
         </div>
       </div>
 
-      {/* Bottom gradient blur fade - 194px tall with graduated blur */}
-      <div 
-        className="absolute bottom-0 left-0 right-0 pointer-events-none z-30"
-        style={{
-          height: '194px',
-          background: 'linear-gradient(to top, #020617 0%, rgba(2, 6, 23, 0.95) 20%, rgba(2, 6, 23, 0.85) 40%, rgba(2, 6, 23, 0.6) 60%, rgba(2, 6, 23, 0.3) 80%, transparent 100%)'
-        }}
-      />
-      <div 
-        className="absolute bottom-0 left-0 right-0 pointer-events-none z-29"
-        style={{
-          height: '194px',
-          maskImage: 'linear-gradient(to top, black 0%, black 20%, rgba(0, 0, 0, 0.7) 40%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.15) 80%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(to top, black 0%, black 20%, rgba(0, 0, 0, 0.7) 40%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.15) 80%, transparent 100%)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)'
-        }}
-      />
+      {isInView && (
+        <>
+          {/* Bottom gradient blur fade - 194px tall with graduated blur */}
+          <div 
+            className="absolute bottom-0 left-0 right-0 pointer-events-none z-30"
+            style={{
+              height: '194px',
+              background: 'linear-gradient(to top, #020617 0%, rgba(2, 6, 23, 0.95) 20%, rgba(2, 6, 23, 0.85) 40%, rgba(2, 6, 23, 0.6) 60%, rgba(2, 6, 23, 0.3) 80%, transparent 100%)'
+            }}
+          />
+          <div 
+            className="absolute bottom-0 left-0 right-0 pointer-events-none z-29"
+            style={{
+              height: '194px',
+              maskImage: 'linear-gradient(to top, black 0%, black 20%, rgba(0, 0, 0, 0.7) 40%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.15) 80%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to top, black 0%, black 20%, rgba(0, 0, 0, 0.7) 40%, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0.15) 80%, transparent 100%)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)'
+            }}
+          />
+        </>
+      )}
     </section>
   );
 };
@@ -139,7 +158,7 @@ const LinePath = ({
   className: string;
   scrollYProgress: any;
 }) => {
-  const pathLength = useTransform(scrollYProgress, [0, 1], [0.5, 1]);
+  const pathLength = useTransform(scrollYProgress, [0, 1], [0.49, 1]);
 
   return (
     <svg
