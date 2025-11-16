@@ -6,6 +6,8 @@ import HeroStroke from "./_components/HeroStroke";
 import SnapScrollSection from "./_components/SnapScrollSection";
 import FourAdvisorsSection from "./_components/FourAdvisorsSection";
 import WhyChooseUs from "./_components/WhyChooseUs";
+import TestimonialsSection from "./_components/Testimonials";
+import FinalCTA from "./_components/FinalCTA";
 
 
 export default function LandingPage() {
@@ -18,6 +20,8 @@ export default function LandingPage() {
       <FeatureStepsDemo language={language} />
       <FourAdvisorsSection />
       <WhyChooseUs language={language} />
+      <TestimonialsSection />
+      <FinalCTA language={language} />
     </div>
   );
 }

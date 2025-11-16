@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { InovaFeatureCard } from './InovaCard';
 import { TaskEaseFeatureCard } from './TaskEaseCard';
 import { BIQFeatureCard } from './BIQCard';
+import { SlidePathDesigner } from "@/components/ui/slide-path-designer";
 
 const Skiper19 = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -46,6 +47,7 @@ const Skiper19 = () => {
       onMouseMove={SHOW_COORDINATE_HELPER ? handleMouseMove : undefined}
       onMouseLeave={SHOW_COORDINATE_HELPER ? handleMouseLeave : undefined}
     >
+      <SlidePathDesigner slideKey="landing-hero" />
       {SHOW_COORDINATE_HELPER && cursorPosition && (
         <div className="pointer-events-none absolute inset-0 z-50">
           <div
@@ -68,18 +70,19 @@ const Skiper19 = () => {
       )}
       {isInView && (
         <>
-          <div className="absolute inset-0">
+          {/* Ambient glow effects */}
+          <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl z-0" />
+          <div className="absolute top-1/3 right-[-18%] w-[30rem] h-[30rem] bg-cyan-400/14 rounded-full blur-3xl z-0" />
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+            <div className="w-[22rem] h-[22rem] rounded-full bg-teal-500/12 blur-[120px]" />
+            <div className="absolute w-[28rem] h-[28rem] rounded-full border border-teal-500/15 blur-[60px]" />
+          </div>
+
+          {/* Feature cards with higher z-index */}
+          <div className="absolute inset-0 z-20">
             <InovaFeatureCard left={420} top={980} width={380} />
             <TaskEaseFeatureCard left={700} top={2100} width={460} />
             <BIQFeatureCard left={720} top={1480} width={520} />
-          </div>
-
-          {/* Ambient glow effects */}
-          <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl" />
-          <div className="absolute top-1/3 right-[-18%] w-[30rem] h-[30rem] bg-cyan-400/14 rounded-full blur-3xl" />
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-[22rem] h-[22rem] rounded-full bg-teal-500/12 blur-[120px]" />
-            <div className="absolute w-[28rem] h-[28rem] rounded-full border border-teal-500/15 blur-[60px]" />
           </div>
         </>
       )}

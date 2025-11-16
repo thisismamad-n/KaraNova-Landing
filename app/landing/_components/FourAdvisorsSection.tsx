@@ -1,6 +1,7 @@
 "use client";
 
 import { CanvasAnimation } from "./AdvisorAnimations";
+import { SlidePathDesigner } from "@/components/ui/slide-path-designer";
 
 const FourAdvisorsSection = () => {
   return (
@@ -11,6 +12,7 @@ const FourAdvisorsSection = () => {
         background: 'linear-gradient(to bottom, #010203 0%, #020617 50%, #010203 100%)'
       }}
     >
+      <SlidePathDesigner slideKey="landing-four-advisors" />
       {/* Ambient glow effects - matching HeroStroke exactly */}
       <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl" />
       <div className="absolute top-1/3 right-[-18%] w-[30rem] h-[30rem] bg-cyan-400/14 rounded-full blur-3xl" />

@@ -6,6 +6,7 @@ import { animate, useMotionValue } from "framer-motion";
 import { Plus } from "lucide-react";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
+import { SlidePathDesigner } from "@/components/ui/slide-path-designer";
 
 const SnapScrollSection = () => {
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -216,6 +217,7 @@ const SnapScrollSection = () => {
         style={{ height: "calc(var(--vh, 1vh) * 100)" }}
       >
         <AnimatedNumber_001 />
+        <SlidePathDesigner slideKey="landing-snap-001" />
       </div>
       <div
         ref={(el) => {
@@ -225,6 +227,7 @@ const SnapScrollSection = () => {
         style={{ height: "calc(var(--vh, 1vh) * 100)" }}
       >
         <AnimatedNumber_002 />
+        <SlidePathDesigner slideKey="landing-snap-002" />
       </div>
       <div
         ref={(el) => {
@@ -234,6 +237,7 @@ const SnapScrollSection = () => {
         style={{ height: "calc(var(--vh, 1vh) * 100)" }}
       >
         <AnimatedNumber_003 />
+        <SlidePathDesigner slideKey="landing-snap-003" />
       </div>
       <div
         ref={(el) => {
@@ -243,6 +247,7 @@ const SnapScrollSection = () => {
         style={{ height: "calc(var(--vh, 1vh) * 100)" }}
       >
         <AnimatedNumber_004 />
+        <SlidePathDesigner slideKey="landing-snap-004" />
       </div>
     </section>
   );

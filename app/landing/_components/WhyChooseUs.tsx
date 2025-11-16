@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import {
   Brain,
   Clock,
@@ -11,12 +10,22 @@ import {
   Rocket,
   Sparkles,
 } from "lucide-react";
+import { SlidePathDesigner } from "@/components/ui/slide-path-designer";
+import { motion, useInView, useScroll, useSpring, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 interface WhyChooseUsProps {
   language?: "en" | "fa";
 }
 
 export default function WhyChooseUs({ language = "en" }: WhyChooseUsProps) {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start 0.8", "end 0.1"] });
+  const easedProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 30, restDelta: 0.001 });
+  const pathLength = useTransform(easedProgress, [0, 1], [0, 1]);
+  const strokeDashoffset = useTransform(pathLength, (value) => 1 - value);
+  const sectionInView = useInView(sectionRef, { amount: 0.2, once: false });
+  const pathTranslateX = -500;
   const title = "چرا کارانووا؟";
   const subtitle = "ساخته شده برای کسب‌وکارهای مدرن که به تعالی نیاز دارند";
   const features = [
@@ -63,7 +72,8 @@ export default function WhyChooseUs({ language = "en" }: WhyChooseUsProps) {
   ];
 
   return (
-    <section className="relative w-full min-h-screen py-20 overflow-hidden" dir="rtl">
+    <section ref={sectionRef} className="relative w-full min-h-screen py-20 overflow-hidden" dir="rtl">
+      <SlidePathDesigner slideKey="landing-why-choose" />
       {/* Ambient glow effects - same as HeroStroke */}
       <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl" />
       <div className="absolute top-1/3 right-1/4 w-[30rem] h-[30rem] bg-cyan-400/14 rounded-full blur-3xl" />
@@ -73,20 +83,77 @@ export default function WhyChooseUs({ language = "en" }: WhyChooseUsProps) {
         <div className="absolute w-[28rem] h-[28rem] rounded-full border border-teal-500/15 blur-[60px]" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-teal-300 via-cyan-300 to-emerald-300 bg-clip-text text-transparent">
-            {title}
-          </h2>
-          <p className="text-lg md:text-xl text-slate-300/80 max-w-2xl mx-auto">
-            {subtitle}
-          </p>
-        </div>
+      {sectionInView ? (
+        <motion.svg
+          className="pointer-events-none absolute inset-0 z-0"
+          width="2200"
+          height="980"
+          viewBox="-800 0 2200 980"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <linearGradient id="why-choose-stroke" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="var(--landing-primary)" />
+              <stop offset="55%" stopColor="hsl(185, 85%, 70%)" />
+              <stop offset="100%" stopColor="var(--landing-accent)" />
+            </linearGradient>
+          </defs>
+          <motion.path
+            d="M 1492.00 1.00 C 1495.00 17.67 1722.00 60.33 1510.00 101.00 C 1298.00 141.67 446.83 177.33 220.00 245.00 C -6.83 312.67 -62.17 389.17 149.00 507.00 C 360.17 624.83 1264.00 877.83 1487.00 952.00"
+            stroke="url(#why-choose-stroke)"
+            strokeWidth="12"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            transform={`translate(${pathTranslateX} 0)`}
+            style={{
+              pathLength,
+              strokeDashoffset,
+              filter:
+                "drop-shadow(0 0 18px rgba(20, 184, 166, 0.55)) drop-shadow(0 0 42px rgba(20, 184, 166, 0.45)) drop-shadow(0 0 64px rgba(14, 165, 233, 0.35))",
+              strokeOpacity: 0.82,
+            }}
+          />
+        </motion.svg>
+      ) : null}
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 relative z-10">
+      {/* Content */}
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <motion.div 
+          className="text-center mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="inline-block mb-6"
+          >
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-500/20 via-cyan-500/20 to-emerald-500/20 blur-2xl" />
+              <h2 className="relative text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-teal-200 via-cyan-200 to-emerald-200 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(20,184,166,0.3)]">
+                {title}
+              </h2>
+            </div>
+          </motion.div>
+          <motion.p 
+            className="text-xl md:text-2xl text-slate-300/90 max-w-3xl mx-auto leading-relaxed"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            {subtitle}
+          </motion.p>
+        </motion.div>
+
+        {/* Features Grid with enhanced styling */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-gradient-to-r from-teal-500/20 via-cyan-500/20 to-emerald-500/20 rounded-2xl overflow-hidden backdrop-blur-sm shadow-2xl shadow-teal-500/10">
           {features.map((feature, index) => (
             <Feature key={feature.title} {...feature} index={index} />
           ))}
@@ -107,32 +174,69 @@ const Feature = ({
   icon: React.ReactNode;
   index: number;
 }) => {
+  const featureRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(featureRef, { once: true, amount: 0.5 });
+
   return (
-    <div
-      className={cn(
-        "flex flex-col lg:border-l py-10 relative group/feature border-teal-500/20",
-        (index === 3 || index === 7) && "lg:border-r border-teal-500/20",
-        index < 4 && "lg:border-b border-teal-500/20"
-      )}
+    <motion.div
+      ref={featureRef}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{ 
+        duration: 0.6, 
+        delay: index * 0.1,
+        ease: [0.21, 0.47, 0.32, 0.98]
+      }}
+      className="relative group/feature bg-slate-900/40 backdrop-blur-md p-8 hover:bg-slate-900/60 transition-all duration-500"
     >
-      {index < 4 && (
-        <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-t from-teal-900/20 to-transparent pointer-events-none" />
-      )}
-      {index >= 4 && (
-        <div className="opacity-0 group-hover/feature:opacity-100 transition duration-200 absolute inset-0 h-full w-full bg-gradient-to-b from-teal-900/20 to-transparent pointer-events-none" />
-      )}
-      <div className="mb-4 relative z-10 px-10 text-teal-400 group-hover/feature:text-teal-300 transition-colors duration-200">
-        {icon}
+      {/* Hover gradient overlay */}
+      <div className="absolute inset-0 opacity-0 group-hover/feature:opacity-100 transition-opacity duration-500">
+        <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-cyan-500/10 to-emerald-500/10" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(20,184,166,0.1),transparent_50%)]" />
       </div>
-      <div className="text-lg font-bold mb-2 relative z-10 px-10">
-        <div className="absolute right-0 inset-y-0 h-6 group-hover/feature:h-8 w-1 rounded-tl-full rounded-bl-full bg-teal-700/50 group-hover/feature:bg-teal-500 transition-all duration-200 origin-center" />
-        <span className="group-hover/feature:-translate-x-2 transition duration-200 inline-block text-slate-100">
+
+      {/* Animated border glow */}
+      <div className="absolute inset-0 opacity-0 group-hover/feature:opacity-100 transition-opacity duration-500">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal-400/50 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
+        <div className="absolute inset-y-0 right-0 w-px bg-gradient-to-b from-transparent via-emerald-400/50 to-transparent" />
+        <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-teal-400/50 to-transparent" />
+      </div>
+
+      {/* Icon with enhanced styling */}
+      <motion.div 
+        className="mb-6 relative z-10"
+        whileHover={{ scale: 1.1, rotate: 5 }}
+        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+      >
+        <div className="relative inline-block">
+          <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-cyan-500/20 rounded-xl blur-xl group-hover/feature:blur-2xl transition-all duration-500" />
+          <div className="relative bg-gradient-to-br from-teal-500/10 to-cyan-500/10 p-4 rounded-xl border border-teal-500/20 group-hover/feature:border-teal-400/40 transition-all duration-500 backdrop-blur-sm">
+            <div className="text-teal-400 group-hover/feature:text-teal-300 transition-colors duration-500 group-hover/feature:drop-shadow-[0_0_8px_rgba(20,184,166,0.6)]">
+              {icon}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Title with accent bar */}
+      <div className="relative z-10 mb-3">
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 h-1 w-0 group-hover/feature:w-12 bg-gradient-to-l from-teal-500 to-cyan-500 rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(20,184,166,0.5)]" />
+        <h3 className="text-xl font-bold text-slate-100 group-hover/feature:text-white transition-colors duration-300 pr-16">
           {title}
-        </span>
+        </h3>
       </div>
-      <p className="text-sm text-slate-400 max-w-xs relative z-10 px-10">
+
+      {/* Description */}
+      <p className="text-sm leading-relaxed text-slate-400 group-hover/feature:text-slate-300 transition-colors duration-300 relative z-10">
         {description}
       </p>
-    </div>
+
+      {/* Corner accent */}
+      <div className="absolute bottom-0 left-0 w-16 h-16 opacity-0 group-hover/feature:opacity-100 transition-opacity duration-500">
+        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-teal-500/50 to-transparent" />
+        <div className="absolute bottom-0 left-0 w-px h-full bg-gradient-to-t from-teal-500/50 to-transparent" />
+      </div>
+    </motion.div>
   );
 };

@@ -1,6 +1,7 @@
 import { FeatureSteps } from "@/components/ui/feature-section"
 import { AnimatedPath } from "@/components/ui/animated-path"
 import { SpiderChart } from "@/components/ui/spider-chart"
+import { SlidePathDesigner } from "@/components/ui/slide-path-designer"
 
 const featuresFa = [
   {
@@ -36,6 +37,7 @@ interface FeatureStepsDemoProps {
 export function FeatureStepsDemo({ language }: FeatureStepsDemoProps) {
   return (
     <div className="relative overflow-visible">
+      <SlidePathDesigner slideKey="landing-feature-steps" />
       {/* Animated Path - positioned absolutely behind content */}
       <AnimatedPath
         className="absolute top-[-96px] pointer-events-none z-0 opacity-100 scale-100 md:scale-100 left-[5%] md:left-[-14%] lg:left-[10%]"
