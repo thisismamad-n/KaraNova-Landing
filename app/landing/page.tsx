@@ -4,13 +4,9 @@ import { useState } from "react";
 import { FeatureStepsDemo } from "@/components/ui/demo";
 import HeroStroke from "./_components/HeroStroke";
 import SnapScrollSection from "./_components/SnapScrollSection";
-import AIAgents from "./_components/AIAgents";
-import FeatureGrid from "./_components/FeatureGrid";
-import Testimonials from "./_components/Testimonials";
-import Pricing from "./_components/Pricing";
-import InteractiveDemo from "./_components/InteractiveDemo";
-import FAQ from "./_components/FAQ";
-import FinalCTA from "./_components/FinalCTA";
+import FourAdvisorsSection from "./_components/FourAdvisorsSection";
+import WhyChooseUs from "./_components/WhyChooseUs";
+
 
 export default function LandingPage() {
   const [language, setLanguage] = useState<"en" | "fa">("en");
@@ -20,13 +16,8 @@ export default function LandingPage() {
       <HeroStroke />
       <SnapScrollSection />
       <FeatureStepsDemo language={language} />
-      <AIAgents language={language} />
-      <FeatureGrid language={language} />
-      <Testimonials language={language} />
-      <Pricing language={language} />
-      <InteractiveDemo language={language} />
-      <FAQ language={language} />
-      <FinalCTA language={language} />
+      <FourAdvisorsSection />
+      <WhyChooseUs language={language} />
     </div>
   );
 }

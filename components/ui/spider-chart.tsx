@@ -148,9 +148,9 @@ export function SpiderChart({
           stroke="url(#lineGrad)"
           strokeWidth={hovered ? 4 : 3}
           filter="url(#softGlow)"
-          initial={{ pathLength: 0, opacity: 0 }}
-          animate={{ pathLength: 1, opacity: 1, scale: hovered ? 1.025 : 1 }}
-          transition={{ duration: 1.2, ease: "easeInOut", delay: 0.2 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: hovered ? 1.025 : 1 }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
           style={{ transformBox: "fill-box", transformOrigin: "50% 50%" }}
         />
 
