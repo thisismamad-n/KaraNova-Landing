@@ -20,12 +20,6 @@ interface WhyChooseUsProps {
 
 export default function WhyChooseUs({ language = "en" }: WhyChooseUsProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start 0.8", "end 0.1"] });
-  const easedProgress = useSpring(scrollYProgress, { stiffness: 80, damping: 30, restDelta: 0.001 });
-  const pathLength = useTransform(easedProgress, [0, 1], [0, 1]);
-  const strokeDashoffset = useTransform(pathLength, (value) => 1 - value);
-  const sectionInView = useInView(sectionRef, { amount: 0.2, once: false });
-  const pathTranslateX = -500;
   const title = "چرا کارانووا؟";
   const subtitle = "ساخته شده برای کسب‌وکارهای مدرن که به تعالی نیاز دارند";
   const features = [
@@ -72,7 +66,7 @@ export default function WhyChooseUs({ language = "en" }: WhyChooseUsProps) {
   ];
 
   return (
-    <section ref={sectionRef} className="relative w-full min-h-screen py-20 overflow-hidden" dir="rtl">
+    <section id="why-choose-section" ref={sectionRef} className="relative w-full min-h-screen py-20 overflow-hidden" dir="rtl">
       <SlidePathDesigner slideKey="landing-why-choose" />
       {/* Ambient glow effects - same as HeroStroke */}
       <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl" />
@@ -82,40 +76,6 @@ export default function WhyChooseUs({ language = "en" }: WhyChooseUsProps) {
         <div className="w-[22rem] h-[22rem] rounded-full bg-teal-500/12 blur-[120px]" />
         <div className="absolute w-[28rem] h-[28rem] rounded-full border border-teal-500/15 blur-[60px]" />
       </div>
-
-      {sectionInView ? (
-        <motion.svg
-          className="pointer-events-none absolute inset-0 z-0"
-          width="2200"
-          height="980"
-          viewBox="-800 0 2200 980"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <linearGradient id="why-choose-stroke" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="var(--landing-primary)" />
-              <stop offset="55%" stopColor="hsl(185, 85%, 70%)" />
-              <stop offset="100%" stopColor="var(--landing-accent)" />
-            </linearGradient>
-          </defs>
-          <motion.path
-            d="M 1492.00 1.00 C 1495.00 17.67 1722.00 60.33 1510.00 101.00 C 1298.00 141.67 446.83 177.33 220.00 245.00 C -6.83 312.67 -62.17 389.17 149.00 507.00 C 360.17 624.83 1264.00 877.83 1487.00 952.00"
-            stroke="url(#why-choose-stroke)"
-            strokeWidth="12"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            transform={`translate(${pathTranslateX} 0)`}
-            style={{
-              pathLength,
-              strokeDashoffset,
-              filter:
-                "drop-shadow(0 0 18px rgba(20, 184, 166, 0.55)) drop-shadow(0 0 42px rgba(20, 184, 166, 0.45)) drop-shadow(0 0 64px rgba(14, 165, 233, 0.35))",
-              strokeOpacity: 0.82,
-            }}
-          />
-        </motion.svg>
-      ) : null}
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6">

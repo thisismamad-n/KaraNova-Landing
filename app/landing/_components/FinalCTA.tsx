@@ -3,10 +3,17 @@
 import { ArrowRight } from "lucide-react";
 import LaserFlow from "@/components/ui/LaserFlow";
 import Squares from "@/app/_components/Squares";
+import { SlidePathDesigner } from "@/components/ui/slide-path-designer";
 
 export default function FinalCTA() {
+  // Configurable gap between LaserFlow and footer box (in pixels)
+  const laserToFooterGap = -0; // Negative value brings them closer, positive pushes apart
+
   return (
-    <section className="relative w-full overflow-hidden flex flex-col pb-0 min-h-[120vh] md:min-h-screen" dir="rtl">
+    <section id="final-cta-section" className="relative w-full overflow-hidden flex flex-col pb-0 min-h-[120vh] md:min-h-screen pt-0" dir="rtl">
+      {/* Slide Path Designer */}
+      <SlidePathDesigner slideKey="landing-final-cta" />
+      
       {/* Animated background grid - same as Testimonials */}
       <div className="absolute inset-0 -z-20">
         <Squares
@@ -29,52 +36,71 @@ export default function FinalCTA() {
         <div className="absolute w-[28rem] h-[28rem] rounded-full border border-teal-500/15 blur-[60px]" />
       </div>
 
-      {/* LaserFlow Background - matching HeroStroke gradient colors - Responsive positioning */}
-      <div className="absolute inset-0 z-0 md:bottom-[35%] lg:bottom-[40%]">
-        <LaserFlow
-          color="#5EEAD4"
-          wispDensity={1.3}
-          flowSpeed={0.35}
-          fogIntensity={0.45}
-          verticalSizing={2}
-          horizontalSizing={1.04}
-          wispSpeed={14}
-          wispIntensity={7.2}
-          flowStrength={0.53}
-          decay={1.1}
-          falloffStart={1.2}
-          fogFallSpeed={0.6}
-          fogScale={0.3}
-        />
-      </div>
+      {/* LaserFlow + Footer Box - Unified Component */}
+      <div className="relative z-10 w-full mt-auto flex-shrink-0">
+        {/* LaserFlow Container - Fixed height to maintain consistency */}
+        <div className="relative w-full h-[500px] sm:h-[550px] md:h-[600px] overflow-visible">
+          {/* Extended LaserFlow wrapper - extends upward significantly for smooth transition */}
+          <div className="absolute left-0 right-0 -top-96 bottom-0">
+            <LaserFlow
+              color="#1FB5AD"
+              wispDensity={1.3}
+              flowSpeed={0.35}
+              fogIntensity={0.45}
+              verticalSizing={2.5}
+              horizontalSizing={1.04}
+              wispSpeed={14}
+              wispIntensity={7.2}
+              flowStrength={0.53}
+              decay={1.1}
+              falloffStart={1.2}
+              fogFallSpeed={0.6}
+              fogScale={0.3}
+            />
+          </div>
+          {/* Bloom effects removed per request */}
+          
+          {/* Enhanced gradient mask with smoother fade-in */}
+          <div 
+            className="absolute left-0 right-0 -top-96 h-96 pointer-events-none z-10"
+            style={{
+              background: 'linear-gradient(to bottom, #020617 0%, rgba(2, 6, 23, 0.95) 15%, rgba(2, 6, 23, 0.7) 40%, rgba(2, 6, 23, 0.3) 70%, transparent 100%)'
+            }}
+          />
+          
+          {/* Content - Positioned on top of LaserFlow */}
+          <div className="absolute inset-0 flex items-center justify-center z-20">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 tracking-tight leading-tight">
+                <span className="bg-gradient-to-r from-emerald-200 via-cyan-200 to-teal-300 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(94,234,212,0.3)]">
+                  آماده تحول در کسب‌وکار خود هستید؟
+                </span>
+              </h2>
 
-      {/* Content - Positioned at top away from laser glow */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center pt-16 sm:pt-24 md:pt-32 pb-8 md:pb-12 flex-shrink-0">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 tracking-tight leading-tight">
-          <span className="bg-gradient-to-r from-emerald-200 via-cyan-200 to-teal-300 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(94,234,212,0.3)]">
-            آماده تحول در کسب‌وکار خود هستید؟
-          </span>
-        </h2>
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-100/90 mb-8 sm:mb-10 leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] px-4">
+                به هزاران کسب‌وکاری که از کارانوا استفاده می‌کنند بپیوندید
+              </p>
 
-        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-slate-100/90 mb-8 sm:mb-10 leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] px-4">
-          به هزاران کسب‌وکاری که از کارانوا استفاده می‌کنند بپیوندید
-        </p>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
+                <button className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[var(--landing-primary)] to-[var(--landing-secondary)] rounded-full text-white font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,191,165,0.5)] hover:scale-105 flex items-center justify-center gap-2 flex-row-reverse shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
+                  شروع آزمایش رایگان
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform rotate-180" />
+                </button>
 
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
-          <button className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[var(--landing-primary)] to-[var(--landing-secondary)] rounded-full text-white font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,191,165,0.5)] hover:scale-105 flex items-center justify-center gap-2 flex-row-reverse shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
-            شروع آزمایش رایگان
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform rotate-180" />
-          </button>
-
-          <button className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 border-2 border-cyan-400/50 rounded-full text-cyan-300 font-semibold text-base sm:text-lg transition-all duration-300 hover:bg-cyan-400/10 hover:border-cyan-400 backdrop-blur-sm shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
-            درخواست دمو
-          </button>
+                <button className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 border-2 border-cyan-400/50 rounded-full text-cyan-300 font-semibold text-base sm:text-lg transition-all duration-300 hover:bg-cyan-400/10 hover:border-cyan-400 backdrop-blur-sm shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
+                  درخواست دمو
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Footer Box at Bottom */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pb-0 mt-auto flex-shrink-0">
-        <div className="relative rounded-2xl sm:rounded-3xl border border-cyan-500/30 bg-black/40 backdrop-blur-xl overflow-hidden">
+        {/* Footer Box - Positioned relative to LaserFlow with configurable gap */}
+        <div 
+          className="relative w-full max-w-7xl mx-auto px-4 sm:px-6"
+          style={{ marginTop: `${laserToFooterGap}px` }}
+        >
+          <div className="relative rounded-2xl sm:rounded-3xl border border-cyan-500/30 bg-black/40 backdrop-blur-xl overflow-hidden">
           {/* Dotted Pattern Background */}
           <div 
             className="absolute inset-0 opacity-30"
@@ -161,6 +187,7 @@ export default function FinalCTA() {
                 <a href="#" className="text-sm text-slate-400 hover:text-teal-300 transition-colors">قوانین</a>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>

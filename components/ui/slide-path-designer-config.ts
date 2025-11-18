@@ -12,6 +12,8 @@ export const SLIDE_PATH_DESIGNER_CONFIG: {
     "landing-feature-steps": true,
     "landing-four-advisors": true,
     "landing-why-choose": true,
+    "landing-testimonials": true,
+    "landing-final-cta": true,
   },
 };
 

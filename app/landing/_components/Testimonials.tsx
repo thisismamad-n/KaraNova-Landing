@@ -9,6 +9,7 @@ import {
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useState } from "react";
 import Squares from "@/app/_components/Squares";
+import { SlidePathDesigner } from "@/components/ui/slide-path-designer";
 
 interface StatItem {
   percentage: string;
@@ -48,7 +49,10 @@ export default function TestimonialsSection() {
   ];
 
   return (
-    <section className="relative w-full min-h-screen py-20 overflow-hidden" dir="rtl">
+    <section id="testimonials-section" className="relative w-full min-h-screen py-20 overflow-hidden" dir="rtl">
+      {/* Slide Path Designer */}
+      <SlidePathDesigner slideKey="landing-testimonials" />
+      
       {/* Animated background grid - same as WhyChooseUs */}
       <div className="absolute inset-0 -z-20">
         <Squares
@@ -60,6 +64,17 @@ export default function TestimonialsSection() {
           baseColor="#020617"
           vignetteColor="rgba(2, 6, 23, 0.88)"
         />
+      </div>
+      
+      {/* Smooth fade-out at bottom to transition to LaserFlow */}
+      <div className="absolute bottom-0 left-0 right-0 h-56 pointer-events-none z-20">
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(to bottom, transparent 0%, rgba(2, 6, 23, 0.25) 35%, rgba(2, 6, 23, 0.75) 75%, rgba(2, 6, 23, 0.98) 100%)'
+          }}
+        />
+        {/* Bloom effects removed per request */}
       </div>
 
       {/* Ambient glow effects - same as WhyChooseUs */}
