@@ -38,7 +38,7 @@ export default function JobFilter({
     "Product",
   ];
 
-  const locations: (JobLocation | "all")[] = ["all", "Tehran", "Remote", "Hybrid"];
+  const locations: (JobLocation | "all")[] = ["all", "Mashhad", "Remote", "Hybrid"];
 
   const types: (JobType | "all")[] = ["all", "full-time", "part-time", "contract", "remote"];
 

@@ -1,16 +1,26 @@
 "use client";
 
 import React, { useState, useMemo, useRef } from "react";
+import dynamic from "next/dynamic";
 import PageHero from "@/app/_components/shared/PageHero";
 import ContentSection from "@/app/_components/shared/ContentSection";
 import Squares from "@/app/_components/Squares";
+import LoadingSkeleton from "@/app/_components/shared/LoadingSkeleton";
 import { useLanguage } from "@/lib/contexts/LanguageContext";
 import SupportChannels from "./_components/SupportChannels";
 import FAQAccordion from "./_components/FAQAccordion";
 import SearchFAQ from "./_components/SearchFAQ";
-import AIChatSupport from "./_components/AIChatSupport";
-import SupportForm from "./_components/SupportForm";
 import { mockFAQs } from "./_data/faqs";
+
+// Dynamically import heavy components
+const AIChatSupport = dynamic(() => import("./_components/AIChatSupport"), {
+  loading: () => <LoadingSkeleton variant="chat" />,
+  ssr: false,
+});
+
+const SupportForm = dynamic(() => import("./_components/SupportForm"), {
+  loading: () => <LoadingSkeleton variant="form" />,
+});
 
 export default function SupportPageClient() {
   const { language } = useLanguage();

@@ -116,6 +116,7 @@ export default function TestimonialsSection() {
                           alt="مدیرعامل شرکت فناوری"
                           className="object-cover w-full h-full"
                           style={{ objectPosition: "center" }}
+                          loading="lazy"
                         />
                       </div>
                     </div>
@@ -155,6 +156,7 @@ export default function TestimonialsSection() {
                           src={`https://pro-section.ui-layouts.com/people/aam3.jpg`}
                           alt="مدیر عملیات"
                           className="object-cover w-full h-full"
+                          loading="lazy"
                         />
                       </div>
                     </div>
@@ -192,6 +194,7 @@ export default function TestimonialsSection() {
                     src={`https://pro-section.ui-layouts.com/${stat?.logo}`}
                     alt={stat.label}
                     className="w-[85%] h-10 object-contain grayscale opacity-60 mx-auto translate-y-0 group-hover:-translate-y-12 group-hover:opacity-0 transition-all duration-300 ease-out"
+                    loading="lazy"
                   />
                   <div className="absolute left-0 top-8 opacity-0 flex flex-col items-center justify-center w-full group-hover:-top-3.5 group-hover:opacity-100 transition-all duration-300 ease-out">
                     <div className="flex items-center justify-center gap-2 relative">

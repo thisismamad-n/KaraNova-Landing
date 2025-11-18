@@ -329,29 +329,39 @@
     - **Property 16: Successful form submission shows confirmation**
     - **Validates: Requirements 8.3**
 
-- [ ] 11. Create legal pages
-  - [ ] 11.1 Build shared legal page components
+- [x] 11. Create legal pages
+
+
+  - [x] 11.1 Build shared legal page components
+
+
     - Create LegalContent component with TOC
     - Create LegalSection component for collapsible sections
     - Create VersionHistory component
     - Every thing should be in persian
     - _Requirements: 9.3, 10.2, 10.4, 11.5_
 
-  - [ ] 11.2 Implement Privacy Policy page
+  - [x] 11.2 Implement Privacy Policy page
+
+
     - Create `/app/legal/privacy/page.tsx`
     - Add comprehensive privacy policy content
     - Include sections on data collection, usage, storage, user rights
     - Display last updated date prominently
     - _Requirements: 9.1, 9.2, 9.4_
 
-  - [ ] 11.3 Implement Terms of Use page
+  - [x] 11.3 Implement Terms of Use page
+
+
     - Create `/app/legal/terms/page.tsx`
     - Add complete terms and conditions content
     - Include definitions section
     - Display version history and effective dates
     - _Requirements: 10.1, 10.3, 10.4, 10.5_
 
-  - [ ] 11.4 Implement Legal Compliance page
+  - [x] 11.4 Implement Legal Compliance page
+
+
     - Create `/app/legal/compliance/page.tsx`
     - Display company registration information
     - Add licenses and compliance certifications
@@ -372,8 +382,15 @@
     - **Property 19: Legal document archives are accessible**
     - **Validates: Requirements 11.5**
 
-- [ ] 12. Implement navigation and routing optimizations
-  - [ ] 12.1 Update header and footer navigation links
+- [x] 12. Implement navigation and routing optimizations
+
+
+
+
+
+  - [x] 12.1 Update header and footer navigation links
+
+
     - Update StickyHeader component with correct routes
     - Update FinalCTA footer component with correct routes
     - Ensure all links use Next.js Link component
@@ -383,14 +400,25 @@
     - **Property 20: Navigation uses Next.js Link components**
     - **Validates: Requirements 14.2**
 
-  - [ ] 12.3 Implement route prefetching and optimization
+  - [x] 12.3 Implement route prefetching and optimization
+
+
     - Configure Next.js Link prefetching
     - Implement dynamic imports for heavy components
     - Add loading states and skeletons
     - _Requirements: 14.2_
 
-- [ ] 13. Implement responsive design and mobile optimizations
-  - [ ] 13.1 Apply responsive layouts to all pages
+- [x] 13. Implement responsive design and mobile optimizations
+
+
+
+
+
+  - [x] 13.1 Apply responsive layouts to all pages
+
+
+
+
     - Review and test all pages at mobile breakpoints
     - Ensure proper spacing and typography scaling
     - Verify touch targets meet minimum size requirements
@@ -408,7 +436,7 @@
     - **Property 29: Mobile forms have appropriately sized inputs**
     - **Validates: Requirements 13.4**
 
-  - [ ] 13.5 Implement image optimization
+  - [x] 13.5 Implement image optimization
     - Add lazy loading to below-fold images
     - Use Next.js Image component for optimization
     - Implement responsive image sizes

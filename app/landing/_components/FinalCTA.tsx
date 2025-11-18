@@ -147,9 +147,9 @@ export default function FinalCTA() {
               <div>
                 <h4 className="text-lg font-semibold text-white mb-4">محصولات</h4>
                 <ul className="space-y-2">
-                  <li><a href="/products/inova" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">Inova - هوش تجاری</a></li>
-                  <li><a href="/products/taskease" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">TaskEase - مدیریت پروژه</a></li>
-                  <li><a href="/products/biq" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">BIQ - داشبورد تحلیلی</a></li>
+                  <li><Link href="/products/inova" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">Inova - هوش تجاری</Link></li>
+                  <li><Link href="/products/taskease" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">TaskEase - مدیریت پروژه</Link></li>
+                  <li><Link href="/products/biq" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">BIQ - داشبورد تحلیلی</Link></li>
                 </ul>
               </div>
 
@@ -157,10 +157,9 @@ export default function FinalCTA() {
               <div>
                 <h4 className="text-lg font-semibold text-white mb-4">شرکت</h4>
                 <ul className="space-y-2">
-                  <li><a href="#" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">درباره ما</a></li>
-                  <li><a href="#" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">تیم ما</a></li>
-                  <li><a href="#" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">فرصت‌های شغلی</a></li>
-                  <li><a href="#" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">تماس با ما</a></li>
+                  <li><Link href="/about" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">درباره ما</Link></li>
+                  <li><Link href="/careers" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">فرصت‌های شغلی</Link></li>
+                  <li><Link href="/contact" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">تماس با ما</Link></li>
                 </ul>
               </div>
 
@@ -169,9 +168,9 @@ export default function FinalCTA() {
                 <h4 className="text-lg font-semibold text-white mb-4">منابع</h4>
                 <ul className="space-y-2">
                   <li><Link href="/resources/documentation" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">مستندات</Link></li>
-                  <li><a href="/resources/api" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">راهنمای API</a></li>
-                  <li><a href="/resources/blog" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">وبلاگ</a></li>
-                  <li><a href="/support" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">پشتیبانی</a></li>
+                  <li><Link href="/resources/api" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">راهنمای API</Link></li>
+                  <li><Link href="/resources/blog" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">وبلاگ</Link></li>
+                  <li><Link href="/support" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">پشتیبانی</Link></li>
                 </ul>
               </div>
             </div>
@@ -182,9 +181,9 @@ export default function FinalCTA() {
                 © ۲۰۲۵ کارانوا. تمامی حقوق محفوظ است.
               </p>
               <div className="flex gap-6">
-                <a href="#" className="text-sm text-slate-400 hover:text-teal-300 transition-colors">حریم خصوصی</a>
-                <a href="#" className="text-sm text-slate-400 hover:text-teal-300 transition-colors">شرایط استفاده</a>
-                <a href="#" className="text-sm text-slate-400 hover:text-teal-300 transition-colors">قوانین</a>
+                <Link href="/legal/privacy" className="text-sm text-slate-400 hover:text-teal-300 transition-colors">حریم خصوصی</Link>
+                <Link href="/legal/terms" className="text-sm text-slate-400 hover:text-teal-300 transition-colors">شرایط استفاده</Link>
+                <Link href="/legal/compliance" className="text-sm text-slate-400 hover:text-teal-300 transition-colors">قوانین</Link>
               </div>
             </div>
           </div>

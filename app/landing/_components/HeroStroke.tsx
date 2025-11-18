@@ -86,12 +86,6 @@ const Skiper19 = () => {
       
       <div dir="rtl" className="relative flex w-full max-w-7xl flex-col items-center justify-center gap-8 text-center pt-[13vh] md:-translate-x-12 lg:-translate-x-20">
         <div className="relative">
-          {/* Badge */}
-          <div dir="rtl" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-sm border border-teal-400/30 mb-6 shadow-sm">
-            <span className="w-2 h-2 bg-teal-500 rounded-full animate-pulse" />
-            <span className="text-sm font-medium text-teal-200">پلتفرم مدیریت کسب‌وکار با هوش مصنوعی</span>
-          </div>
-
           <h1 className="relative z-10 text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.08] mb-6 text-balance drop-shadow-[0_18px_48px_rgba(8,47,73,0.55)]" dir="rtl">
             <span className="bg-gradient-to-r from-emerald-200 via-cyan-200 to-teal-300 bg-clip-text text-transparent">
               گره گشایی کسب و کار
@@ -207,21 +201,3 @@ const LinePath = ({
     </svg>
   );
 };
-
-/**
- * Skiper 19 — React + framer motion
- * Inspired by and adapted from https://comgio.ai/
- * We respect the original creators. This is an inspired rebuild with our own taste and does not claim any ownership.
- * These animations aren't associated with the comgio.ai . They're independent recreations meant to study interaction design
- *
- * License & Usage:
- * - Free to use and modify in both personal and commercial projects.
- * - Attribution to Skiper UI is required when using the free version.
- * - No attribution required with Skiper UI Pro.
- *
- * Feedback and contributions are welcome.
- *
- * Author: @gurvinder-singh02
- * Website: https://gxuri.in
- * Twitter: https://x.com/Gur__vi
- */

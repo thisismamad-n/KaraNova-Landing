@@ -66,3 +66,30 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Fix for gradient text clipping */
+.bg-clip-text {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+  line-height: 1.2;
+}
+
+/* Ensure headings with gradient text don't clip */
+h1.bg-clip-text,
+h2.bg-clip-text,
+h3.bg-clip-text {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  line-height: 1.15;
+}
+
+/* For spans inside headings with gradient text */
+h1 > span.bg-clip-text,
+h2 > span.bg-clip-text,
+h3 > span.bg-clip-text {
+  display: inline-block;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}

@@ -87,8 +87,13 @@ export default function PageHero({
             "text-4xl sm:text-5xl lg:text-6xl font-bold mb-6",
             "bg-gradient-to-r from-slate-100 via-teal-200 to-cyan-200",
             "bg-clip-text text-transparent",
-            "drop-shadow-[0_0_30px_rgba(20,184,166,0.3)]"
+            "drop-shadow-[0_0_30px_rgba(20,184,166,0.3)]",
+            "leading-tight py-2"
           )}
+          style={{ 
+            WebkitBoxDecorationBreak: 'clone',
+            boxDecorationBreak: 'clone'
+          }}
         >
           {title}
         </motion.h1>

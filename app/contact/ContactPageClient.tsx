@@ -1,14 +1,20 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import PageHero from "@/app/_components/shared/PageHero";
 import ContentSection from "@/app/_components/shared/ContentSection";
 import Squares from "@/app/_components/Squares";
+import LoadingSkeleton from "@/app/_components/shared/LoadingSkeleton";
 import { useLanguage } from "@/lib/contexts/LanguageContext";
 import ContactInfo from "./_components/ContactInfo";
 import OfficeMap from "./_components/OfficeMap";
 import SocialLinks from "./_components/SocialLinks";
-import ContactForm from "./_components/ContactForm";
+
+// Dynamically import heavy form component
+const ContactForm = dynamic(() => import("./_components/ContactForm"), {
+  loading: () => <LoadingSkeleton variant="form" />,
+});
 
 export default function ContactPageClient() {
   const { language } = useLanguage();

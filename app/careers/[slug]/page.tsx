@@ -15,9 +15,10 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const job = mockJobs.find((j) => j.slug === params.slug);
+  const { slug } = await params;
+  const job = mockJobs.find((j) => j.slug === slug);
 
   if (!job) {
     return generatePageMetadata({
@@ -44,8 +45,9 @@ export async function generateMetadata({
   });
 }
 
-export default function JobDetailPage({ params }: { params: { slug: string } }) {
-  const job = mockJobs.find((j) => j.slug === params.slug);
+export default async function JobDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const job = mockJobs.find((j) => j.slug === slug);
 
   if (!job) {
     notFound();

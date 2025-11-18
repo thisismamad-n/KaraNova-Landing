@@ -25,7 +25,7 @@ const StickyHeader: React.FC = () => {
       links: [
         { label: "معرفی شرکت", href: "/about", ariaLabel: "معرفی کارانوا" },
         { label: "مسیرهای شغلی", href: "/careers", ariaLabel: "فرصت‌های شغلی کارانوا" },
-        { label: "تیم ما", href: "/team", ariaLabel: "تیم کارانوا" },
+        { label: "تماس با ما", href: "/contact", ariaLabel: "تماس با کارانوا" },
       ],
     },
     {

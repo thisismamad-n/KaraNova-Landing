@@ -301,6 +301,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     placeholder={currentContent.placeholders.name}
                     className={cn(
                       "w-full px-4 py-3 rounded-lg",
+                      "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
                       "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
                       "border",
                       errors.name
@@ -339,6 +340,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     placeholder={currentContent.placeholders.email}
                     className={cn(
                       "w-full px-4 py-3 rounded-lg",
+                      "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
                       "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
                       "border",
                       errors.email
@@ -380,6 +382,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     placeholder={currentContent.placeholders.phone}
                     className={cn(
                       "w-full px-4 py-3 rounded-lg",
+                      "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
                       "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
                       "border",
                       errors.phone
@@ -418,6 +421,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     placeholder={currentContent.placeholders.company}
                     className={cn(
                       "w-full px-4 py-3 rounded-lg",
+                      "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
                       "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
                       "border border-slate-700/50",
                       "focus:outline-none focus:border-teal-500/50 focus:ring-2 focus:ring-teal-500/20",
@@ -444,6 +448,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   placeholder={currentContent.placeholders.subject}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
+                    "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
                     "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
                     "border",
                     errors.subject
@@ -482,6 +487,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   rows={5}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
+                    "text-base", // Prevent zoom on iOS
                     "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
                     "border",
                     errors.message
@@ -519,6 +525,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   onChange={handleChange}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
+                    "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
                     "backdrop-blur-md bg-slate-800/40 text-slate-100",
                     "border border-slate-700/50",
                     "focus:outline-none focus:border-teal-500/50 focus:ring-2 focus:ring-teal-500/20",

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Link from "next/link";
@@ -9,10 +10,15 @@ import { ArrowLeft, MapPin, Briefcase, Calendar, CheckCircle } from "lucide-reac
 import PageHero from "@/app/_components/shared/PageHero";
 import ContentSection from "@/app/_components/shared/ContentSection";
 import Squares from "@/app/_components/Squares";
+import LoadingSkeleton from "@/app/_components/shared/LoadingSkeleton";
 import { useLanguage } from "@/lib/contexts/LanguageContext";
-import ApplicationForm from "@/app/careers/[slug]/_components/ApplicationForm";
 import type { JobPosting } from "@/app/careers/_data/jobs";
 import { jobTranslations } from "@/app/careers/_data/jobs";
+
+// Dynamically import heavy form component
+const ApplicationForm = dynamic(() => import("@/app/careers/[slug]/_components/ApplicationForm"), {
+  loading: () => <LoadingSkeleton variant="form" />,
+});
 
 interface JobDetailClientProps {
   job: JobPosting;

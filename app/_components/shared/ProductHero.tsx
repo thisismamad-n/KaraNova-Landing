@@ -85,13 +85,15 @@ export default function ProductHero({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight py-2"
             >
               <span
                 className="bg-clip-text text-transparent"
                 style={{
                   backgroundImage: `linear-gradient(to right, ${gradientFrom}, ${gradientTo})`,
                   filter: `drop-shadow(0 0 30px ${gradientFrom}40)`,
+                  WebkitBoxDecorationBreak: 'clone',
+                  boxDecorationBreak: 'clone',
                 }}
               >
                 {title}
@@ -150,6 +152,8 @@ export default function ProductHero({
                   width={600}
                   height={400}
                   className="rounded-lg w-full h-auto"
+                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
                 />
                 {/* Glow effect */}
                 <div

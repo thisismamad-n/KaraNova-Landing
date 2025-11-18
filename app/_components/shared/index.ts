@@ -18,3 +18,5 @@ export type { UseCaseCardsProps, UseCase } from "./UseCaseCards";
 
 export { default as PricingComparison } from "./PricingComparison";
 export type { PricingComparisonProps, PricingTier } from "./PricingComparison";
+
+export { default as LoadingSkeleton } from "./LoadingSkeleton";

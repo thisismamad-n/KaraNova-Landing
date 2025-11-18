@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import PageHero from "@/app/_components/shared/PageHero";
 import ContentSection from "@/app/_components/shared/ContentSection";
@@ -214,10 +215,13 @@ export default function BlogPostClient({ slug }: BlogPostClientProps) {
               )}
             >
               {post.author.avatar && (
-                <img
+                <Image
                   src={post.author.avatar}
                   alt={authorName}
+                  width={64}
+                  height={64}
                   className="w-16 h-16 rounded-full object-cover"
+                  loading="lazy"
                 />
               )}
               <div className={language === "fa" ? "text-right" : "text-left"}>

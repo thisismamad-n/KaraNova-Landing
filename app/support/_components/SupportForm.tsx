@@ -250,6 +250,7 @@ export default function SupportForm({ language }: SupportFormProps) {
                   placeholder={currentContent.placeholders.name}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
+                    "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
                     "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
                     "border",
                     errors.name ? "border-red-500/50" : "border-slate-700/50",
@@ -286,6 +287,7 @@ export default function SupportForm({ language }: SupportFormProps) {
                   placeholder={currentContent.placeholders.email}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
+                    "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
                     "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
                     "border",
                     errors.email ? "border-red-500/50" : "border-slate-700/50",
@@ -325,6 +327,7 @@ export default function SupportForm({ language }: SupportFormProps) {
                   placeholder={currentContent.placeholders.subject}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
+                    "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
                     "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
                     "border",
                     errors.subject ? "border-red-500/50" : "border-slate-700/50",
@@ -359,6 +362,7 @@ export default function SupportForm({ language }: SupportFormProps) {
                   onChange={handleChange}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
+                    "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
                     "backdrop-blur-md bg-slate-800/40 text-slate-100",
                     "border border-slate-700/50",
                     "focus:outline-none focus:border-teal-500/50 focus:ring-2 focus:ring-teal-500/20",
@@ -390,6 +394,7 @@ export default function SupportForm({ language }: SupportFormProps) {
                 rows={5}
                 className={cn(
                   "w-full px-4 py-3 rounded-lg",
+                  "text-base", // Prevent zoom on iOS
                   "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
                   "border",
                   errors.message ? "border-red-500/50" : "border-slate-700/50",
