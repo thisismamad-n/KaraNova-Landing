@@ -204,9 +204,7 @@ const SnapScrollSection = () => {
         className="pointer-events-none absolute inset-0"
       >
         <div className="absolute inset-0 opacity-60 bg-gradient-to-b from-[#03252b]/50 via-[#030b11]/70 to-[#010203]/80" />
-        <div className="absolute inset-0 opacity-50 bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.12),transparent_60%)]" />
-        <div className="absolute inset-0 opacity-45 bg-[radial-gradient(circle_at_bottom,rgba(16,185,129,0.12),transparent_65%)]" />
-        <div className="absolute left-1/2 top-1/2 h-[130%] w-[130%] -translate-x-1/2 -translate-y-1/2 rounded-[45%] border border-white/5 opacity-25 blur-2xl" />
+        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.08),transparent_60%)]" />
       </div>
       <div
         ref={(el) => {
@@ -305,7 +303,9 @@ const AnimatedNumber_001 = () => {
           <div className="absolute left-1/2 top-1/2 h-[32vw] w-[32vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-400/15 blur-[130px]" />
           <div className="absolute left-1/2 top-1/2 h-[26vw] w-[26vw] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-35" />
         </div>
-        <NumberFlow value={count} prefix="0:" />
+        <span className="inline-flex items-center">
+          <NumberFlow value={count} />
+        </span>
       </div>
       <div className="flex w-fit items-center gap-3">
         <motion.button
@@ -588,22 +588,14 @@ const DOT_COLORS: Record<SlideHaloProps["accent"], string> = {
 function SlideHalo({ accent }: SlideHaloProps) {
   const gradient = HALO_GRADIENTS[accent];
   const ring = RING_COLORS[accent];
-  const dot = DOT_COLORS[accent];
 
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0">
       <div
-        className={`absolute left-1/2 top-1/3 h-[45vh] w-[65vw] -translate-x-1/2 rounded-[50%] bg-gradient-to-r ${gradient} blur-[130px] opacity-75`}
+        className={`absolute left-1/2 top-1/3 h-[45vh] w-[65vw] -translate-x-1/2 rounded-[50%] bg-gradient-to-r ${gradient} blur-[100px] opacity-60`}
       />
       <div
-        className={`absolute left-1/2 top-1/2 h-[48vh] w-[48vh] -translate-x-1/2 -translate-y-1/2 rounded-full ${ring} opacity-45`}
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[length:140px_140px] opacity-20" />
-      <div
-        className={`absolute right-[12%] top-[28%] h-24 w-24 rounded-full ${ring} opacity-30 blur-2xl`}
-      />
-      <div
-        className={`absolute left-[18%] bottom-[20%] h-16 w-16 rounded-full ${dot} blur-[90px] opacity-70`}
+        className={`absolute left-1/2 top-1/2 h-[48vh] w-[48vh] -translate-x-1/2 -translate-y-1/2 rounded-full ${ring} opacity-30`}
       />
     </div>
   );

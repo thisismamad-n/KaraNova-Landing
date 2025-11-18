@@ -47,45 +47,45 @@ const FourAdvisorsSection = () => {
 
         {/* Four Advisor Animations Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          <div className="flex flex-col items-center gap-4">
+          <a href="/products/inova" className="flex flex-col items-center gap-4 group cursor-pointer transition-transform hover:scale-105">
             <CanvasAnimation title="Vision AI" animationId="sonar-sweep" />
             <div className="text-center" dir="rtl">
-              <h3 className="text-xl font-bold text-teal-100 mb-2">دستیار چشم انداز</h3>
+              <h3 className="text-xl font-bold text-teal-100 mb-2 group-hover:text-teal-300 transition-colors">دستیار چشم انداز</h3>
               <p className="text-sm text-slate-300/80 max-w-[320px]">
                 تحلیل بازار، رقبا و فرصت‌های رشد با دید ۳۶۰ درجه
               </p>
             </div>
-          </div>
+          </a>
 
-          <div className="flex flex-col items-center gap-4">
+          <a href="/products/inova" className="flex flex-col items-center gap-4 group cursor-pointer transition-transform hover:scale-105">
             <CanvasAnimation title="Creative AI" animationId="interconnecting-waves" />
             <div className="text-center" dir="rtl">
-              <h3 className="text-xl font-bold text-teal-100 mb-2">دستیار خلاق</h3>
+              <h3 className="text-xl font-bold text-teal-100 mb-2 group-hover:text-teal-300 transition-colors">دستیار خلاق</h3>
               <p className="text-sm text-slate-300/80 max-w-[320px]">
                 تولید محتوا، طراحی و ایده‌پردازی خلاقانه
               </p>
             </div>
-          </div>
+          </a>
 
-          <div className="flex flex-col items-center gap-4">
+          <a href="/products/inova" className="flex flex-col items-center gap-4 group cursor-pointer transition-transform hover:scale-105">
             <CanvasAnimation title="Supply AI" animationId="helix-scanner" />
             <div className="text-center" dir="rtl">
-              <h3 className="text-xl font-bold text-teal-100 mb-2">دستیار رسان</h3>
+              <h3 className="text-xl font-bold text-teal-100 mb-2 group-hover:text-teal-300 transition-colors">دستیار رسان</h3>
               <p className="text-sm text-slate-300/80 max-w-[320px]">
                 بهینه‌سازی زنجیره تامین و پیش‌بینی تقاضا
               </p>
             </div>
-          </div>
+          </a>
 
-          <div className="flex flex-col items-center gap-4">
+          <a href="/products/inova" className="flex flex-col items-center gap-4 group cursor-pointer transition-transform hover:scale-105">
             <CanvasAnimation title="Govern AI" animationId="crystalline-cube-refraction" />
             <div className="text-center" dir="rtl">
-              <h3 className="text-xl font-bold text-teal-100 mb-2">دستیار آیین</h3>
+              <h3 className="text-xl font-bold text-teal-100 mb-2 group-hover:text-teal-300 transition-colors">دستیار آیین</h3>
               <p className="text-sm text-slate-300/80 max-w-[320px]">
                 مدیریت حاکمیت، ریسک و انطباق با استانداردها
               </p>
             </div>
-          </div>
+          </a>
         </div>
 
         {/* Bottom CTA or Stats */}

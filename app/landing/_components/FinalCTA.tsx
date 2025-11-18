@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import LaserFlow from "@/components/ui/LaserFlow";
 import Squares from "@/app/_components/Squares";
@@ -146,10 +147,10 @@ export default function FinalCTA() {
               <div>
                 <h4 className="text-lg font-semibold text-white mb-4">محصولات</h4>
                 <ul className="space-y-2">
-                  <li><a href="#" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">Inova - هوش تجاری</a></li>
-                  <li><a href="#" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">TaskEase - مدیریت پروژه</a></li>
-                  <li><a href="#" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">BIQ - داشبورد تحلیلی</a></li>
-                  <li><a href="#" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">عوامل هوش مصنوعی</a></li>
+                  <li><a href="/products/inova" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">Inova - هوش تجاری</a></li>
+                  <li><a href="/products/taskease" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">TaskEase - مدیریت پروژه</a></li>
+                  <li><a href="/products/biq" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">BIQ - داشبورد تحلیلی</a></li>
+                  <li><a href="/products/inova" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">عوامل هوش مصنوعی</a></li>
                 </ul>
               </div>
 
@@ -168,7 +169,7 @@ export default function FinalCTA() {
               <div>
                 <h4 className="text-lg font-semibold text-white mb-4">منابع</h4>
                 <ul className="space-y-2">
-                  <li><a href="#" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">مستندات</a></li>
+                  <li><Link href="/resources/documentation" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">مستندات</Link></li>
                   <li><a href="#" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">راهنمای API</a></li>
                   <li><a href="#" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">وبلاگ</a></li>
                   <li><a href="#" className="text-sm text-slate-300/80 hover:text-teal-300 transition-colors">پشتیبانی</a></li>

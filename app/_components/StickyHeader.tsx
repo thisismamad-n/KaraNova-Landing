@@ -23,19 +23,30 @@ const StickyHeader: React.FC = () => {
       bgColor: "rgba(13, 20, 32, 0.82)",
       textColor: "#e2e8f0",
       links: [
-        { label: "معرفی شرکت", href: "/#about", ariaLabel: "معرفی کارانوا" },
-        { label: "مسیرهای شغلی", href: "/#careers", ariaLabel: "فرصت‌های شغلی کارانوا" },
-        { label: "تیم ما", href: "/#team", ariaLabel: "تیم کارانوا" },
+        { label: "معرفی شرکت", href: "/about", ariaLabel: "معرفی کارانوا" },
+        { label: "مسیرهای شغلی", href: "/careers", ariaLabel: "فرصت‌های شغلی کارانوا" },
+        { label: "تیم ما", href: "/team", ariaLabel: "تیم کارانوا" },
       ],
     },
     {
-      label: "راهکارها",
+      label: "محصولات",
       bgColor: "rgba(13, 20, 32, 0.82)",
       textColor: "#e2e8f0",
       links: [
-        { label: "مدیریت پروژه‌ها", href: "/#solutions", ariaLabel: "راهکار مدیریت پروژه کارانوا" },
-        { label: "اتوماسیون هوشمند", href: "/#automation", ariaLabel: "اتوماسیون هوشمند کارانوا" },
-        { label: "داشبورد تحلیلی", href: "/#analytics", ariaLabel: "داشبورد تحلیلی کارانوا" },
+        { label: "اینووا - هوش تجاری", href: "/products/inova", ariaLabel: "اینووا - چهار مشاور هوشمند" },
+        { label: "تسک‌ایز - مدیریت پروژه", href: "/products/taskease", ariaLabel: "تسک‌ایز - مدیریت پروژه با AI" },
+        { label: "بی‌آی‌کیو - داشبورد", href: "/products/biq", ariaLabel: "بی‌آی‌کیو - داشبورد تحلیلی" },
+      ],
+    },
+    {
+      label: "منابع",
+      bgColor: "rgba(13, 20, 32, 0.82)",
+      textColor: "#e2e8f0",
+      links: [
+        { label: "مستندات", href: "/resources/documentation", ariaLabel: "مستندات کارانوا" },
+        { label: "راهنمای API", href: "/resources/api", ariaLabel: "راهنمای API کارانوا" },
+        { label: "وبلاگ", href: "/resources/blog", ariaLabel: "وبلاگ کارانوا" },
+        { label: "پشتیبانی", href: "/support", ariaLabel: "پشتیبانی کارانوا" },
       ],
     },
     {

@@ -21,9 +21,20 @@ export function ContinuousPath({
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 1920, height: 3000 });
   const completionTarget = useMotionValue(1);
+  const [hasRendered, setHasRendered] = useState(false);
   
-  // Check if the path is in view
-  const isInView = useInView(containerRef, { amount: 0.1, once: false });
+  // Check if the path is in view - only render once it's been seen
+  const isInView = useInView(containerRef, { amount: 0.05, once: false });
+  
+  useEffect(() => {
+    // Use requestAnimationFrame to defer state update
+    if (isInView && !hasRendered) {
+      const rafId = requestAnimationFrame(() => {
+        setHasRendered(true);
+      });
+      return () => cancelAnimationFrame(rafId);
+    }
+  }, [isInView, hasRendered]);
 
   // Calculate total height
   useEffect(() => {
@@ -101,6 +112,8 @@ export function ContinuousPath({
   const pathLength = useTransform(normalizedProgress, [0, 1], [0, 1]);
   const strokeDashoffset = useTransform(pathLength, (value) => 1 - value);
   const glowOpacity = useTransform(pathLength, [0, 0.3, 1], [0, 0.7, 1]);
+  // Pre-calculate outer glow opacity to avoid hook in JSX
+  const outerGlowOpacity = useTransform(glowOpacity, (v) => (typeof v === 'number' ? v * 0.7 : 0));
 
   if (!enabled || !pathData) return null;
 
@@ -112,7 +125,7 @@ export function ContinuousPath({
         height: `${dimensions.height}px`,
       }}
     >
-      {isInView ? (
+      {hasRendered && isInView ? (
         <svg
           className="absolute inset-0 w-full h-full"
           viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
@@ -126,6 +139,7 @@ export function ContinuousPath({
               <stop offset="100%" stopColor="var(--landing-accent)" />
             </linearGradient>
           </defs>
+          {/* Main path with enhanced glow */}
           <motion.path
             d={pathData}
             stroke={`url(#${gradientId})`}
@@ -137,15 +151,16 @@ export function ContinuousPath({
             style={{
               pathLength,
               strokeDashoffset,
-              filter:
-                "drop-shadow(0 0 18px rgba(20, 184, 166, 0.55)) drop-shadow(0 0 42px rgba(20, 184, 166, 0.45)) drop-shadow(0 0 64px rgba(14, 165, 233, 0.35))",
-              strokeOpacity: 0.82,
+              filter: "drop-shadow(0 0 8px rgba(20, 184, 166, 0.8)) drop-shadow(0 0 16px rgba(20, 184, 166, 0.6))",
+              strokeOpacity: 0.9,
+              willChange: "auto",
             }}
           />
+          {/* Inner glow layer - tight blur for definition */}
           <motion.path
             d={pathData}
-            stroke={`url(#${gradientId})`}
-            strokeWidth={strokeWidth * 1.1}
+            stroke="rgba(94, 234, 212, 0.6)"
+            strokeWidth={strokeWidth * 1.8}
             strokeLinecap="round"
             strokeLinejoin="round"
             fill="none"
@@ -154,29 +169,16 @@ export function ContinuousPath({
               pathLength,
               strokeDashoffset,
               opacity: glowOpacity,
-            }}
-          />
-          <motion.path
-            d={pathData}
-            stroke="rgba(184, 255, 245, 0.95)"
-            strokeWidth={strokeWidth * 1.35}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            fill="none"
-            pathLength={1}
-            style={{
-              pathLength,
-              strokeDashoffset,
-              opacity: glowOpacity,
-              filter:
-                "drop-shadow(0 0 32px rgba(94, 234, 212, 0.75)) drop-shadow(0 0 72px rgba(59, 130, 246, 0.45))",
+              filter: "blur(6px)",
               mixBlendMode: "screen",
+              willChange: "auto",
             }}
           />
+          {/* Outer glow layer - wider blur for atmosphere */}
           <motion.path
             d={pathData}
-            stroke="rgba(16, 185, 129, 0.45)"
-            strokeWidth={strokeWidth * 2.4}
+            stroke="rgba(20, 184, 166, 0.4)"
+            strokeWidth={strokeWidth * 3}
             strokeLinecap="round"
             strokeLinejoin="round"
             fill="none"
@@ -184,9 +186,10 @@ export function ContinuousPath({
             style={{
               pathLength,
               strokeDashoffset,
-              opacity: glowOpacity,
+              opacity: outerGlowOpacity,
               filter: "blur(12px)",
               mixBlendMode: "screen",
+              willChange: "auto",
             }}
           />
         </svg>
