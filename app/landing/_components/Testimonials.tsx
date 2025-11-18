@@ -110,6 +110,7 @@ export default function TestimonialsSection() {
                         aria-expanded={hoveredImage === "ops"}
                         data-hovered={hoveredImage === "ops"}
                       >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={`https://pro-section.ui-layouts.com/people/aam1.png`}
                           alt="مدیرعامل شرکت فناوری"
@@ -149,6 +150,7 @@ export default function TestimonialsSection() {
                         aria-expanded={hoveredImage === "finance"}
                         data-hovered={hoveredImage === "finance"}
                       >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={`https://pro-section.ui-layouts.com/people/aam3.jpg`}
                           alt="مدیر عملیات"
@@ -185,6 +187,7 @@ export default function TestimonialsSection() {
                   <div className="w-0.5 h-9 border border-dashed border-teal-500/30 absolute left-0" />
                 )}
                 <div className="w-full h-full group">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`https://pro-section.ui-layouts.com/${stat?.logo}`}
                     alt={stat.label}

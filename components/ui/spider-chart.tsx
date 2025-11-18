@@ -35,10 +35,12 @@ export function SpiderChart({
     return metrics.map((_, i) => (Math.PI * 2 * i) / n - Math.PI / 2)
   }, [metrics])
 
-  const scalePoint = (value: number, angle: number) => {
-    const r = (Math.max(0, Math.min(value, max)) / max) * radius
-    return [center + r * Math.cos(angle), center + r * Math.sin(angle)]
-  }
+  const scalePoint = useMemo(() => {
+    return (value: number, angle: number) => {
+      const r = (Math.max(0, Math.min(value, max)) / max) * radius
+      return [center + r * Math.cos(angle), center + r * Math.sin(angle)]
+    }
+  }, [max, radius, center])
 
   const ringPolygons = useMemo(() => {
     const n = metrics.length
@@ -54,12 +56,12 @@ export function SpiderChart({
       arr.push(pts.join(" "))
     }
     return arr
-  }, [angles, levels, metrics.length])
+  }, [angles, levels, metrics.length, center, radius])
 
   const dataPath = useMemo(() => {
     const pts = metrics.map((m, i) => scalePoint(m.value, angles[i]))
     return `M ${pts.map(([x, y]) => `${x},${y}`).join(" L ")} Z`
-  }, [metrics, angles])
+  }, [metrics, angles, scalePoint])
 
   const labelPoints = useMemo(() => {
     const offset = 20
@@ -73,7 +75,7 @@ export function SpiderChart({
         : "middle"
       return { label: m.label, x: x + (anchor === "start" ? offset : anchor === "end" ? -offset : 0), y, anchor }
     })
-  }, [metrics, angles])
+  }, [metrics, angles, center, radius])
 
   const [hovered, setHovered] = useState(false)
 

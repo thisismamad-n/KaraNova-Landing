@@ -1,8 +1,7 @@
 "use client";
 
 import NumberFlow from "@number-flow/react";
-import { AnimatePresence, motion, useSpring } from "framer-motion";
-import { animate, useMotionValue } from "framer-motion";
+import { AnimatePresence, motion, useSpring, animate, useMotionValue } from "framer-motion";
 import { Plus } from "lucide-react";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
@@ -261,6 +260,14 @@ const AnimatedNumber_001 = () => {
 
   const { ref, inView } = useInView({ triggerOnce: false, threshold: 0.35 });
 
+  // Reset count when not in view or when resetTrigger changes
+  useEffect(() => {
+    if (!inView || resetTrigger > 0) {
+      const timeoutId = setTimeout(() => setCount(60), 0);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [inView, resetTrigger]);
+
   useEffect(() => {
     if (isPaused || !inView) return;
 
@@ -277,17 +284,6 @@ const AnimatedNumber_001 = () => {
       clearInterval(id);
     };
   }, [isPaused, inView]);
-
-  useEffect(() => {
-    if (!inView) {
-      setCount(60);
-    }
-  }, [inView]);
-
-  // Reset timer when resetTrigger changes
-  useEffect(() => {
-    setCount(60);
-  }, [resetTrigger]);
 
   const handleReset = () => {
     setResetTrigger((prev) => prev + 1);
@@ -515,7 +511,7 @@ function AnimatedNumber_004() {
 
   useEffect(() => {
     if (inView) {
-      animate(count, 60, {
+      const controls = animate(count, 60, {
         duration: 1,
         ease: "easeInOut",
         onUpdate: (latest) => setDisplayValue(Math.round(latest)),
@@ -523,8 +519,10 @@ function AnimatedNumber_004() {
           console.log("complete");
         },
       });
+      return () => controls.stop();
     } else {
-      setDisplayValue(3);
+      const timeoutId = setTimeout(() => setDisplayValue(3), 0);
+      return () => clearTimeout(timeoutId);
     }
   }, [inView, count]);
 

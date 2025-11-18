@@ -65,10 +65,10 @@ export function MultiSectionPathDesigner({
   enabled = true,
   label = "طراح مسیر چند بخشی",
 }: MultiSectionPathDesignerProps) {
-  const [points, setPoints] = useState<Point[]>([]);
   const [sectionOffsets, setSectionOffsets] = useState<Map<string, number>>(new Map());
   const [cursor, setCursor] = useState<{ x: number; y: number; sectionId: string } | null>(null);
   const [copied, setCopied] = useState(false);
+  const [sectionElements, setSectionElements] = useState<Map<string, HTMLElement>>(new Map());
   const sectionsRef = useRef<Map<string, HTMLElement>>(new Map());
 
   // Calculate section offsets
@@ -77,6 +77,7 @@ export function MultiSectionPathDesigner({
 
     const updateOffsets = () => {
       const offsets = new Map<string, number>();
+      const elements = new Map<string, HTMLElement>();
       const firstSection = document.getElementById(sectionIds[0]);
       const firstTop = firstSection?.offsetTop ?? 0;
 
@@ -84,11 +85,13 @@ export function MultiSectionPathDesigner({
         const el = document.getElementById(id);
         if (el) {
           sectionsRef.current.set(id, el);
+          elements.set(id, el);
           offsets.set(id, el.offsetTop - firstTop);
         }
       });
 
       setSectionOffsets(offsets);
+      setSectionElements(elements);
     };
 
     updateOffsets();
@@ -101,21 +104,22 @@ export function MultiSectionPathDesigner({
     };
   }, [sectionIds, enabled]);
 
-  // Load saved points
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  // Load saved points - use lazy initialization to avoid setState in effect
+  const [points, setPoints] = useState<Point[]>(() => {
+    if (typeof window === "undefined") return [];
     const saved = window.localStorage.getItem(storageKey);
-    if (!saved) return;
+    if (!saved) return [];
 
     try {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed)) {
-        setPoints(parsed);
+        return parsed;
       }
     } catch {
       window.localStorage.removeItem(storageKey);
     }
-  }, [storageKey]);
+    return [];
+  });
 
   // Save points
   useEffect(() => {
@@ -129,6 +133,54 @@ export function MultiSectionPathDesigner({
     const timeout = window.setTimeout(() => setCopied(false), 1600);
     return () => window.clearTimeout(timeout);
   }, [copied]);
+
+  const pathData = useMemo(() => toPathData(points, sectionOffsets), [points, sectionOffsets]);
+
+  const getSectionFromPoint = useCallback(
+    (clientY: number): string | null => {
+      for (const [id, el] of sectionsRef.current.entries()) {
+        const rect = el.getBoundingClientRect();
+        if (clientY >= rect.top && clientY <= rect.bottom) {
+          return id;
+        }
+      }
+      return null;
+    },
+    [],
+  );
+
+  const copyPath = useCallback(async () => {
+    if (!pathData) return;
+
+    try {
+      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(pathData);
+        setCopied(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [pathData]);
+
+  const addPoint = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (!enabled || event.button !== 0) return;
+      event.preventDefault();
+
+      const sectionId = getSectionFromPoint(event.clientY);
+      if (!sectionId) return;
+
+      const section = sectionsRef.current.get(sectionId);
+      if (!section) return;
+
+      const rect = section.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      setPoints((prev) => [...prev, { x: Number(x.toFixed(2)), y: Number(y.toFixed(2)), sectionId }]);
+    },
+    [enabled, getSectionFromPoint],
+  );
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -151,55 +203,7 @@ export function MultiSectionPathDesigner({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  });
-
-  const pathData = useMemo(() => toPathData(points, sectionOffsets), [points, sectionOffsets]);
-
-  const getSectionFromPoint = useCallback(
-    (clientY: number): string | null => {
-      for (const [id, el] of sectionsRef.current.entries()) {
-        const rect = el.getBoundingClientRect();
-        if (clientY >= rect.top && clientY <= rect.bottom) {
-          return id;
-        }
-      }
-      return null;
-    },
-    [],
-  );
-
-  const addPoint = useCallback(
-    (event: React.PointerEvent<HTMLDivElement>) => {
-      if (!enabled || event.button !== 0) return;
-      event.preventDefault();
-
-      const sectionId = getSectionFromPoint(event.clientY);
-      if (!sectionId) return;
-
-      const section = sectionsRef.current.get(sectionId);
-      if (!section) return;
-
-      const rect = section.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-
-      setPoints((prev) => [...prev, { x: Number(x.toFixed(2)), y: Number(y.toFixed(2)), sectionId }]);
-    },
-    [enabled, getSectionFromPoint],
-  );
-
-  const copyPath = useCallback(async () => {
-    if (!pathData) return;
-
-    try {
-      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(pathData);
-        setCopied(true);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [pathData]);
+  }, [enabled, copyPath]);
 
   if (!enabled) return null;
 
@@ -207,7 +211,7 @@ export function MultiSectionPathDesigner({
     <>
       {/* Render overlay for each section using portals */}
       {sectionIds.map((sectionId) => {
-        const section = sectionsRef.current.get(sectionId);
+        const section = sectionElements.get(sectionId);
         if (!section) return null;
 
         const overlay = (

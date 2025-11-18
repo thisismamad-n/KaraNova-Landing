@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState, useCallback } from 'react';
 import { gsap } from 'gsap';
 import { GoArrowUpRight } from 'react-icons/go';
 
@@ -77,7 +77,7 @@ const CardNav: React.FC<CardNavProps> = ({
     return 320;
   };
 
-  const createTimeline = () => {
+  const createTimeline = useCallback(() => {
     const navEl = navRef.current;
     if (!navEl) return null;
 
@@ -106,7 +106,7 @@ const CardNav: React.FC<CardNavProps> = ({
     );
 
     return tl;
-  };
+  }, []);
 
   useLayoutEffect(() => {
     const tl = createTimeline();
@@ -116,7 +116,7 @@ const CardNav: React.FC<CardNavProps> = ({
       tl?.kill();
       tlRef.current = null;
     };
-  }, [ease, items]);
+  }, [items, createTimeline]);
 
   useLayoutEffect(() => {
     const handleResize = () => {
@@ -143,7 +143,7 @@ const CardNav: React.FC<CardNavProps> = ({
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [isExpanded]);
+  }, [isExpanded, createTimeline]);
 
   const toggleMenu = () => {
     const tl = tlRef.current;
@@ -184,6 +184,7 @@ const CardNav: React.FC<CardNavProps> = ({
           </div>
 
           <div className="logo-container">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={logo} alt={logoAlt} className="logo" />
           </div>
 

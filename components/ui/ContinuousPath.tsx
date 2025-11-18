@@ -69,7 +69,7 @@ export function ContinuousPath({
       clearTimeout(timeoutId);
       window.removeEventListener("resize", updateDimensions);
     };
-  }, [sectionIds, enabled]);
+  }, [sectionIds, enabled, completionTarget]);
 
   // Scroll-based animation - complete the path by the time FinalCTA is visible
   const { scrollYProgress } = useScroll({

@@ -78,7 +78,6 @@ interface SlidePathDesignerProps {
 
 export function SlidePathDesigner({ slideKey, enabled, label, className }: SlidePathDesignerProps) {
   const interactiveRef = useRef<HTMLDivElement>(null);
-  const [points, setPoints] = useState<Point[]>([]);
   const [cursor, setCursor] = useState<Point | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -86,23 +85,22 @@ export function SlidePathDesigner({ slideKey, enabled, label, className }: Slide
 
   const isActive = typeof enabled === "boolean" ? enabled : isSlidePathDesignerEnabled(slideKey);
 
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
+  // Load saved points - use lazy initialization to avoid setState in effect
+  const [points, setPoints] = useState<Point[]>(() => {
+    if (typeof window === "undefined") return [];
     const saved = window.localStorage.getItem(storageKey);
-    if (!saved) {
-      return;
-    }
+    if (!saved) return [];
+
     try {
       const parsed = JSON.parse(saved);
       if (isPointArray(parsed)) {
-        setPoints(parsed.map((point) => ({ x: Number(point.x), y: Number(point.y) })));
+        return parsed.map((point) => ({ x: Number(point.x), y: Number(point.y) }));
       }
     } catch {
       window.localStorage.removeItem(storageKey);
     }
-  }, [storageKey]);
+    return [];
+  });
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -126,6 +124,35 @@ export function SlidePathDesigner({ slideKey, enabled, label, className }: Slide
     };
   }, [copied]);
 
+  const pathData = useMemo(() => toPathData(points), [points]);
+
+  const copyPath = useCallback(async () => {
+    if (!pathData) {
+      return;
+    }
+    try {
+      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(pathData);
+        setCopied(true);
+        return;
+      }
+      if (typeof document !== "undefined") {
+        const textarea = document.createElement("textarea");
+        textarea.value = pathData;
+        textarea.setAttribute("readonly", "true");
+        textarea.style.position = "absolute";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+        setCopied(true);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [pathData]);
+
   useEffect(() => {
     if (!isActive) {
       return;
@@ -148,13 +175,7 @@ export function SlidePathDesigner({ slideKey, enabled, label, className }: Slide
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  });
-
-  useEffect(() => {
-    setCopied(false);
-  }, [points]);
-
-  const pathData = useMemo(() => toPathData(points), [points]);
+  }, [isActive, copyPath]);
 
   const updateCursor = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
     if (!isActive) {
@@ -197,33 +218,6 @@ export function SlidePathDesigner({ slideKey, enabled, label, className }: Slide
   const resetPoints = useCallback(() => {
     setPoints([]);
   }, []);
-
-  const copyPath = useCallback(async () => {
-    if (!pathData) {
-      return;
-    }
-    try {
-      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(pathData);
-        setCopied(true);
-        return;
-      }
-      if (typeof document !== "undefined") {
-        const textarea = document.createElement("textarea");
-        textarea.value = pathData;
-        textarea.setAttribute("readonly", "true");
-        textarea.style.position = "absolute";
-        textarea.style.left = "-9999px";
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand("copy");
-        document.body.removeChild(textarea);
-        setCopied(true);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [pathData]);
 
   if (!isActive) {
     return null;
