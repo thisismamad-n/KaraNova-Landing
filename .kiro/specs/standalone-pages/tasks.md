@@ -184,16 +184,22 @@
     - Add breadcrumb navigation
     - _Requirements: 5.3_
 
-- [-] 6. Create API documentation page
+- [x] 6. Create API documentation page
 
 
-  - [ ] 6.1 Implement API Guide page structure
+
+
+  - [x] 6.1 Implement API Guide page structure
+
+
     - Create `/app/resources/api/page.tsx`
     - Implement API endpoint listing
     - Create authentication documentation section
     - _Requirements: 4.1, 4.4_
 
-  - [ ] 6.2 Build API documentation components
+  - [x] 6.2 Build API documentation components
+
+
     - Create code example component with language tabs
     - Implement request/response format displays
     - Add interactive API testing section or playground link
@@ -211,26 +217,34 @@
     - **Property 11: Syntax highlighting applied to code blocks**
     - **Validates: Requirements 4.5**
 
-- [ ] 7. Checkpoint - Ensure all tests pass
+- [x] 7. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 8. Create blog system
-  - [ ] 8.1 Implement blog listing page
+- [-] 8. Create blog system
+
+
+  - [x] 8.1 Implement blog listing page
+
     - Create `/app/resources/blog/page.tsx`
     - Create BlogCard component for article previews
     - Implement BlogFilter component (category, date, tags)
     - Add pagination or infinite scroll
+    - Every thing should be in persian
     - _Requirements: 6.1, 6.3_
 
   - [ ]* 8.2 Write property test for blog post metadata
     - **Property 12: Blog posts display all required metadata**
     - **Validates: Requirements 6.1**
 
-  - [ ] 8.3 Create individual blog post page
+
+  - [x] 8.3 Create individual blog post page
+
     - Create `/app/resources/blog/[slug]/page.tsx`
     - Implement BlogPost layout with author info
     - Create ShareButtons component for social sharing
     - Create RelatedPosts component
+    - Every thing should be in persian
+    - do not run build
     - _Requirements: 6.2, 6.4, 6.5_
 
   - [ ]* 8.4 Write property test for blog navigation
@@ -241,17 +255,36 @@
     - **Property 14: Blog articles include engagement features**
     - **Validates: Requirements 6.4**
 
-- [ ] 9. Create support page
-  - [ ] 9.1 Implement Support page structure
+- [x] 9. Create support page
+
+
+
+
+  - [x] 9.1 Implement Support page structure
+
+
+
+
     - Create `/app/support/page.tsx`
     - Implement hero section with support channels overview
     - Create SupportChannels component displaying contact options
+    - Every thing should be in persian
     - _Requirements: 7.1, 7.3, 7.5_
 
-  - [ ] 9.2 Build support components
+  - [x] 9.2 Build support components
+
+
+
+
+
+
+
     - Create FAQAccordion component with expandable items
     - Create SearchFAQ component
+    - Add a Component for Talk to Ai Customer support
     - Create SupportForm component with validation
+    - Every thing should be in persian
+    - do not run build run tsc and lint
     - _Requirements: 7.1, 7.2_
 
   - [ ]* 9.3 Write property test for FAQ search
@@ -262,16 +295,26 @@
     - **Property 15: Form validation prevents invalid submissions**
     - **Validates: Requirements 7.2**
 
-- [ ] 10. Create contact page
-  - [ ] 10.1 Implement Contact page structure
+- [x] 10. Create contact page
+
+
+
+
+  - [x] 10.1 Implement Contact page structure
+
+
     - Create `/app/contact/page.tsx`
     - Display contact information (email, phone, addresses)
     - Create ContactInfo component
     - Implement OfficeMap component with embedded map
     - Create SocialLinks component
+    - Every thing should be in persian
+    - do not run build run tsc and lint
     - _Requirements: 8.1, 8.4, 8.5_
 
-  - [ ] 10.2 Build contact form with validation
+  - [x] 10.2 Build contact form with validation
+
+
     - Create ContactForm component
     - Implement form validation with Zod schema
     - Add form submission handling
@@ -291,6 +334,7 @@
     - Create LegalContent component with TOC
     - Create LegalSection component for collapsible sections
     - Create VersionHistory component
+    - Every thing should be in persian
     - _Requirements: 9.3, 10.2, 10.4, 11.5_
 
   - [ ] 11.2 Implement Privacy Policy page
@@ -313,6 +357,7 @@
     - Add licenses and compliance certifications
     - Include links to regulatory bodies
     - Provide downloadable PDF versions
+    - do not run build run tsc and lint
     - _Requirements: 11.1, 11.2, 11.3, 11.4_
 
   - [ ]* 11.5 Write property test for legal document version info
@@ -458,8 +503,6 @@
     - _Requirements: All_
 
 - [ ] 17. Final checkpoint - Comprehensive testing
-  - Ensure all tests pass, ask the user if questions arise.
-  - Test all pages across different browsers
   - Verify mobile responsiveness on real devices
   - Run accessibility audit with automated tools
   - Check performance metrics with Lighthouse

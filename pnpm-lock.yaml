@@ -66,6 +66,9 @@ importers:
       three:
         specifier: ^0.181.1
         version: 0.181.1
+      zod:
+        specifier: ^4.1.12
+        version: 4.1.12
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.3.1
