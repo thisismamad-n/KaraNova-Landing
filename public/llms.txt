@@ -1,0 +1,54 @@
+# Karanova Platform
+
+> https://karanova.io
+
+Karanova is an AI-powered business management platform for Iranian and international markets.
+
+## Core Products
+
+### Inova - AI Business Intelligence
+- Vision AI: Market analysis
+- Govern AI: Risk management  
+- Supply AI: Supply chain optimization
+- Creative AI: Content generation
+
+### TaskEase - AI Project Management
+- Automated sprint planning
+- Intelligent resource allocation
+- 60% time reduction
+
+### BIQ - Business Analytics Dashboard
+- Real-time KPI tracking
+- Interactive dashboards
+- 92% analysis accuracy
+
+## Key URLs
+
+- Home: https://karanova.io
+- Products: https://karanova.io/products/{inova,taskease,biq}
+- Documentation: https://karanova.io/resources/documentation
+- API: https://karanova.io/resources/api
+- Blog: https://karanova.io/resources/blog
+- Support: https://karanova.io/support
+- Contact: hello@karanova.io
+
+## Features
+
+- 24/7 AI assistance
+- Persian/English bilingual
+- RTL support
+- Multi-tenant architecture
+- Real-time collaboration
+- API integration
+
+## Target Users
+
+Entrepreneurs, project managers, business analysts, marketing teams, supply chain managers in Iran and Middle East.
+
+## Technology
+
+Next.js 16, React 19, TypeScript, Tailwind CSS, AI/ML models
+
+---
+
+For detailed information: https://karanova.io/llm.txt

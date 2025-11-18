@@ -41,5 +41,29 @@ export async function generateMetadata({
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
-  return <BlogPostClient slug={slug} />;
+  const post = mockBlogs.find((blog) => blog.slug === slug);
+
+  if (!post) {
+    return <BlogPostClient slug={slug} />;
+  }
+
+  const { generateArticleSchema } = await import("@/lib/seo/metadata");
+  const StructuredData = (await import("@/app/_components/shared/StructuredData")).default;
+
+  const articleSchema = generateArticleSchema({
+    title: post.title,
+    description: post.excerpt,
+    url: `https://karanova.io/resources/blog/${post.slug}`,
+    image: post.featuredImage,
+    author: post.author.name,
+    publishedDate: post.publishedDate,
+    modifiedDate: post.updatedDate,
+  });
+
+  return (
+    <>
+      <StructuredData data={articleSchema} />
+      <BlogPostClient slug={slug} />
+    </>
+  );
 }

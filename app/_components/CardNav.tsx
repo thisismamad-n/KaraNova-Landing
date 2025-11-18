@@ -160,6 +160,16 @@ const CardNav: React.FC<CardNavProps> = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleMenu();
+    }
+    if (e.key === 'Escape' && isExpanded) {
+      toggleMenu();
+    }
+  };
+
   const setCardRef = (i: number) => (el: HTMLDivElement | null) => {
     if (el) cardsRef.current[i] = el;
   };
@@ -175,8 +185,10 @@ const CardNav: React.FC<CardNavProps> = ({
           <div
             className={`hamburger-menu ${isHamburgerOpen ? "open" : ""}`}
             onClick={toggleMenu}
+            onKeyDown={handleKeyDown}
             role="button"
             aria-label={isExpanded ? "بستن منوی ناوبری" : "باز کردن منوی ناوبری"}
+            aria-expanded={isExpanded}
             tabIndex={0}
             style={{ color: menuColor || "#000" }}
           >

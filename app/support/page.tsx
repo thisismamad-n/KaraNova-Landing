@@ -1,5 +1,7 @@
 import { Metadata } from "next";
-import { generatePageMetadata } from "@/lib/seo/metadata";
+import { generatePageMetadata, generateFAQSchema } from "@/lib/seo/metadata";
+import StructuredData from "@/app/_components/shared/StructuredData";
+import { mockFAQs } from "./_data/faqs";
 import dynamic from "next/dynamic";
 
 const SupportPageClient = dynamic(() => import("./SupportPageClient"), {
@@ -24,5 +26,17 @@ export const metadata: Metadata = generatePageMetadata({
 });
 
 export default function SupportPage() {
-  return <SupportPageClient />;
+  const faqSchema = generateFAQSchema(
+    mockFAQs.map((faq) => ({
+      question: faq.question,
+      answer: faq.answer,
+    }))
+  );
+
+  return (
+    <>
+      <StructuredData data={faqSchema} />
+      <SupportPageClient />
+    </>
+  );
 }

@@ -468,7 +468,7 @@ export default function SupportForm({ language }: SupportFormProps) {
                   </>
                 ) : (
                   <>
-                    <Send className="w-5 h-5" />
+                    <Send className="w-5 h-5" aria-hidden="true" />
                     {currentContent.submit}
                   </>
                 )}

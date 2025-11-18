@@ -49,6 +49,8 @@ export default function FAQAccordion({ items, language }: FAQAccordionProps) {
               "hover:bg-slate-900/60 transition-colors"
             )}
             aria-expanded={openId === item.id}
+            aria-controls={`faq-answer-${item.id}`}
+            id={`faq-question-${item.id}`}
           >
             <span className="text-lg font-semibold text-slate-100 flex-1">
               {item.question}
@@ -57,6 +59,7 @@ export default function FAQAccordion({ items, language }: FAQAccordionProps) {
               animate={{ rotate: openId === item.id ? 180 : 0 }}
               transition={{ duration: 0.3 }}
               className="flex-shrink-0"
+              aria-hidden="true"
             >
               <ChevronDown className="w-5 h-5 text-teal-400" />
             </motion.div>
@@ -71,6 +74,9 @@ export default function FAQAccordion({ items, language }: FAQAccordionProps) {
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.3 }}
                 className="overflow-hidden"
+                id={`faq-answer-${item.id}`}
+                role="region"
+                aria-labelledby={`faq-question-${item.id}`}
               >
                 <div className="px-4 sm:px-6 pb-4 sm:pb-6 pt-2">
                   <p className="text-slate-400 leading-relaxed whitespace-pre-line">

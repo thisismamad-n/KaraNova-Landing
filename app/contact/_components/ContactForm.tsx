@@ -338,6 +338,8 @@ export default function ContactForm({ language }: ContactFormProps) {
                     value={formData.email}
                     onChange={handleChange}
                     placeholder={currentContent.placeholders.email}
+                    aria-invalid={errors.email ? "true" : "false"}
+                    aria-describedby={errors.email ? "email-error" : undefined}
                     className={cn(
                       "w-full px-4 py-3 rounded-lg",
                       "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -352,11 +354,13 @@ export default function ContactForm({ language }: ContactFormProps) {
                   />
                   {errors.email && (
                     <motion.p
+                      id="email-error"
                       initial={{ opacity: 0, y: -5 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
+                      role="alert"
                     >
-                      <AlertCircle className="w-3 h-3" />
+                      <AlertCircle className="w-3 h-3" aria-hidden="true" />
                       {errors.email}
                     </motion.p>
                   )}
@@ -638,7 +642,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     </>
                   ) : (
                     <>
-                      <Send className="w-5 h-5" />
+                      <Send className="w-5 h-5" aria-hidden="true" />
                       {currentContent.submit}
                     </>
                   )}

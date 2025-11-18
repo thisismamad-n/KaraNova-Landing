@@ -1,8 +1,9 @@
 import { Metadata } from "next";
+import { generatePageMetadata } from "@/lib/seo/metadata";
 import TermsPageClient from "./TermsPageClient";
 
-export const metadata: Metadata = {
-  title: "شرایط استفاده | کارانوا",
+export const metadata: Metadata = generatePageMetadata({
+  title: "شرایط استفاده",
   description:
     "شرایط و ضوابط استفاده از خدمات کارانوا - اطلاعات کامل درباره حقوق و تعهدات کاربران",
   keywords: [
@@ -11,14 +12,13 @@ export const metadata: Metadata = {
     "کارانوا",
     "ضوابط",
     "قرارداد کاربری",
+    "terms of service",
+    "terms of use",
   ],
-  openGraph: {
-    title: "شرایط استفاده | کارانوا",
-    description:
-      "شرایط و ضوابط استفاده از خدمات کارانوا - اطلاعات کامل درباره حقوق و تعهدات کاربران",
-    type: "website",
-  },
-};
+  canonical: "https://karanova.io/legal/terms",
+  language: "fa",
+  lastModified: new Date("2024-01-15"),
+});
 
 export default function TermsPage() {
   return <TermsPageClient />;

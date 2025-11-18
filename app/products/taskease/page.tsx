@@ -1,8 +1,10 @@
 import { Metadata } from "next";
+import { generatePageMetadata, generateProductSchema } from "@/lib/seo/metadata";
+import StructuredData from "@/app/_components/shared/StructuredData";
 import TaskEasePageClient from "./TaskEasePageClient";
 
-export const metadata: Metadata = {
-  title: "TaskEase - AI Project Management | Karanova",
+export const metadata: Metadata = generatePageMetadata({
+  title: "TaskEase - AI Project Management",
   description:
     "AI-integrated project management with automated sprints, intelligent resource allocation, and accurate delivery predictions. Reduce project management time by 60%.",
   keywords: [
@@ -13,15 +15,28 @@ export const metadata: Metadata = {
     "Project Planning",
     "Team Collaboration",
     "Karanova",
+    "تسک‌ایز",
+    "مدیریت پروژه",
   ],
-  openGraph: {
-    title: "TaskEase - AI Project Management",
-    description:
-      "AI-integrated project management with automated sprints and intelligent resource allocation",
-    images: ["/og-taskease.jpg"],
-  },
-};
+  ogImage: "/og-taskease.jpg",
+  canonical: "https://karanova.io/products/taskease",
+  language: "en",
+});
 
 export default function TaskEasePage() {
-  return <TaskEasePageClient />;
+  const productSchema = generateProductSchema({
+    name: "TaskEase - AI Project Management",
+    description:
+      "AI-integrated project management with automated sprints, intelligent resource allocation, and accurate delivery predictions",
+    url: "https://karanova.io/products/taskease",
+    image: "https://karanova.io/og-taskease.jpg",
+    category: "BusinessApplication",
+  });
+
+  return (
+    <>
+      <StructuredData data={productSchema} />
+      <TaskEasePageClient />
+    </>
+  );
 }

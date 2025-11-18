@@ -118,6 +118,7 @@ export default function FeatureShowcase({
                 <feature.icon
                   className="w-6 h-6"
                   style={{ color: feature.color || accentColor }}
+                  aria-hidden="true"
                 />
               </div>
 

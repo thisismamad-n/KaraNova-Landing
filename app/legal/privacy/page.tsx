@@ -1,8 +1,9 @@
 import { Metadata } from "next";
+import { generatePageMetadata } from "@/lib/seo/metadata";
 import PrivacyPageClient from "./PrivacyPageClient";
 
-export const metadata: Metadata = {
-  title: "سیاست حفظ حریم خصوصی | کارانوا",
+export const metadata: Metadata = generatePageMetadata({
+  title: "سیاست حفظ حریم خصوصی",
   description:
     "سیاست حفظ حریم خصوصی کارانوا - اطلاعات جامع درباره نحوه جمع‌آوری، استفاده و حفاظت از داده‌های شخصی شما",
   keywords: [
@@ -11,14 +12,13 @@ export const metadata: Metadata = {
     "کارانوا",
     "حفاظت از داده",
     "امنیت اطلاعات",
+    "privacy policy",
+    "data protection",
   ],
-  openGraph: {
-    title: "سیاست حفظ حریم خصوصی | کارانوا",
-    description:
-      "اطلاعات جامع درباره نحوه جمع‌آوری، استفاده و حفاظت از داده‌های شخصی شما در کارانوا",
-    type: "website",
-  },
-};
+  canonical: "https://karanova.io/legal/privacy",
+  language: "fa",
+  lastModified: new Date("2024-01-15"),
+});
 
 export default function PrivacyPage() {
   return <PrivacyPageClient />;

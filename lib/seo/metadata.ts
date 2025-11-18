@@ -208,3 +208,119 @@ export function generateFAQSchema(faqs: Array<{ question: string; answer: string
     })),
   };
 }
+
+/**
+ * Generate JSON-LD structured data for software product
+ */
+export function generateProductSchema(config: {
+  name: string;
+  description: string;
+  url: string;
+  image?: string;
+  category?: string;
+  offers?: {
+    price?: string;
+    priceCurrency?: string;
+  };
+}) {
+  const { name, description, url, image, category, offers } = config;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name,
+    description,
+    url,
+    image: image || `${SITE_URL}/og-default.jpg`,
+    applicationCategory: category || "BusinessApplication",
+    operatingSystem: "Web",
+    offers: offers
+      ? {
+          "@type": "Offer",
+          price: offers.price || "0",
+          priceCurrency: offers.priceCurrency || "IRR",
+        }
+      : undefined,
+    provider: {
+      "@type": "Organization",
+      name: "Karanova",
+      url: SITE_URL,
+    },
+  };
+}
+
+/**
+ * Generate JSON-LD structured data for blog article
+ */
+export function generateArticleSchema(config: {
+  title: string;
+  description: string;
+  url: string;
+  image?: string;
+  author: string;
+  publishedDate: Date;
+  modifiedDate?: Date;
+}) {
+  const { title, description, url, image, author, publishedDate, modifiedDate } = config;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description,
+    url,
+    image: image || `${SITE_URL}/og-default.jpg`,
+    author: {
+      "@type": "Person",
+      name: author,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Karanova",
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/logo.png`,
+      },
+    },
+    datePublished: publishedDate.toISOString(),
+    dateModified: (modifiedDate || publishedDate).toISOString(),
+  };
+}
+
+/**
+ * Generate JSON-LD structured data for job posting
+ */
+export function generateJobPostingSchema(config: {
+  title: string;
+  description: string;
+  url: string;
+  datePosted: Date;
+  employmentType: string;
+  location: string;
+}) {
+  const { title, description, url, datePosted, employmentType, location } = config;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title,
+    description,
+    url,
+    datePosted: datePosted.toISOString(),
+    employmentType,
+    jobLocation: {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: location,
+        addressCountry: "IR",
+      },
+    },
+    hiringOrganization: {
+      "@type": "Organization",
+      name: "Karanova",
+      sameAs: SITE_URL,
+      logo: `${SITE_URL}/logo.png`,
+    },
+  };
+}

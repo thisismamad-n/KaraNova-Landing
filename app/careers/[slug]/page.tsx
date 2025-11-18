@@ -53,5 +53,22 @@ export default async function JobDetailPage({ params }: { params: Promise<{ slug
     notFound();
   }
 
-  return <JobDetailClient job={job} />;
+  const { generateJobPostingSchema } = await import("@/lib/seo/metadata");
+  const StructuredData = (await import("@/app/_components/shared/StructuredData")).default;
+
+  const jobSchema = generateJobPostingSchema({
+    title: job.title,
+    description: job.description,
+    url: `https://karanova.io/careers/${job.slug}`,
+    datePosted: job.postedDate,
+    employmentType: job.type.toUpperCase().replace("-", "_"),
+    location: job.location,
+  });
+
+  return (
+    <>
+      <StructuredData data={jobSchema} />
+      <JobDetailClient job={job} />
+    </>
+  );
 }

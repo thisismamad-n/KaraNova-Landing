@@ -119,6 +119,7 @@ export default function ProductHero({
               >
                 <button
                   onClick={onCtaClick}
+                  aria-label={ctaText}
                   className={cn(
                     "inline-flex items-center justify-center",
                     "px-8 py-4 rounded-lg",

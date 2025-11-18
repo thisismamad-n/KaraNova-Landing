@@ -29,18 +29,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
-  return {
-    title: `${doc.title} | مستندات کارانوا`,
+  const { generatePageMetadata } = await import("@/lib/seo/metadata");
+  
+  return generatePageMetadata({
+    title: `${doc.title} - مستندات کارانوا`,
     description: doc.content.substring(0, 160),
     keywords: doc.searchKeywords,
-    openGraph: {
-      title: doc.title,
-      description: doc.content.substring(0, 160),
-      type: "article",
-      publishedTime: doc.lastUpdated.toISOString(),
-      locale: "fa_IR",
-    },
-  };
+    canonical: `https://karanova.io/resources/documentation/${category}/${slug}`,
+    language: "fa",
+    lastModified: doc.lastUpdated,
+  });
 }
 
 export default async function DocArticlePage({ params }: PageProps) {

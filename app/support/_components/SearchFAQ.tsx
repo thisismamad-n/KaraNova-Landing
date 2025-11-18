@@ -50,7 +50,7 @@ export default function SearchFAQ({ onSearch, language }: SearchFAQProps) {
       >
         {/* Search Icon */}
         <div className="absolute right-4 pointer-events-none">
-          <Search className="w-5 h-5 text-slate-400" />
+          <Search className="w-5 h-5 text-slate-400" aria-hidden="true" />
         </div>
 
         {/* Input */}
