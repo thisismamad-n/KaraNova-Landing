@@ -6,17 +6,23 @@ interface ProductCardPositionProps {
   left: number;
   top: number;
   width?: number;
+  variant?: "overlay" | "stacked";
 }
 
 export const TaskEaseFeatureCard = ({
   left,
   top,
   width = 520,
+  variant = "overlay",
 }: ProductCardPositionProps) => {
   return (
     <motion.div
-      className="absolute z-20 hidden pointer-events-none md:block"
-      style={{ left, top, width }}
+      className={
+        variant === "overlay"
+          ? "absolute z-20 hidden pointer-events-none md:block"
+          : "relative z-20 block md:hidden w-full pointer-events-none"
+      }
+      style={variant === "overlay" ? { left, top, width } : undefined}
       dir="rtl"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}

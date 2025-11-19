@@ -102,6 +102,8 @@ export function FeatureSteps({
     }
   }
 
+  const customVisual = renderCustomVisual?.(features[currentFeature], currentFeature)
+
   return (
     <div
       ref={containerRef}
@@ -158,42 +160,36 @@ export function FeatureSteps({
               imageHeight
             )}
           >
-            <AnimatePresence mode="wait">
-              {features.map(
-                (feature, index) =>
-                  index === currentFeature && (
-                    <motion.div
-                      key={index}
-                      className="absolute inset-0 rounded-lg overflow-hidden"
-                      initial={{ y: 100, opacity: 0, rotateX: -20 }}
-                      animate={{ y: 0, opacity: 1, rotateX: 0 }}
-                      exit={{ y: -100, opacity: 0, rotateX: 20 }}
-                      transition={{ duration: 0.5, ease: "easeInOut" }}
-                    >
-                      {(() => {
-                        const custom = renderCustomVisual?.(feature, index)
-                        if (custom) {
-                          return (
-                            <div className="w-full h-full">{custom}</div>
-                          )
-                        }
-                        return (
-                          <>
-                            <Image
-                              src={feature.image}
-                              alt={feature.step}
-                              className="w-full h-full object-cover transition-transform transform"
-                              width={1000}
-                              height={500}
-                            />
-                            <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-background via-background/50 to-transparent" />
-                          </>
-                        )
-                      })()}
-                    </motion.div>
-                  ),
-              )}
-            </AnimatePresence>
+            {customVisual ? (
+              <div className="absolute inset-0 rounded-lg overflow-hidden w-full h-full">
+                {customVisual}
+              </div>
+            ) : (
+              <AnimatePresence mode="wait">
+                {features.map(
+                  (feature, index) =>
+                    index === currentFeature && (
+                      <motion.div
+                        key={index}
+                        className="absolute inset-0 rounded-lg overflow-hidden"
+                        initial={{ y: 100, opacity: 0, rotateX: -20 }}
+                        animate={{ y: 0, opacity: 1, rotateX: 0 }}
+                        exit={{ y: -100, opacity: 0, rotateX: 20 }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                      >
+                        <Image
+                          src={feature.image}
+                          alt={feature.step}
+                          className="w-full h-full object-cover transition-transform transform"
+                          width={1000}
+                          height={500}
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 h-2/3 bg-gradient-to-t from-background via-background/50 to-transparent" />
+                      </motion.div>
+                    ),
+                )}
+              </AnimatePresence>
+            )}
           </div>
         </div>
       </div>

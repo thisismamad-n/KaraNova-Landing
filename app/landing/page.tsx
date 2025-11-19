@@ -45,10 +45,11 @@ export default function LandingPage() {
         />
         
         {/* Intense glow at the end point of continuous path - positioned at last coordinate (1151, 1918) */}
+        {/* Using percentage-based positioning for responsiveness */}
         <div 
           className="absolute pointer-events-none z-50"
           style={{
-            left: '60%',
+            left: 'calc(1151 / 1920 * 100%)', // Responsive positioning based on design width
             top: '1918px',
             transform: 'translate(-50%, -50%)',
           }}

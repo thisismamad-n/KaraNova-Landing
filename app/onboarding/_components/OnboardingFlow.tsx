@@ -59,7 +59,7 @@ export default function OnboardingFlow() {
   const progress = step <= 4 ? ((step + 1) / 5) * 100 : 0;
 
   return (
-    <div className="w-full max-w-4xl mx-auto" dir="rtl">
+    <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-0" dir="rtl">
       
       {/* Progress Bar (shown only during questions) */}
       <AnimatePresence>
@@ -68,7 +68,7 @@ export default function OnboardingFlow() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="mb-12 relative"
+            className="mb-8 sm:mb-10 md:mb-12 relative"
           >
             <div className="h-2 w-full border border-transparent bg-slate-900/20 rounded-full overflow-hidden">
               <motion.div 
@@ -78,7 +78,7 @@ export default function OnboardingFlow() {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
               />
             </div>
-            <div className="absolute top-4 left-0 text-white/60 text-sm font-medium">
+            <div className="absolute top-4 left-0 text-white/60 text-xs sm:text-sm font-medium">
               مرحله {step + 1} از ۵
             </div>
           </motion.div>
@@ -88,10 +88,10 @@ export default function OnboardingFlow() {
       {/* Main Card */}
       <div className="relative group">
         {/* Large circular gradient glow at center - gradient defines the edges */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] bg-gradient-radial from-[hsl(177,100%,35%)]/30 via-[hsl(177,100%,35%)]/15 to-transparent rounded-full blur-[100px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[720px] sm:w-[960px] sm:h-[960px] xl:w-[1200px] xl:h-[1200px] bg-gradient-radial from-[hsl(177,100%,35%)]/30 via-[hsl(177,100%,35%)]/15 to-transparent rounded-full blur-[100px] pointer-events-none" />
         
         {/* Card with invisible border that clips the gradient */}
-        <div className="relative border border-transparent rounded-[2rem] p-8 md:p-12 overflow-hidden">
+        <div className="relative border border-transparent rounded-[2rem] p-6 sm:p-8 md:p-12 overflow-hidden">
 
           <AnimatePresence mode="wait">
             {step === 0 && (
@@ -154,18 +154,18 @@ function StepAuth({ onComplete }: { onComplete: () => void }) {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="flex flex-col gap-8 items-center max-w-md mx-auto w-full">
+    <div className="flex flex-col gap-6 sm:gap-8 items-center max-w-md mx-auto w-full px-2 sm:px-0">
       <div className="text-center space-y-2">
-        <h2 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-[hsl(177,100%,35%)] to-[hsl(190,95%,42%)]">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-[hsl(177,100%,35%)] to-[hsl(190,95%,42%)]">
           {isLogin ? 'خوش آمدید' : 'ساخت حساب کاربری'}
         </h2>
-        <p className="text-white/60">
+        <p className="text-white/60 text-sm sm:text-base">
           {isLogin ? 'برای ادامه وارد حساب خود شوید' : 'برای شروع، حساب کاربری خود را بسازید'}
         </p>
       </div>
 
       {/* Toggle */}
-      <div className="flex p-1 rounded-xl w-full border border-transparent bg-slate-900/10">
+      <div className="flex flex-col sm:flex-row gap-2 p-1 rounded-xl w-full border border-transparent bg-slate-900/10">
         <button 
           onClick={() => setIsLogin(true)}
           className={cn(
@@ -235,7 +235,7 @@ function StepAuth({ onComplete }: { onComplete: () => void }) {
 
       <button 
         onClick={onComplete}
-        className="w-full py-4 rounded-xl bg-gradient-to-r from-[hsl(177,100%,35%)] to-[hsl(190,95%,42%)] text-white font-bold text-lg hover:shadow-[0_0_20px_hsl(177,100%,35%,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 border border-white/10"
+        className="w-full py-4 rounded-2xl bg-gradient-to-r from-[rgba(45,212,191,0.18)] via-[rgba(14,165,233,0.22)] to-[rgba(20,184,166,0.28)] backdrop-blur-xl text-white font-bold text-lg shadow-[0_22px_44px_rgba(13,148,136,0.28)] hover:from-[rgba(45,212,191,0.26)] hover:via-[rgba(14,165,233,0.28)] hover:to-[rgba(20,184,166,0.36)] hover:shadow-[0_28px_64px_rgba(13,148,136,0.35)] hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
       >
         {isLogin ? 'ورود به حساب' : 'شروع کنید'}
       </button>
@@ -247,7 +247,7 @@ function StepAuth({ onComplete }: { onComplete: () => void }) {
         <span className="relative bg-slate-950 px-4 text-xs text-white/30">یا ادامه دهید با</span>
       </div>
 
-      <div className="flex gap-3 w-full">
+      <div className="flex flex-col sm:flex-row gap-3 w-full">
         <button className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border border-transparent bg-slate-900/10 hover:bg-slate-900/20 transition-all text-white/70 hover:text-white">
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z" />
@@ -275,13 +275,13 @@ function Step1Activity({ data, updateData, onNext }: any) {
   return (
     <div className="flex flex-col gap-8">
       <div className="text-center md:text-right">
-        <h2 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 mb-4">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 mb-3 sm:mb-4">
           نوع فعالیت شما چیست؟
         </h2>
-        <p className="text-lg text-white/60">لطفاً نزدیک‌ترین گزینه به کسب‌وکار خود را انتخاب کنید.</p>
+        <p className="text-sm sm:text-base md:text-lg text-white/60">لطفاً نزدیک‌ترین گزینه به کسب‌وکار خود را انتخاب کنید.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         {options.map((opt) => (
           <OptionCard
             key={opt.id}
@@ -312,13 +312,13 @@ function Step2Size({ data, updateData, onNext, onBack }: any) {
   return (
     <div className="flex flex-col gap-8">
       <div className="text-center md:text-right">
-        <h2 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 mb-4">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 mb-3 sm:mb-4">
           تیم شما چند نفره است؟
         </h2>
-        <p className="text-lg text-white/60">اندازه سازمان خود را مشخص کنید.</p>
+        <p className="text-sm sm:text-base md:text-lg text-white/60">اندازه سازمان خود را مشخص کنید.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         {options.map((opt) => (
           <OptionCard
             key={opt.id}
@@ -350,13 +350,13 @@ function Step3Style({ data, updateData, onNext, onBack }: any) {
   return (
     <div className="flex flex-col gap-8">
       <div className="text-center md:text-right">
-        <h2 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 mb-4">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 mb-3 sm:mb-4">
           شیوه فعالیت کسب‌وکارتان؟
         </h2>
-        <p className="text-lg text-white/60">نحوه تعامل شما با مشتریان چگونه است؟</p>
+        <p className="text-sm sm:text-base md:text-lg text-white/60">نحوه تعامل شما با مشتریان چگونه است؟</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-3 sm:gap-4">
         {options.map((opt) => (
           <OptionCard
             key={opt.id}
@@ -390,13 +390,13 @@ function Step4Age({ data, updateData, onNext, onBack }: any) {
   return (
     <div className="flex flex-col gap-8">
       <div className="text-center md:text-right">
-        <h2 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 mb-4">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 mb-3 sm:mb-4">
           سابقه فعالیت شما؟
         </h2>
-        <p className="text-lg text-white/60">مدت زمانی که در این حوزه فعال هستید.</p>
+        <p className="text-sm sm:text-base md:text-lg text-white/60">مدت زمانی که در این حوزه فعال هستید.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         {options.map((opt) => (
           <OptionCard
             key={opt.id}
@@ -433,10 +433,10 @@ function Step5Info({ data, updateData, onBack, onNext }: any) {
   return (
     <div className="flex flex-col gap-8">
       <div className="text-center md:text-right">
-        <h2 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 mb-4">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 mb-3 sm:mb-4">
           توضیحات تکمیلی
         </h2>
-        <p className="text-lg text-white/60">آیا نکته دیگری هست که باید بدانیم؟ (اختیاری)</p>
+        <p className="text-sm sm:text-base md:text-lg text-white/60">آیا نکته دیگری هست که باید بدانیم؟ (اختیاری)</p>
       </div>
 
       <div className="relative group">
@@ -444,14 +444,14 @@ function Step5Info({ data, updateData, onBack, onNext }: any) {
           value={data.additionalInfo}
           onChange={(e) => updateData({ additionalInfo: e.target.value })}
           placeholder="توضیحات خود را اینجا بنویسید..."
-          className="relative w-full h-40 border border-transparent rounded-2xl p-6 text-lg text-white bg-slate-900/10 placeholder:text-white/30 focus:outline-none transition-all resize-none selection:bg-[hsl(190,95%,42%)]/30"
+          className="relative w-full h-32 sm:h-40 border border-transparent rounded-2xl p-4 sm:p-6 text-base sm:text-lg text-white bg-slate-900/10 placeholder:text-white/30 focus:outline-none transition-all resize-none selection:bg-[hsl(190,95%,42%)]/30"
         />
       </div>
 
-      <div className="flex items-center justify-between mt-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-8">
         <button
           onClick={onBack}
-          className="flex items-center gap-2 px-6 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all"
+          className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-white/60 hover:text-white hover:bg-white/5 transition-all w-full sm:w-auto"
         >
           <ChevronRight className="w-5 h-5" />
           <span className="text-lg">بازگشت</span>
@@ -460,7 +460,7 @@ function Step5Info({ data, updateData, onBack, onNext }: any) {
         <button
           onClick={handleSubmit}
           disabled={isSubmitting}
-          className="group relative flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-[hsl(177,100%,35%)] to-[hsl(190,95%,42%)] text-white font-bold text-lg overflow-hidden transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed hover:shadow-[0_0_20px_hsl(177,100%,35%,0.4)]"
+          className="group relative flex items-center justify-center gap-3 px-6 sm:px-8 py-4 rounded-2xl bg-gradient-to-r from-[hsl(177,100%,35%)] to-[hsl(190,95%,42%)] text-white font-bold text-lg overflow-hidden transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed hover:shadow-[0_0_20px_hsl(177,100%,35%,0.4)] w-full sm:w-auto"
         >
           <span>{isSubmitting ? 'در حال ثبت...' : 'ادامه به احراز هویت'}</span>
           {!isSubmitting && <CheckCircle2 className="w-6 h-6" />}
@@ -477,9 +477,9 @@ function OptionCard({ selected, onClick, icon: Icon, title, desc, horizontal }: 
     <button
       onClick={onClick}
       className={cn(
-        "relative group flex flex-col items-start text-right p-6 rounded-2xl border border-transparent transition-all duration-300 w-full overflow-hidden",
+        "relative group flex flex-col items-start text-right p-5 sm:p-6 rounded-2xl border border-transparent transition-all duration-300 w-full overflow-hidden",
         "hover:shadow-[0_0_40px_-10px_hsl(177,100%,35%,0.15)]",
-        horizontal ? "flex-row items-center gap-6" : "gap-4",
+        horizontal ? "sm:flex-row sm:items-center gap-4 sm:gap-6" : "gap-4",
         selected 
           ? "shadow-[0_0_30px_-5px_hsl(177,100%,35%,0.2)]" 
           : ""
@@ -491,16 +491,16 @@ function OptionCard({ selected, onClick, icon: Icon, title, desc, horizontal }: 
       )}
       
       <div className={cn(
-        "relative p-3 rounded-xl transition-all duration-300",
+        "relative p-2.5 sm:p-3 rounded-xl transition-all duration-300",
         selected ? "bg-[hsl(177,100%,35%)] text-white rotate-3 scale-110" : "bg-white/5 text-white group-hover:bg-white/10"
       )}>
-        <Icon className="w-8 h-8" />
+        <Icon className="w-7 h-7 sm:w-8 sm:h-8" />
       </div>
       <div className="relative flex flex-col gap-1">
-        <span className={cn("text-xl font-semibold transition-colors", selected ? "text-white" : "text-white/90")}>
+        <span className={cn("text-lg sm:text-xl font-semibold transition-colors", selected ? "text-white" : "text-white/90") }>
           {title}
         </span>
-        {desc && <span className="text-sm text-white/50 group-hover:text-white/70 transition-colors">{desc}</span>}
+        {desc && <span className="text-xs sm:text-sm text-white/50 group-hover:text-white/70 transition-colors leading-relaxed">{desc}</span>}
       </div>
       
       {/* Selection Indicator */}
@@ -515,10 +515,10 @@ function OptionCard({ selected, onClick, icon: Icon, title, desc, horizontal }: 
 
 function NavigationButtons({ onBack, onNext, showNext = true }: { onBack: () => void, onNext?: () => void, showNext?: boolean }) {
   return (
-    <div className="flex items-center justify-between mt-8 pt-8 border-t border-slate-700/10">
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-8 pt-8 border-t border-slate-700/10">
       <button
         onClick={onBack}
-        className="flex items-center gap-2 px-4 py-2 rounded-xl border border-transparent text-white/40 hover:text-white hover:bg-slate-900/10 transition-all"
+        className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-transparent text-white/40 hover:text-white hover:bg-slate-900/10 transition-all w-full sm:w-auto"
       >
         <ChevronRight className="w-5 h-5" /> {/* RTL: Right is Back */}
         <span>بازگشت</span>
@@ -527,7 +527,7 @@ function NavigationButtons({ onBack, onNext, showNext = true }: { onBack: () => 
       {showNext && onNext && (
         <button
           onClick={onNext}
-          className="flex items-center gap-2 px-6 py-3 rounded-xl border border-transparent bg-slate-900/10 hover:bg-slate-900/20 text-white font-medium transition-all"
+          className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl border border-transparent bg-slate-900/10 hover:bg-slate-900/20 text-white font-medium transition-all w-full sm:w-auto"
         >
           <span>بعدی</span>
           <ChevronLeft className="w-5 h-5" /> {/* RTL: Left is Next */}

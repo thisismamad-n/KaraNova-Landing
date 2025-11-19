@@ -8,7 +8,7 @@ export default function OnboardingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative min-h-screen bg-slate-950 text-white">
+    <div className="relative min-h-screen bg-[#030712] text-white overflow-hidden">
       {/* Animated Background - matches other pages */}
       <Squares />
 
@@ -16,7 +16,7 @@ export default function OnboardingLayout({
       <StickyHeader />
 
       {/* Content Container */}
-      <main className="relative z-10 flex min-h-screen flex-col items-center justify-center p-4 md:p-8 pt-24">
+      <main className="relative z-10 flex min-h-screen w-full flex-col items-center justify-center p-4 md:p-8 pt-24">
         {children}
       </main>
     </div>

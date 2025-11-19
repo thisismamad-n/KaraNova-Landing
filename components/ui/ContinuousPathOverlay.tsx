@@ -16,7 +16,10 @@ export function ContinuousPathOverlay({
   pathData,
   gradientId = "continuous-path-gradient",
 }: ContinuousPathOverlayProps) {
-  const [viewBox, setViewBox] = useState("0 0 1920 3000");
+  // Reference design width - the width the path was designed for
+  const DESIGN_WIDTH = 1920;
+  const [viewBox, setViewBox] = useState(`0 0 ${DESIGN_WIDTH} 3000`);
+  const [scaledPathData, setScaledPathData] = useState(pathData);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Track scroll progress across the entire path
@@ -35,25 +38,49 @@ export function ContinuousPathOverlay({
   const strokeDashoffset = useTransform(pathLength, (value) => 1 - value);
 
   useEffect(() => {
+    const scalePathCoordinates = (path: string, scaleX: number): string => {
+      // Match all coordinate pairs in the path
+      return path.replace(/([ML])\s*([\d.]+)\s+([\d.]+)|C\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/g, 
+        (match, cmd, x1, y1, cx1, cy1, cx2, cy2, x2, y2) => {
+          if (cmd === 'M' || cmd === 'L') {
+            // Move or Line command
+            const scaledX = parseFloat(x1) * scaleX;
+            return `${cmd} ${scaledX.toFixed(2)} ${y1}`;
+          } else {
+            // Cubic Bezier curve command
+            const scaledCx1 = parseFloat(cx1) * scaleX;
+            const scaledCx2 = parseFloat(cx2) * scaleX;
+            const scaledX2 = parseFloat(x2) * scaleX;
+            return `C ${scaledCx1.toFixed(2)} ${cy1} ${scaledCx2.toFixed(2)} ${cy2} ${scaledX2.toFixed(2)} ${y2}`;
+          }
+        }
+      );
+    };
+
     const updateViewBox = () => {
       const startEl = document.getElementById(startSectionId);
       const endEl = document.getElementById(endSectionId);
 
       if (startEl && endEl) {
-        const startRect = startEl.getBoundingClientRect();
-        const endRect = endEl.getBoundingClientRect();
         const startTop = startEl.offsetTop;
         const endBottom = endEl.offsetTop + endEl.offsetHeight;
         const totalHeight = endBottom - startTop;
+        const currentWidth = window.innerWidth;
+        
+        // Calculate scale factor based on current viewport width vs design width
+        const scaleX = currentWidth / DESIGN_WIDTH;
 
-        setViewBox(`0 0 ${window.innerWidth} ${totalHeight}`);
+        setViewBox(`0 0 ${currentWidth} ${totalHeight}`);
+        
+        // Scale the path data
+        setScaledPathData(scalePathCoordinates(pathData, scaleX));
       }
     };
 
     updateViewBox();
     window.addEventListener("resize", updateViewBox);
     return () => window.removeEventListener("resize", updateViewBox);
-  }, [startSectionId, endSectionId]);
+  }, [startSectionId, endSectionId, pathData, DESIGN_WIDTH]);
 
   return (
     <div
@@ -75,9 +102,10 @@ export function ContinuousPathOverlay({
           </linearGradient>
         </defs>
         <motion.path
-          d={pathData}
+          d={scaledPathData}
           stroke={`url(#${gradientId})`}
           strokeWidth="12"
+          vectorEffect="non-scaling-stroke"
           strokeLinecap="round"
           strokeLinejoin="round"
           fill="none"

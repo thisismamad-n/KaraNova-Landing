@@ -19,7 +19,10 @@ export function ContinuousPath({
   enabled = true,
 }: ContinuousPathProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 1920, height: 3000 });
+  // Reference design dimensions - the dimensions the path was designed for
+  const DESIGN_WIDTH = 1920;
+  const [dimensions, setDimensions] = useState({ width: DESIGN_WIDTH, height: 3000 });
+  const [scaledPathData, setScaledPathData] = useState(pathData);
   const completionTarget = useMotionValue(1);
   const [hasRendered, setHasRendered] = useState(false);
   
@@ -36,23 +39,53 @@ export function ContinuousPath({
     }
   }, [isInView, hasRendered]);
 
-  // Calculate total height
+  // Scale path coordinates based on viewport width
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || !pathData) return;
+
+    const scalePathCoordinates = (path: string, scaleX: number): string => {
+      // Match all coordinate pairs in the path
+      return path.replace(/([ML])\s*([\d.]+)\s+([\d.]+)|C\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/g, 
+        (match, cmd, x1, y1, cx1, cy1, cx2, cy2, x2, y2) => {
+          if (cmd === 'M' || cmd === 'L') {
+            // Move or Line command
+            const scaledX = parseFloat(x1) * scaleX;
+            return `${cmd} ${scaledX.toFixed(2)} ${y1}`;
+          } else {
+            // Cubic Bezier curve command
+            const scaledCx1 = parseFloat(cx1) * scaleX;
+            const scaledCx2 = parseFloat(cx2) * scaleX;
+            const scaledX2 = parseFloat(x2) * scaleX;
+            return `C ${scaledCx1.toFixed(2)} ${cy1} ${scaledCx2.toFixed(2)} ${cy2} ${scaledX2.toFixed(2)} ${y2}`;
+          }
+        }
+      );
+    };
 
     const updateDimensions = () => {
       const firstSection = document.getElementById(sectionIds[0]);
       const lastSection = document.getElementById(sectionIds[sectionIds.length - 1]);
 
-      if (firstSection && lastSection) {
-        const firstTop = firstSection.offsetTop;
-        const lastTop = lastSection.offsetTop;
+      if (firstSection && lastSection && containerRef.current) {
+        // Get the parent wrapper position
+        const wrapperTop = containerRef.current.parentElement?.offsetTop || 0;
+        
+        // Calculate positions relative to the wrapper
+        const firstTop = firstSection.offsetTop - wrapperTop;
+        const lastTop = lastSection.offsetTop - wrapperTop;
         const totalHeight = (lastTop + lastSection.offsetHeight) - firstTop;
+        const currentWidth = window.innerWidth;
+        
+        // Calculate scale factor based on current viewport width vs design width
+        const scaleX = currentWidth / DESIGN_WIDTH;
 
         setDimensions({
-          width: window.innerWidth,
+          width: currentWidth,
           height: totalHeight,
         });
+
+        // Scale the path data
+        setScaledPathData(scalePathCoordinates(pathData, scaleX));
 
         const viewportHeight = window.innerHeight;
         const scrollableDistance = Math.max(totalHeight - viewportHeight, 1);
@@ -80,7 +113,7 @@ export function ContinuousPath({
       clearTimeout(timeoutId);
       window.removeEventListener("resize", updateDimensions);
     };
-  }, [sectionIds, enabled, completionTarget]);
+  }, [sectionIds, enabled, completionTarget, pathData, DESIGN_WIDTH]);
 
   // Scroll-based animation - complete the path by the time FinalCTA is visible
   const { scrollYProgress } = useScroll({
@@ -120,8 +153,9 @@ export function ContinuousPath({
   return (
     <div
       ref={containerRef}
-      className="pointer-events-none absolute inset-0 z-0"
+      className="pointer-events-none absolute left-0 right-0 z-0"
       style={{
+        top: 0,
         height: `${dimensions.height}px`,
       }}
     >
@@ -141,9 +175,10 @@ export function ContinuousPath({
           </defs>
           {/* Main path with enhanced glow */}
           <motion.path
-            d={pathData}
+            d={scaledPathData}
             stroke={`url(#${gradientId})`}
             strokeWidth={strokeWidth}
+            vectorEffect="non-scaling-stroke"
             strokeLinecap="butt"
             strokeLinejoin="miter"
             fill="none"
@@ -158,9 +193,10 @@ export function ContinuousPath({
           />
           {/* Inner glow layer - tight blur for definition */}
           <motion.path
-            d={pathData}
+            d={scaledPathData}
             stroke="rgba(94, 234, 212, 0.6)"
             strokeWidth={strokeWidth * 1.8}
+            vectorEffect="non-scaling-stroke"
             strokeLinecap="butt"
             strokeLinejoin="miter"
             fill="none"
@@ -176,9 +212,10 @@ export function ContinuousPath({
           />
           {/* Outer glow layer - wider blur for atmosphere */}
           <motion.path
-            d={pathData}
+            d={scaledPathData}
             stroke="rgba(20, 184, 166, 0.4)"
             strokeWidth={strokeWidth * 3}
+            vectorEffect="non-scaling-stroke"
             strokeLinecap="butt"
             strokeLinejoin="miter"
             fill="none"
