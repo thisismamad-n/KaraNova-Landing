@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion, useScroll, useTransform, useInView, useSpring } from "framer-motion";
 import { useRef, useState } from "react";
 import { InovaFeatureCard } from './InovaCard';
@@ -84,7 +85,7 @@ const Skiper19 = () => {
       )}
       
       
-      <div dir="rtl" className="relative flex w-full max-w-7xl flex-col items-center justify-center gap-8 text-center pt-[13vh] md:-translate-x-12 lg:-translate-x-20">
+      <div dir="rtl" className="relative z-40 flex w-full max-w-7xl flex-col items-center justify-center gap-8 text-center pt-[13vh] md:-translate-x-12 lg:-translate-x-20">
         <div className="relative">
           <h1 className="relative z-10 text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.08] mb-6 text-balance drop-shadow-[0_18px_48px_rgba(8,47,73,0.55)]" dir="rtl">
             <span className="bg-gradient-to-r from-emerald-200 via-cyan-200 to-teal-300 bg-clip-text text-transparent">
@@ -100,22 +101,23 @@ const Skiper19 = () => {
             راهکاری هوشمند برای یکپارچه‌سازی عملیات، بهینه‌سازی تصمیم‌ها و خلق مزیت رقابتی پایدار
           </p>
 
-          {/* CTA Buttons */}
-          <div className="relative z-10 flex justify-center mt-10 md:justify-start">
-            <button 
-              className="relative inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full font-medium text-white/92 bg-white/8 backdrop-blur-[6px] shadow-[0_18px_32px_rgba(13,148,136,0.25)] transition-all duration-300 ease-out hover:bg-white/14 hover:border-black/60 hover:shadow-[0_24px_60px_rgba(15,23,42,0.45)] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/45"
-              aria-label="مشاهده دمو محصول کارانوا"
-            >
-              مشاهده دمو
-            </button>
-          </div>
-
           {isInView && (
             <LinePath
               className="absolute left-[65%] top-0 z-0 -translate-x-1/2 opacity-14 scale-[0.78] md:scale-90 lg:scale-95 pointer-events-none"
               scrollYProgress={easedProgress}
             />
           )}
+        </div>
+        
+        {/* CTA Buttons */}
+        <div className="relative flex justify-center mt-10 md:justify-start md:-translate-x-0 lg:-translate-x-0 w-full max-w-2xl">
+          <Link 
+            href="/onboarding"
+            className="relative inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full font-medium text-white/92 bg-white/8 backdrop-blur-[6px] shadow-[0_18px_32px_rgba(13,148,136,0.25)] transition-all duration-300 ease-out hover:bg-white/14 hover:shadow-[0_24px_60px_rgba(15,23,42,0.45)] hover:-translate-y-0.5 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/45 cursor-pointer"
+            aria-label="مشاهده دمو محصول کارانوا"
+          >
+            مشاهده دمو
+          </Link>
         </div>
       </div>
 

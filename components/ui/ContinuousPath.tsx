@@ -144,8 +144,8 @@ export function ContinuousPath({
             d={pathData}
             stroke={`url(#${gradientId})`}
             strokeWidth={strokeWidth}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            strokeLinecap="butt"
+            strokeLinejoin="miter"
             fill="none"
             pathLength={1}
             style={{
@@ -161,8 +161,8 @@ export function ContinuousPath({
             d={pathData}
             stroke="rgba(94, 234, 212, 0.6)"
             strokeWidth={strokeWidth * 1.8}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            strokeLinecap="butt"
+            strokeLinejoin="miter"
             fill="none"
             pathLength={1}
             style={{
@@ -179,8 +179,8 @@ export function ContinuousPath({
             d={pathData}
             stroke="rgba(20, 184, 166, 0.4)"
             strokeWidth={strokeWidth * 3}
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            strokeLinecap="butt"
+            strokeLinejoin="miter"
             fill="none"
             pathLength={1}
             style={{

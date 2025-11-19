@@ -91,6 +91,10 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  
+  .bg-gradient-radial {
+    background-image: radial-gradient(circle, var(--tw-gradient-stops));
+  }
 }
 
 /* Fix for gradient text clipping */

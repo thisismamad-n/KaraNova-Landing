@@ -38,11 +38,46 @@ export default function LandingPage() {
         {/* Continuous animated path */}
         <ContinuousPath
           sectionIds={["why-choose-section", "testimonials-section", "final-cta-section"]}
-          pathData="M 1497.00 5.00 C 1503.33 24.50 1765.00 88.00 1535.00 122.00 C 1305.00 156.00 111.50 60.00 117.00 209.00 C 122.50 358.00 1550.33 825.33 1568.00 1016.00 C 1585.67 1206.67 272.50 1209.50 223.00 1353.00 C 173.50 1496.50 1100.67 1815.83 1271.00 1877.00 C 1441.33 1938.17 1294.83 1721.83 1245.00 1720.00 C 1195.17 1718.17 989.67 1877.83 972.00 1866.00 C 954.33 1854.17 1109.17 1641.50 1139.00 1649.00 C 1168.83 1656.50 1149.00 1867.33 1151.00 1911.00"
+          pathData="M 1497.00 5.00 C 1503.33 24.50 1765.00 88.00 1535.00 122.00 C 1305.00 156.00 111.50 60.00 117.00 209.00 C 122.50 358.00 1550.33 825.33 1568.00 1016.00 C 1585.67 1206.67 272.50 1209.50 223.00 1353.00 C 173.50 1496.50 1100.67 1815.83 1271.00 1877.00 C 1441.33 1938.17 1294.83 1721.83 1245.00 1720.00 C 1195.17 1718.17 989.67 1877.83 972.00 1866.00 C 954.33 1854.17 1109.17 1641.50 1139.00 1649.00 C 1168.83 1656.50 1149.00 1867.33 1151.00 1918.00"
           gradientId="continuous-path-gradient"
           strokeWidth={12}
           enabled={true}
         />
+        
+        {/* Intense glow at the end point of continuous path - positioned at last coordinate (1151, 1918) */}
+        <div 
+          className="absolute pointer-events-none z-50"
+          style={{
+            left: '60%',
+            top: '1918px',
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          {/* Core bright spot - very intense */}
+          <div 
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32"
+            style={{
+              background: 'radial-gradient(circle, rgba(94, 234, 212, 1) 0%, rgba(94, 234, 212, 0.9) 20%, rgba(20, 184, 166, 0.6) 50%, transparent 100%)',
+              filter: 'blur(8px)',
+            }}
+          />
+          {/* Inner glow layer */}
+          <div 
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48"
+            style={{
+              background: 'radial-gradient(circle, rgba(94, 234, 212, 0.8) 0%, rgba(20, 184, 166, 0.5) 40%, transparent 100%)',
+              filter: 'blur(20px)',
+            }}
+          />
+          {/* Outer atmospheric glow - smaller */}
+          <div 
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80"
+            style={{
+              background: 'radial-gradient(circle, rgba(94, 234, 212, 0.4) 0%, rgba(20, 184, 166, 0.2) 50%, transparent 100%)',
+              filter: 'blur(40px)',
+            }}
+          />
+        </div>
         
         <WhyChooseUs language={language} />
         <TestimonialsSection />

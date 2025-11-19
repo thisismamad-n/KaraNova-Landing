@@ -49,7 +49,7 @@ export default function TestimonialsSection() {
   ];
 
   return (
-    <section id="testimonials-section" className="relative w-full min-h-screen py-20 overflow-hidden" dir="rtl">
+    <section id="testimonials-section" className="relative w-full min-h-screen pt-20 pb-0 overflow-hidden" dir="rtl">
       {/* Slide Path Designer */}
       <SlidePathDesigner slideKey="landing-testimonials" />
       
@@ -67,14 +67,48 @@ export default function TestimonialsSection() {
       </div>
       
       {/* Smooth fade-out at bottom to transition to LaserFlow */}
-      <div className="absolute bottom-0 left-0 right-0 h-56 pointer-events-none z-20">
+      <div className="absolute bottom-0 left-0 right-0 h-96 pointer-events-none z-20">
+        {/* Dense wisp layer for seamless transition */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Multiple wisp layers with varying opacity and blur */}
+          <div 
+            className="absolute left-1/4 bottom-0 w-32 h-64 bg-teal-400/20 rounded-full blur-3xl animate-pulse"
+            style={{ animationDuration: '3s' }}
+          />
+          <div 
+            className="absolute right-1/3 bottom-10 w-40 h-72 bg-cyan-400/25 rounded-full blur-3xl animate-pulse"
+            style={{ animationDuration: '4s', animationDelay: '0.5s' }}
+          />
+          <div 
+            className="absolute left-1/2 bottom-5 w-36 h-80 bg-emerald-400/20 rounded-full blur-3xl animate-pulse"
+            style={{ animationDuration: '3.5s', animationDelay: '1s' }}
+          />
+          <div 
+            className="absolute right-1/4 bottom-20 w-28 h-56 bg-teal-300/25 rounded-full blur-2xl animate-pulse"
+            style={{ animationDuration: '4.5s', animationDelay: '1.5s' }}
+          />
+          <div 
+            className="absolute left-2/3 bottom-0 w-44 h-64 bg-cyan-300/20 rounded-full blur-3xl animate-pulse"
+            style={{ animationDuration: '3.8s', animationDelay: '0.8s' }}
+          />
+          {/* Additional dense wisps for better coverage */}
+          <div 
+            className="absolute left-1/3 bottom-32 w-24 h-48 bg-teal-400/30 rounded-full blur-2xl animate-pulse"
+            style={{ animationDuration: '3.2s', animationDelay: '0.3s' }}
+          />
+          <div 
+            className="absolute right-2/3 bottom-16 w-32 h-56 bg-cyan-400/28 rounded-full blur-3xl animate-pulse"
+            style={{ animationDuration: '4.2s', animationDelay: '1.2s' }}
+          />
+        </div>
+        
+        {/* Gradient overlay - very light to allow wisps to show through */}
         <div 
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(to bottom, transparent 0%, rgba(2, 6, 23, 0.25) 35%, rgba(2, 6, 23, 0.75) 75%, rgba(2, 6, 23, 0.98) 100%)'
+            background: 'linear-gradient(to bottom, transparent 0%, transparent 60%, rgba(2, 6, 23, 0.1) 100%)'
           }}
         />
-        {/* Bloom effects removed per request */}
       </div>
 
       {/* Ambient glow effects - same as WhyChooseUs */}
@@ -86,7 +120,7 @@ export default function TestimonialsSection() {
         <div className="absolute w-[28rem] h-[28rem] rounded-full border border-teal-500/15 blur-[60px]" />
       </div>
 
-      <div className="relative z-10 w-full grid place-content-center py-16 px-4 md:px-8 lg:px-16">
+      <div className="relative z-10 w-full grid place-content-center pt-16 pb-0 px-4 md:px-8 lg:px-16">
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-center mb-8">
             <div className="bg-teal-500/10 backdrop-blur-sm border border-teal-400/30 text-teal-200 px-4 py-1 rounded-full text-xs uppercase tracking-wider font-medium">
@@ -106,7 +140,7 @@ export default function TestimonialsSection() {
                       onMouseLeave={() => setHoveredImage(null)}
                     >
                       <div
-                        className="relative overflow-hidden sm:w-16 w-12 h-12 origin-center transition-all duration-300 md:hover:w-36 hover:-24 rounded-full border-2 border-teal-400/40"
+                        className="relative overflow-hidden sm:w-16 w-12 h-12 origin-center transition-all duration-300 md:hover:w-36 hover:w-24 rounded-full border-2 border-teal-400/40"
                         aria-expanded={hoveredImage === "ops"}
                         data-hovered={hoveredImage === "ops"}
                       >
@@ -147,7 +181,7 @@ export default function TestimonialsSection() {
                       onMouseLeave={() => setHoveredImage(null)}
                     >
                       <div
-                        className="relative overflow-hidden sm:w-16 w-14 h-14 origin-center transition-all duration-300 lg:hover:w-36 md:hover:w-24 hover:-20 rounded-full border-2 border-teal-400/40"
+                        className="relative overflow-hidden sm:w-16 w-14 h-14 origin-center transition-all duration-300 lg:hover:w-36 md:hover:w-24 hover:w-20 rounded-full border-2 border-teal-400/40"
                         aria-expanded={hoveredImage === "finance"}
                         data-hovered={hoveredImage === "finance"}
                       >

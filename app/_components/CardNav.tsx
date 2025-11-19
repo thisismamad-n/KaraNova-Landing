@@ -201,15 +201,15 @@ const CardNav: React.FC<CardNavProps> = ({
             <img src={logo} alt={logoAlt} className="logo" />
           </div>
 
-          <button
-            type="button"
-            className="card-nav-cta-button"
-            onClick={toggleMenu}
-            aria-expanded={isExpanded}
-            aria-label={isExpanded ? "بستن منوی ناوبری" : "باز کردن منوی ناوبری"}
-          >
-            شروع کنید
-          </button>
+          <Link href="/onboarding">
+            <button
+              type="button"
+              className="card-nav-cta-button"
+              aria-label="شروع کنید - ورود به صفحه آنبوردینگ"
+            >
+              شروع کنید
+            </button>
+          </Link>
         </div>
 
         <div className="card-nav-content" aria-hidden={!isExpanded}>

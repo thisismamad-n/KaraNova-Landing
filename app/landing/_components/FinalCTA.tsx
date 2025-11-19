@@ -7,11 +7,17 @@ import Squares from "@/app/_components/Squares";
 import { SlidePathDesigner } from "@/components/ui/slide-path-designer";
 
 export default function FinalCTA() {
-  // Configurable gap between LaserFlow and footer box (in pixels)
-  const laserToFooterGap = -0; // Negative value brings them closer, positive pushes apart
+  // Configurable overlap between sections (in pixels)
+  // Negative value creates overlap, positive creates gap
+  const sectionOverlap = 0; // Adjust this to control overlap between Testimonials and FinalCTA
 
   return (
-    <section id="final-cta-section" className="relative w-full overflow-hidden flex flex-col pb-0 min-h-[120vh] md:min-h-screen pt-0" dir="rtl">
+    <section 
+      id="final-cta-section" 
+      className="relative w-full overflow-hidden flex flex-col pb-0 min-h-[120vh] md:min-h-screen pt-0" 
+      style={{ marginTop: `${sectionOverlap}px` }}
+      dir="rtl"
+    >
       {/* Slide Path Designer */}
       <SlidePathDesigner slideKey="landing-final-cta" />
       
@@ -38,21 +44,21 @@ export default function FinalCTA() {
       </div>
 
       {/* LaserFlow + Footer Box - Unified Component */}
-      <div className="relative z-10 w-full mt-auto flex-shrink-0">
+      <div className="relative z-10 w-full flex-shrink-0">
         {/* LaserFlow Container - Fixed height to maintain consistency */}
         <div className="relative w-full h-[500px] sm:h-[550px] md:h-[600px] overflow-visible">
           {/* Extended LaserFlow wrapper - extends upward significantly for smooth transition */}
-          <div className="absolute left-0 right-0 -top-96 bottom-0">
+          <div className="absolute left-0 right-0 -top-[32rem] bottom-0 mix-blend-screen pointer-events-none">
             <LaserFlow
               color="#1FB5AD"
-              wispDensity={1.3}
-              flowSpeed={0.35}
-              fogIntensity={0.45}
-              verticalSizing={2.5}
+              wispDensity={1.8}
+              flowSpeed={0}
+              fogIntensity={0.5}
+              verticalSizing={2.8}
               horizontalSizing={1.04}
               wispSpeed={14}
-              wispIntensity={7.2}
-              flowStrength={0.53}
+              wispIntensity={8.5}
+              flowStrength={0.58}
               decay={1.1}
               falloffStart={1.2}
               fogFallSpeed={0.6}
@@ -61,11 +67,31 @@ export default function FinalCTA() {
           </div>
           {/* Bloom effects removed per request */}
           
-          {/* Enhanced gradient mask with smoother fade-in */}
+          {/* Additional wisp layer at the top for denser coverage */}
+          <div className="absolute left-0 right-0 -top-[32rem] h-96 pointer-events-none overflow-hidden">
+            <div 
+              className="absolute left-1/5 top-0 w-40 h-80 bg-teal-400/25 rounded-full blur-3xl animate-pulse"
+              style={{ animationDuration: '3.5s', animationDelay: '0.2s' }}
+            />
+            <div 
+              className="absolute right-1/5 top-10 w-48 h-72 bg-cyan-400/30 rounded-full blur-3xl animate-pulse"
+              style={{ animationDuration: '4s', animationDelay: '0.7s' }}
+            />
+            <div 
+              className="absolute left-1/2 top-5 w-36 h-88 bg-emerald-400/25 rounded-full blur-3xl animate-pulse"
+              style={{ animationDuration: '3.8s', animationDelay: '1.3s' }}
+            />
+            <div 
+              className="absolute right-2/5 top-20 w-32 h-64 bg-teal-300/28 rounded-full blur-2xl animate-pulse"
+              style={{ animationDuration: '4.3s', animationDelay: '0.5s' }}
+            />
+          </div>
+          
+          {/* Enhanced gradient mask with smoother fade-in - very light to show wisps */}
           <div 
-            className="absolute left-0 right-0 -top-96 h-96 pointer-events-none z-10"
+            className="absolute left-0 right-0 -top-[32rem] h-[32rem] pointer-events-none z-10"
             style={{
-              background: 'linear-gradient(to bottom, #020617 0%, rgba(2, 6, 23, 0.95) 15%, rgba(2, 6, 23, 0.7) 40%, rgba(2, 6, 23, 0.3) 70%, transparent 100%)'
+              background: 'linear-gradient(to bottom, transparent 0%, transparent 30%, rgba(2, 6, 23, 0.3) 70%, rgba(2, 6, 23, 0.7) 90%, #020617 100%)'
             }}
           />
           
@@ -83,20 +109,24 @@ export default function FinalCTA() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
-                <button 
-                  className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[var(--landing-primary)] to-[var(--landing-secondary)] rounded-full text-white font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,191,165,0.5)] hover:scale-105 flex items-center justify-center gap-2 flex-row-reverse shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
-                  aria-label="شروع آزمایش رایگان کارانوا"
-                >
-                  شروع آزمایش رایگان
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform rotate-180" aria-hidden="true" />
-                </button>
+                <Link href="/onboarding" className="w-full sm:w-auto">
+                  <button 
+                    className="group relative w-full px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[var(--landing-primary)] to-[var(--landing-secondary)] rounded-full text-white font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,191,165,0.5)] hover:scale-105 flex items-center justify-center gap-2 flex-row-reverse shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
+                    aria-label="شروع آزمایش رایگان کارانوا"
+                  >
+                    شروع آزمایش رایگان
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform rotate-180" aria-hidden="true" />
+                  </button>
+                </Link>
 
-                <button 
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 border-2 border-cyan-400/50 rounded-full text-cyan-300 font-semibold text-base sm:text-lg transition-all duration-300 hover:bg-cyan-400/10 hover:border-cyan-400 backdrop-blur-sm shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
-                  aria-label="درخواست دمو محصول کارانوا"
-                >
-                  درخواست دمو
-                </button>
+                <Link href="/onboarding" className="w-full sm:w-auto">
+                  <button 
+                    className="w-full px-6 sm:px-8 py-3 sm:py-4 border-2 border-cyan-400/50 rounded-full text-cyan-300 font-semibold text-base sm:text-lg transition-all duration-300 hover:bg-cyan-400/10 hover:border-cyan-400 backdrop-blur-sm shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
+                    aria-label="درخواست دمو محصول کارانوا"
+                  >
+                    درخواست دمو
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -105,7 +135,7 @@ export default function FinalCTA() {
         {/* Footer Box - Positioned relative to LaserFlow with configurable gap */}
         <div 
           className="relative w-full max-w-7xl mx-auto px-4 sm:px-6"
-          style={{ marginTop: `${laserToFooterGap}px` }}
+          style={{ marginTop: '0px' }}
         >
           <div className="relative rounded-2xl sm:rounded-3xl border border-cyan-500/30 bg-black/40 backdrop-blur-xl overflow-hidden">
           {/* Dotted Pattern Background */}
