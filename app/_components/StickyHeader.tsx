@@ -36,6 +36,7 @@ const StickyHeader: React.FC = () => {
         { label: "اینووا - هوش تجاری", href: "/products/inova", ariaLabel: "اینووا - چهار مشاور هوشمند" },
         { label: "تسک‌ایز - مدیریت پروژه", href: "/products/taskease", ariaLabel: "تسک‌ایز - مدیریت پروژه با AI" },
         { label: "بی‌آی‌کیو - داشبورد", href: "/products/biq", ariaLabel: "بی‌آی‌کیو - داشبورد تحلیلی" },
+        { label: "قیمت‌گذاری", href: "/pricing", ariaLabel: "قیمت‌گذاری کارانوا" },
       ],
     },
     {

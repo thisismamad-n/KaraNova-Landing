@@ -67,7 +67,7 @@ export const CanvasAnimation: React.FC<CanvasAnimationProps> = ({
   }, [animationId]);
 
   return (
-    <div className="group relative flex h-[320px] w-[320px] flex-col items-center overflow-visible border border-teal-400/20 bg-slate-900/30 p-3 transition-all duration-300 hover:border-teal-300/40 hover:bg-slate-900/50 backdrop-blur-xl rounded-lg shadow-[0_8px_32px_rgba(13,148,136,0.15)]">
+    <div className="group relative flex h-[320px] w-[320px] flex-col items-center overflow-visible border border-teal-500/10 p-3 transition-all duration-300 rounded-xl">
       <Corner position="top-[-8px] left-[-8px]" rotation="rotate(0deg)" delay="0s" />
       <Corner position="top-[-8px] right-[-8px]" rotation="rotate(90deg)" delay="0.1s" />
       <Corner position="bottom-[-8px] left-[-8px]" rotation="rotate(-90deg)" delay="0.2s" />

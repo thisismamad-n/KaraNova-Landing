@@ -109,7 +109,7 @@ export default function FinalCTA() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center px-4">
-                <Link href="/onboarding" className="w-full sm:w-auto">
+                <a href="https://app.karanovaa.com" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
                   <button 
                     className="group relative w-full px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[var(--landing-primary)] to-[var(--landing-secondary)] rounded-full text-white font-semibold text-base sm:text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(0,191,165,0.5)] hover:scale-105 flex items-center justify-center gap-2 flex-row-reverse shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
                     aria-label="شروع آزمایش رایگان کارانوا"
@@ -117,16 +117,16 @@ export default function FinalCTA() {
                     شروع آزمایش رایگان
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform rotate-180" aria-hidden="true" />
                   </button>
-                </Link>
+                </a>
 
-                <Link href="/onboarding" className="w-full sm:w-auto">
+                <a href="https://app.karanovaa.com" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
                   <button 
                     className="w-full px-6 sm:px-8 py-3 sm:py-4 border-2 border-cyan-400/50 rounded-full text-cyan-300 font-semibold text-base sm:text-lg transition-all duration-300 hover:bg-cyan-400/10 hover:border-cyan-400 backdrop-blur-sm shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
                     aria-label="درخواست دمو محصول کارانوا"
                   >
                     درخواست دمو
                   </button>
-                </Link>
+                </a>
               </div>
             </div>
           </div>

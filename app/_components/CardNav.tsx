@@ -201,7 +201,7 @@ const CardNav: React.FC<CardNavProps> = ({
             <img src={logo} alt={logoAlt} className="logo" />
           </div>
 
-          <Link href="/onboarding">
+          <a href="https://app.karanovaa.com" target="_blank" rel="noopener noreferrer">
             <button
               type="button"
               className="card-nav-cta-button"
@@ -209,7 +209,7 @@ const CardNav: React.FC<CardNavProps> = ({
             >
               شروع کنید
             </button>
-          </Link>
+          </a>
         </div>
 
         <div className="card-nav-content" aria-hidden={!isExpanded}>

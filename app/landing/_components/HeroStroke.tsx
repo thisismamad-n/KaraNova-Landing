@@ -115,13 +115,15 @@ const Skiper19 = () => {
         
         {/* CTA Buttons */}
         <div className="relative flex justify-center mt-10 md:justify-start md:-translate-x-0 lg:-translate-x-0 w-full max-w-2xl">
-          <Link 
-            href="/onboarding"
+          <a 
+            href="https://app.karanovaa.com"
+            target="_blank"
+            rel="noopener noreferrer"
             className="relative inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full font-medium text-white/92 bg-white/8 backdrop-blur-[6px] shadow-[0_18px_32px_rgba(13,148,136,0.25)] transition-all duration-300 ease-out hover:bg-white/14 hover:shadow-[0_24px_60px_rgba(15,23,42,0.45)] hover:-translate-y-0.5 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300/45 cursor-pointer"
             aria-label="مشاهده دمو محصول کارانوا"
           >
             مشاهده دمو
-          </Link>
+          </a>
         </div>
       </div>
 
