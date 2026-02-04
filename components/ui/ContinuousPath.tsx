@@ -25,10 +25,10 @@ export function ContinuousPath({
   const [scaledPathData, setScaledPathData] = useState(pathData);
   const completionTarget = useMotionValue(1);
   const [hasRendered, setHasRendered] = useState(false);
-  
+
   // Check if the path is in view - only render once it's been seen
   const isInView = useInView(containerRef, { amount: 0.05, once: false });
-  
+
   useEffect(() => {
     // Use requestAnimationFrame to defer state update
     if (isInView && !hasRendered) {
@@ -45,7 +45,7 @@ export function ContinuousPath({
 
     const scalePathCoordinates = (path: string, scaleX: number): string => {
       // Match all coordinate pairs in the path
-      return path.replace(/([ML])\s*([\d.]+)\s+([\d.]+)|C\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/g, 
+      return path.replace(/([ML])\s*([\d.]+)\s+([\d.]+)|C\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/g,
         (match, cmd, x1, y1, cx1, cy1, cx2, cy2, x2, y2) => {
           if (cmd === 'M' || cmd === 'L') {
             // Move or Line command
@@ -69,13 +69,13 @@ export function ContinuousPath({
       if (firstSection && lastSection && containerRef.current) {
         // Get the parent wrapper position
         const wrapperTop = containerRef.current.parentElement?.offsetTop || 0;
-        
+
         // Calculate positions relative to the wrapper
         const firstTop = firstSection.offsetTop - wrapperTop;
         const lastTop = lastSection.offsetTop - wrapperTop;
         const totalHeight = (lastTop + lastSection.offsetHeight) - firstTop;
         const currentWidth = window.innerWidth;
-        
+
         // Calculate scale factor based on current viewport width vs design width
         const scaleX = currentWidth / DESIGN_WIDTH;
 
@@ -104,9 +104,9 @@ export function ContinuousPath({
     };
 
     updateDimensions();
-    
+
     const timeoutId = setTimeout(updateDimensions, 100);
-    
+
     window.addEventListener("resize", updateDimensions);
 
     return () => {
@@ -121,11 +121,11 @@ export function ContinuousPath({
     offset: ["start start", "end end"],
   });
 
-  // Fast spring response
+  // Optimized spring response - lower stiffness for better performance
   const easedProgress = useSpring(scrollYProgress, {
-    stiffness: 420,
-    damping: 55,
-    restDelta: 0.0001,
+    stiffness: 150,
+    damping: 40,
+    restDelta: 0.001,
   });
 
   // Map scroll progress to path drawing
@@ -173,7 +173,17 @@ export function ContinuousPath({
               <stop offset="100%" stopColor="var(--landing-accent)" />
             </linearGradient>
           </defs>
-          {/* Main path with enhanced glow */}
+          {/* SVG filter for glow - more performant than CSS blur */}
+          <defs>
+            <filter id="pathGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          {/* Main path with optimized glow - using SVG filter instead of CSS */}
           <motion.path
             d={scaledPathData}
             stroke={`url(#${gradientId})`}
@@ -183,19 +193,19 @@ export function ContinuousPath({
             strokeLinejoin="miter"
             fill="none"
             pathLength={1}
+            filter="url(#pathGlow)"
             style={{
               pathLength,
               strokeDashoffset,
-              filter: "drop-shadow(0 0 8px rgba(20, 184, 166, 0.8)) drop-shadow(0 0 16px rgba(20, 184, 166, 0.6))",
               strokeOpacity: 0.9,
               willChange: "auto",
             }}
           />
-          {/* Inner glow layer - tight blur for definition */}
+          {/* Single glow layer - reduced from 2 layers, no CSS blur */}
           <motion.path
             d={scaledPathData}
-            stroke="rgba(94, 234, 212, 0.6)"
-            strokeWidth={strokeWidth * 1.8}
+            stroke="rgba(94, 234, 212, 0.5)"
+            strokeWidth={strokeWidth * 2}
             vectorEffect="non-scaling-stroke"
             strokeLinecap="butt"
             strokeLinejoin="miter"
@@ -205,26 +215,6 @@ export function ContinuousPath({
               pathLength,
               strokeDashoffset,
               opacity: glowOpacity,
-              filter: "blur(6px)",
-              mixBlendMode: "screen",
-              willChange: "auto",
-            }}
-          />
-          {/* Outer glow layer - wider blur for atmosphere */}
-          <motion.path
-            d={scaledPathData}
-            stroke="rgba(20, 184, 166, 0.4)"
-            strokeWidth={strokeWidth * 3}
-            vectorEffect="non-scaling-stroke"
-            strokeLinecap="butt"
-            strokeLinejoin="miter"
-            fill="none"
-            pathLength={1}
-            style={{
-              pathLength,
-              strokeDashoffset,
-              opacity: outerGlowOpacity,
-              filter: "blur(12px)",
               mixBlendMode: "screen",
               willChange: "auto",
             }}

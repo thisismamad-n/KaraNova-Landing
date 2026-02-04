@@ -33,29 +33,43 @@
 
 :root {
   /* Primary Colors */
-  --landing-primary: hsl(177, 70%, 40%);      /* Brand Teal */
-  --landing-accent: hsl(185, 85%, 45%);       /* Accent Cyan */
-  --landing-success: hsl(160, 65%, 45%);      /* Success Green */
-  --landing-warning: hsl(38, 92%, 50%);       /* Warning Amber */
+  --landing-primary: hsl(177, 70%, 40%);
+  /* Brand Teal */
+  --landing-accent: hsl(185, 85%, 45%);
+  /* Accent Cyan */
+  --landing-success: hsl(160, 65%, 45%);
+  /* Success Green */
+  --landing-warning: hsl(38, 92%, 50%);
+  /* Warning Amber */
 
   /* Neutral Light Mode */
-  --landing-bg-base: hsl(210, 25%, 97%);      /* Base Background */
-  --landing-bg-elevated: hsl(210, 20%, 99%);  /* Cards/Elevated */
-  --landing-border: hsl(210, 15%, 88%);       /* Borders */
-  --landing-text-primary: hsl(220, 25%, 15%); /* Primary Text */
-  --landing-text-secondary: hsl(220, 15%, 45%); /* Secondary Text */
+  --landing-bg-base: hsl(210, 25%, 97%);
+  /* Base Background */
+  --landing-bg-elevated: hsl(210, 20%, 99%);
+  /* Cards/Elevated */
+  --landing-border: hsl(210, 15%, 88%);
+  /* Borders */
+  --landing-text-primary: hsl(220, 25%, 15%);
+  /* Primary Text */
+  --landing-text-secondary: hsl(220, 15%, 45%);
+  /* Secondary Text */
 
   /* Dark Mode */
-  --landing-dark-bg: hsl(220, 40%, 8%);       /* Dark Base */
-  --landing-dark-elevated: hsl(220, 35%, 12%); /* Dark Elevated */
-  --landing-dark-border: hsl(220, 25%, 20%);  /* Dark Borders */
-  --landing-dark-text: hsl(210, 20%, 92%);    /* Dark Text */
+  --landing-dark-bg: hsl(220, 40%, 8%);
+  /* Dark Base */
+  --landing-dark-elevated: hsl(220, 35%, 12%);
+  /* Dark Elevated */
+  --landing-dark-border: hsl(220, 25%, 20%);
+  /* Dark Borders */
+  --landing-dark-text: hsl(210, 20%, 92%);
+  /* Dark Text */
 
   /* Effects */
-  --landing-glow: rgba(31, 181, 173, 0.25);   /* Teal Glow */
-  --landing-shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
-  --landing-shadow-md: 0 4px 16px rgba(0,0,0,0.12);
-  --landing-shadow-lg: 0 8px 32px rgba(0,0,0,0.16);
+  --landing-glow: rgba(31, 181, 173, 0.25);
+  /* Teal Glow */
+  --landing-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --landing-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --landing-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
 }
 
 * {
@@ -91,7 +105,7 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-  
+
   .bg-gradient-radial {
     background-image: radial-gradient(circle, var(--tw-gradient-stops));
   }
@@ -116,9 +130,9 @@ h3.bg-clip-text {
 }
 
 /* For spans inside headings with gradient text */
-h1 > span.bg-clip-text,
-h2 > span.bg-clip-text,
-h3 > span.bg-clip-text {
+h1>span.bg-clip-text,
+h2>span.bg-clip-text,
+h3>span.bg-clip-text {
   display: inline-block;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
@@ -164,16 +178,74 @@ select:focus-visible {
 /* Ensure minimum contrast for all text */
 .text-slate-500 {
   /* Upgrade slate-500 to slate-400 for better contrast on dark backgrounds */
-  color: rgb(148 163 184) !important; /* slate-400 */
+  color: rgb(148 163 184) !important;
+  /* slate-400 */
 }
 
 /* Ensure links have sufficient contrast */
 a.text-slate-400:hover {
-  color: rgb(45 212 191) !important; /* teal-400 for better visibility */
+  color: rgb(45 212 191) !important;
+  /* teal-400 for better visibility */
 }
 
 /* Ensure placeholder text has sufficient contrast */
 ::placeholder {
-  color: rgb(148 163 184) !important; /* slate-400 */
+  color: rgb(148 163 184) !important;
+  /* slate-400 */
   opacity: 0.8;
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+/* Reduced motion support - respects user preferences for accessibility */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Disable blur effects which are expensive */
+  .blur-2xl,
+  .blur-3xl,
+  .blur-xl {
+    filter: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+/* GPU acceleration hints for animated elements */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Optimize backdrop-blur performance */
+.backdrop-blur-optimized {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform: translateZ(0);
+}
+
+/* Disable heavy effects on low-power devices */
+@media (prefers-reduced-motion: reduce),
+(update: slow) {
+  .blur-3xl {
+    filter: blur(24px) !important;
+  }
+
+  .blur-2xl {
+    filter: blur(16px) !important;
+  }
+
+  [class*="blur-["] {
+    filter: blur(24px) !important;
+  }
 }

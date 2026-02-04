@@ -8,7 +8,6 @@ import {
 } from "@radix-ui/react-tooltip";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useState } from "react";
-import Squares from "@/app/_components/Squares";
 import { SlidePathDesigner } from "@/components/ui/slide-path-designer";
 
 interface StatItem {
@@ -52,61 +51,27 @@ export default function TestimonialsSection() {
     <section id="testimonials-section" className="relative w-full min-h-screen pt-20 pb-0 overflow-hidden" dir="rtl">
       {/* Slide Path Designer */}
       <SlidePathDesigner slideKey="landing-testimonials" />
-      
-      {/* Animated background grid - same as WhyChooseUs */}
-      <div className="absolute inset-0 -z-20">
-        <Squares
-          speed={0.3}
-          direction="diagonal"
-          squareSize={44}
-          borderColor="rgba(94, 234, 212, 0.08)"
-          hoverFillColor="rgba(20, 184, 166, 0.08)"
-          baseColor="#020617"
-          vignetteColor="rgba(2, 6, 23, 0.88)"
-        />
-      </div>
-      
-      {/* Smooth fade-out at bottom to transition to LaserFlow */}
-      <div className="absolute bottom-0 left-0 right-0 h-96 pointer-events-none z-20">
-        {/* Dense wisp layer for seamless transition */}
-        <div className="absolute inset-0 overflow-hidden">
-          {/* Multiple wisp layers with varying opacity and blur */}
-          <div 
-            className="absolute left-1/4 bottom-0 w-32 h-64 bg-teal-400/20 rounded-full blur-3xl animate-pulse"
-            style={{ animationDuration: '3s' }}
-          />
-          <div 
-            className="absolute right-1/3 bottom-10 w-40 h-72 bg-cyan-400/25 rounded-full blur-3xl animate-pulse"
-            style={{ animationDuration: '4s', animationDelay: '0.5s' }}
-          />
-          <div 
-            className="absolute left-1/2 bottom-5 w-36 h-80 bg-emerald-400/20 rounded-full blur-3xl animate-pulse"
-            style={{ animationDuration: '3.5s', animationDelay: '1s' }}
-          />
-          <div 
-            className="absolute right-1/4 bottom-20 w-28 h-56 bg-teal-300/25 rounded-full blur-2xl animate-pulse"
-            style={{ animationDuration: '4.5s', animationDelay: '1.5s' }}
-          />
-          <div 
-            className="absolute left-2/3 bottom-0 w-44 h-64 bg-cyan-300/20 rounded-full blur-3xl animate-pulse"
-            style={{ animationDuration: '3.8s', animationDelay: '0.8s' }}
-          />
-          {/* Additional dense wisps for better coverage */}
-          <div 
-            className="absolute left-1/3 bottom-32 w-24 h-48 bg-teal-400/30 rounded-full blur-2xl animate-pulse"
-            style={{ animationDuration: '3.2s', animationDelay: '0.3s' }}
-          />
-          <div 
-            className="absolute right-2/3 bottom-16 w-32 h-56 bg-cyan-400/28 rounded-full blur-3xl animate-pulse"
-            style={{ animationDuration: '4.2s', animationDelay: '1.2s' }}
-          />
-        </div>
-        
-        {/* Gradient overlay - very light to allow wisps to show through */}
-        <div 
+
+      {/* Static CSS Grid background - replaces animated canvas */}
+      <div className="absolute inset-0 -z-20" style={{
+        backgroundColor: '#020617',
+        backgroundImage: `
+          linear-gradient(to right, rgba(94, 234, 212, 0.08) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(94, 234, 212, 0.08) 1px, transparent 1px)
+        `,
+        backgroundSize: '44px 44px',
+      }} />
+      {/* Radial vignette overlay */}
+      <div className="absolute inset-0 -z-19" style={{
+        background: 'radial-gradient(circle at center, transparent 0%, transparent 30%, rgba(2, 6, 23, 0.88) 100%)'
+      }} />
+
+      {/* Simple gradient fade-out at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-64 pointer-events-none z-20">
+        <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(to bottom, transparent 0%, transparent 60%, rgba(2, 6, 23, 0.1) 100%)'
+            background: 'linear-gradient(to bottom, transparent 0%, rgba(2, 6, 23, 0.5) 60%, rgba(2, 6, 23, 0.9) 100%)'
           }}
         />
       </div>

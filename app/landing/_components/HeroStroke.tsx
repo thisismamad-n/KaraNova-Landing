@@ -41,7 +41,7 @@ const Skiper19 = () => {
     <section
       ref={ref}
       className="mx-auto flex w-screen flex-col items-center overflow-hidden px-4 pt-20 relative h-auto md:h-[2804px]"
-      style={{ 
+      style={{
         color: 'var(--landing-dark-text)'
       }}
       onMouseMove={SHOW_COORDINATE_HELPER ? handleMouseMove : undefined}
@@ -82,8 +82,8 @@ const Skiper19 = () => {
           </div>
         </>
       )}
-      
-      
+
+
       <div dir="rtl" className="relative z-40 flex w-full max-w-7xl flex-col items-center justify-center gap-8 text-center pt-[13vh] md:-translate-x-12 lg:-translate-x-20">
         <div className="relative">
           <h1 className="relative z-10 text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.08] mb-6 text-balance drop-shadow-[0_18px_48px_rgba(8,47,73,0.55)]" dir="rtl">
@@ -95,7 +95,7 @@ const Skiper19 = () => {
               با کارانوا
             </span>
           </h1>
-          
+
           <p className="relative z-10 mt-6 max-w-2xl mx-auto text-xl md:text-2xl font-normal leading-relaxed text-slate-100/85 text-balance md:text-left" dir="rtl">
             راهکاری هوشمند برای یکپارچه‌سازی عملیات، بهینه‌سازی تصمیم‌ها و خلق مزیت رقابتی پایدار
           </p>
@@ -112,10 +112,10 @@ const Skiper19 = () => {
             </>
           )}
         </div>
-        
+
         {/* CTA Buttons */}
         <div className="relative flex justify-center mt-10 md:justify-start md:-translate-x-0 lg:-translate-x-0 w-full max-w-2xl">
-          <a 
+          <a
             href="https://app.karanovaa.com"
             target="_blank"
             rel="noopener noreferrer"
@@ -136,14 +136,14 @@ const Skiper19 = () => {
       {isInView && (
         <>
           {/* Bottom gradient blur fade - matches SnapScrollSection's teal-tinted dark background */}
-          <div 
+          <div
             className="hidden md:block absolute bottom-0 left-0 right-0 pointer-events-none z-30"
             style={{
               height: '280px',
               background: 'linear-gradient(to top, rgba(3, 37, 43, 1) 0%, rgba(3, 11, 17, 0.95) 10%, rgba(1, 11, 15, 0.88) 22%, rgba(2, 6, 23, 0.75) 38%, rgba(2, 6, 23, 0.55) 55%, rgba(2, 6, 23, 0.32) 72%, rgba(2, 6, 23, 0.12) 88%, transparent 100%)'
             }}
           />
-          <div 
+          <div
             className="hidden md:block absolute bottom-0 left-0 right-0 pointer-events-none z-29"
             style={{
               height: '280px',
@@ -169,7 +169,7 @@ const LinePath = ({
   scrollYProgress: any;
 }) => {
   const pathLength = useTransform(scrollYProgress, [0, 1], [0.49, 1]);
-  
+
   // Reference design width - the width the path was designed for
   const DESIGN_WIDTH = 1278;
   const DESIGN_HEIGHT = 2319;
@@ -191,34 +191,27 @@ const LinePath = ({
           <stop offset="55%" stopColor="hsl(185, 85%, 70%)" />
           <stop offset="100%" stopColor="var(--landing-accent)" />
         </linearGradient>
+        {/* Optimized SVG glow filter - replaces expensive CSS drop-shadow */}
+        <filter id="heroPathGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="6" result="glow" />
+          <feMerge>
+            <feMergeNode in="glow" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
-      {/* Main path with enhanced glow */}
+      {/* Main path with SVG filter glow - much more performant */}
       <motion.path
         d="M876.605 394.131C788.982 335.917 696.198 358.139 691.836 416.303C685.453 501.424 853.722 498.43 941.95 409.714C1016.1 335.156 1008.64 186.907 906.167 142.846C807.014 100.212 712.699 198.494 789.049 245.127C889.053 306.207 986.062 116.979 840.548 43.3233C743.932 -5.58141 678.027 57.1682 672.279 112.188C666.53 167.208 712.538 172.943 736.353 163.088C760.167 153.234 764.14 120.924 746.651 93.3868C717.461 47.4252 638.894 77.8642 601.018 116.979C568.164 150.908 557 201.079 576.467 246.924C593.342 286.664 630.24 310.55 671.68 302.614C756.114 286.446 729.747 206.546 681.86 186.442C630.54 164.898 492 209.318 495.026 287.644C496.837 334.494 518.402 366.466 582.455 367.287C680.013 368.538 771.538 299.456 898.634 292.434C1007.02 286.446 1192.67 309.384 1242.36 382.258C1266.99 418.39 1273.65 443.108 1247.75 474.477C1217.32 511.33 1149.4 511.259 1096.84 466.093C1044.29 420.928 1029.14 380.576 1033.97 324.172C1038.31 273.428 1069.55 228.986 1117.2 216.384C1152.2 207.128 1188.29 213.629 1194.45 245.127C1201.49 281.062 1132.22 280.104 1100.44 272.673C1065.32 264.464 1044.22 234.837 1032.77 201.413C1019.29 162.061 1029.71 131.126 1056.44 100.965C1086.19 67.4032 1143.96 54.5526 1175.78 86.1513C1207.02 117.17 1186.81 143.379 1156.22 166.691C1112.57 199.959 1052.57 186.238 999.784 155.164C957.312 130.164 899.171 63.7054 931.284 26.3214C952.068 2.12513 996.288 3.87363 1007.22 43.58C1018.15 83.2749 1003.56 122.644 975.969 163.376C948.377 204.107 907.272 255.122 913.558 321.045C919.727 385.734 990.968 497.068 1063.84 503.35C1111.46 507.456 1166.79 511.984 1175.68 464.527C1191.52 379.956 1101.26 334.985 1030.29 377.017C971.109 412.064 956.297 483.647 953.797 561.655C947.587 755.413 1197.56 941.828 936.039 1140.66C745.771 1285.32 321.926 950.737 134.536 1202.19C-6.68295 1391.68 -53.4837 1655.38 131.935 1760.5C478.381 1956.91 1124.19 1515 1201.28 1997.83C1273.66 2451.23 100.805 1864.7 303.794 2668.89"
         stroke="url(#tealStroke)"
         strokeWidth="14"
         vectorEffect="non-scaling-stroke"
+        filter="url(#heroPathGlow)"
         style={{
           pathLength,
           strokeDashoffset: useTransform(pathLength, (value) => 1 - value),
-          filter: 'drop-shadow(0 0 8px rgba(20, 184, 166, 0.8)) drop-shadow(0 0 16px rgba(20, 184, 166, 0.6))',
           strokeOpacity: 0.85,
-          willChange: 'auto',
-        }}
-        strokeLinecap="round"
-      />
-      {/* Glow layer for enhanced luminosity */}
-      <motion.path
-        d="M876.605 394.131C788.982 335.917 696.198 358.139 691.836 416.303C685.453 501.424 853.722 498.43 941.95 409.714C1016.1 335.156 1008.64 186.907 906.167 142.846C807.014 100.212 712.699 198.494 789.049 245.127C889.053 306.207 986.062 116.979 840.548 43.3233C743.932 -5.58141 678.027 57.1682 672.279 112.188C666.53 167.208 712.538 172.943 736.353 163.088C760.167 153.234 764.14 120.924 746.651 93.3868C717.461 47.4252 638.894 77.8642 601.018 116.979C568.164 150.908 557 201.079 576.467 246.924C593.342 286.664 630.24 310.55 671.68 302.614C756.114 286.446 729.747 206.546 681.86 186.442C630.54 164.898 492 209.318 495.026 287.644C496.837 334.494 518.402 366.466 582.455 367.287C680.013 368.538 771.538 299.456 898.634 292.434C1007.02 286.446 1192.67 309.384 1242.36 382.258C1266.99 418.39 1273.65 443.108 1247.75 474.477C1217.32 511.33 1149.4 511.259 1096.84 466.093C1044.29 420.928 1029.14 380.576 1033.97 324.172C1038.31 273.428 1069.55 228.986 1117.2 216.384C1152.2 207.128 1188.29 213.629 1194.45 245.127C1201.49 281.062 1132.22 280.104 1100.44 272.673C1065.32 264.464 1044.22 234.837 1032.77 201.413C1019.29 162.061 1029.71 131.126 1056.44 100.965C1086.19 67.4032 1143.96 54.5526 1175.78 86.1513C1207.02 117.17 1186.81 143.379 1156.22 166.691C1112.57 199.959 1052.57 186.238 999.784 155.164C957.312 130.164 899.171 63.7054 931.284 26.3214C952.068 2.12513 996.288 3.87363 1007.22 43.58C1018.15 83.2749 1003.56 122.644 975.969 163.376C948.377 204.107 907.272 255.122 913.558 321.045C919.727 385.734 990.968 497.068 1063.84 503.35C1111.46 507.456 1166.79 511.984 1175.68 464.527C1191.52 379.956 1101.26 334.985 1030.29 377.017C971.109 412.064 956.297 483.647 953.797 561.655C947.587 755.413 1197.56 941.828 936.039 1140.66C745.771 1285.32 321.926 950.737 134.536 1202.19C-6.68295 1391.68 -53.4837 1655.38 131.935 1760.5C478.381 1956.91 1124.19 1515 1201.28 1997.83C1273.66 2451.23 100.805 1864.7 303.794 2668.89"
-        stroke="rgba(94, 234, 212, 0.2)"
-        strokeWidth="24"
-        vectorEffect="non-scaling-stroke"
-        style={{
-          pathLength,
-          strokeDashoffset: useTransform(pathLength, (value) => 1 - value),
-          filter: 'blur(10px)',
-          mixBlendMode: 'screen',
-          willChange: 'auto',
+          willChange: "auto",
         }}
         strokeLinecap="round"
       />

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useMemo, useState } from "react"
+import React, { useMemo, useState, memo } from "react"
 import { motion } from "framer-motion"
 import { cn } from "@/lib/utils"
 
@@ -13,7 +13,15 @@ interface SpiderChartProps {
   className?: string
 }
 
-export function SpiderChart({
+/**
+ * PERFORMANCE OPTIMIZED VERSION
+ * Reduced from 40+ motion elements to minimal set:
+ * 1. Static polygons for rings (no animation)
+ * 2. Static lines for axes (no animation)
+ * 3. Single motion.path for data with simple entrance
+ * 4. CSS transitions for hover instead of Framer Motion
+ */
+const SpiderChart = memo(function SpiderChart({
   metrics = [
     { label: "رشد", value: 80 },
     { label: "بازده", value: 65 },
@@ -29,6 +37,7 @@ export function SpiderChart({
   const size = 520
   const center = size / 2
   const radius = size * 0.38
+  const [hovered, setHovered] = useState(false)
 
   const angles = useMemo(() => {
     const n = metrics.length
@@ -42,6 +51,7 @@ export function SpiderChart({
     }
   }, [max, radius, center])
 
+  // Pre-calculate ring polygons
   const ringPolygons = useMemo(() => {
     const n = metrics.length
     const arr: string[] = []
@@ -58,11 +68,21 @@ export function SpiderChart({
     return arr
   }, [angles, levels, metrics.length, center, radius])
 
+  // Pre-calculate data path
   const dataPath = useMemo(() => {
     const pts = metrics.map((m, i) => scalePoint(m.value, angles[i]))
     return `M ${pts.map(([x, y]) => `${x},${y}`).join(" L ")} Z`
   }, [metrics, angles, scalePoint])
 
+  // Pre-calculate axis lines
+  const axisLines = useMemo(() => {
+    return angles.map((ang) => ({
+      x2: center + radius * Math.cos(ang),
+      y2: center + radius * Math.sin(ang),
+    }))
+  }, [angles, center, radius])
+
+  // Pre-calculate label positions
   const labelPoints = useMemo(() => {
     const offset = 20
     return metrics.map((m, i) => {
@@ -71,21 +91,24 @@ export function SpiderChart({
       const anchor: "start" | "middle" | "end" = Math.cos(angles[i]) > 0.35
         ? "start"
         : Math.cos(angles[i]) < -0.35
-        ? "end"
-        : "middle"
+          ? "end"
+          : "middle"
       return { label: m.label, x: x + (anchor === "start" ? offset : anchor === "end" ? -offset : 0), y, anchor }
     })
   }, [metrics, angles, center, radius])
 
-  const [hovered, setHovered] = useState(false)
+  // Pre-calculate dot positions
+  const dotPositions = useMemo(() => {
+    return metrics.map((m, i) => scalePoint(m.value, angles[i]))
+  }, [metrics, angles, scalePoint])
 
   return (
-    <motion.div
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       className={cn(
         "w-full h-full relative rounded-2xl overflow-hidden",
-        "bg-white/6 backdrop-blur-2xl border border-white/20",
+        "bg-white/6 backdrop-blur-sm border border-white/20",
         "ring-1 ring-teal-300/10",
         "transition-all duration-300",
         hovered ? "bg-white/8 ring-teal-300/20 shadow-[0_12px_60px_rgba(20,184,166,0.25)]" : "shadow-[0_8px_40px_rgba(15,23,42,0.2)]",
@@ -104,7 +127,7 @@ export function SpiderChart({
             <stop offset="0%" stopColor="#34d399" />
             <stop offset="100%" stopColor="#22d3ee" />
           </linearGradient>
-          <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <filter id="spiderGlow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="4" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
@@ -113,78 +136,76 @@ export function SpiderChart({
           </filter>
         </defs>
 
+        {/* Static ring polygons - no animation */}
         {ringPolygons.map((pts, i) => (
-          <motion.polygon
+          <polygon
             key={i}
             points={pts}
             fill={i === ringPolygons.length - 1 ? "url(#glowFill)" : "none"}
             stroke="rgba(226,232,240,0.25)"
             strokeWidth={1}
-            initial={{ opacity: 0, scale: 0.98, transformOrigin: `${center}px ${center}px` }}
-            animate={{ opacity: 1, scale: hovered ? 1.01 : 1 }}
-            transition={{ duration: 0.6, delay: i * 0.05 }}
+            className="transition-transform duration-300"
+            style={{
+              transformOrigin: `${center}px ${center}px`,
+              transform: hovered ? "scale(1.01)" : "scale(1)"
+            }}
           />
         ))}
 
-        {angles.map((ang, i) => {
-          const [x, y] = [center + radius * Math.cos(ang), center + radius * Math.sin(ang)]
-          return (
-            <motion.line
-              key={`axis-${i}`}
-              x1={center}
-              y1={center}
-              x2={x}
-              y2={y}
-              stroke="rgba(226,232,240,0.25)"
-              strokeWidth={1}
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 0.6, delay: 0.15 + i * 0.05 }}
-            />
-          )
-        })}
+        {/* Static axis lines - no animation */}
+        {axisLines.map((line, i) => (
+          <line
+            key={`axis-${i}`}
+            x1={center}
+            y1={center}
+            x2={line.x2}
+            y2={line.y2}
+            stroke="rgba(226,232,240,0.25)"
+            strokeWidth={1}
+          />
+        ))}
 
+        {/* Main data path - only element with motion, simple entrance */}
         <motion.path
           d={dataPath}
           fill="url(#glowFill)"
           stroke="url(#lineGrad)"
           strokeWidth={hovered ? 4 : 3}
-          filter="url(#softGlow)"
+          filter="url(#spiderGlow)"
           initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: hovered ? 1.025 : 1 }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-          style={{ transformBox: "fill-box", transformOrigin: "50% 50%" }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          style={{
+            transformBox: "fill-box",
+            transformOrigin: "50% 50%",
+            transform: hovered ? "scale(1.025)" : "scale(1)",
+          }}
+          className="transition-transform duration-300"
         />
 
-        {metrics.map((m, i) => {
-          const [x, y] = scalePoint(m.value, angles[i])
-          return (
-            <motion.circle
-              key={`dot-${i}`}
-              cx={x}
-              cy={y}
-              r={hovered ? 5.5 : 4}
-              fill="#34d399"
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: hovered ? 1.15 : 1, opacity: 1 }}
-              transition={{ delay: 0.5 + i * 0.05, type: "spring", stiffness: 260, damping: 18 }}
-            />
-          )
-        })}
+        {/* Static dots with CSS transitions */}
+        {dotPositions.map(([x, y], i) => (
+          <circle
+            key={`dot-${i}`}
+            cx={x}
+            cy={y}
+            r={hovered ? 5.5 : 4}
+            fill="#34d399"
+            className="transition-all duration-300"
+          />
+        ))}
 
+        {/* Static labels */}
         {labelPoints.map((p, i) => (
-          <motion.text
+          <text
             key={`lbl-${i}`}
             x={p.x}
             y={p.y}
             textAnchor={p.anchor}
-            className="fill-slate-200 text-[13px] md:text-sm"
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 0.9, y: 0 }}
-            transition={{ delay: 0.4 + i * 0.04 }}
+            className="fill-slate-200 text-[13px] md:text-sm opacity-90"
           >
             {p.label}
-          </motion.text>
+          </text>
         ))}
       </svg>
 
@@ -192,6 +213,8 @@ export function SpiderChart({
         <div className="absolute inset-0 bg-gradient-to-tr from-emerald-400/10 via-teal-400/10 to-cyan-400/10 mix-blend-overlay" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(45,212,191,0.08),transparent_60%)]" />
       </div>
-    </motion.div>
+    </div>
   )
-}
+})
+
+export { SpiderChart }

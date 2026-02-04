@@ -80,7 +80,7 @@ export default function WhyChooseUs({ language = "en" }: WhyChooseUsProps) {
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         {/* Header */}
-        <motion.div 
+        <motion.div
           className="text-center mb-20"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -101,7 +101,7 @@ export default function WhyChooseUs({ language = "en" }: WhyChooseUsProps) {
               </h2>
             </div>
           </motion.div>
-          <motion.p 
+          <motion.p
             className="text-xl md:text-2xl text-slate-300/90 max-w-3xl mx-auto leading-relaxed"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -142,8 +142,8 @@ const Feature = ({
       ref={featureRef}
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      transition={{ 
-        duration: 0.6, 
+      transition={{
+        duration: 0.6,
         delay: index * 0.1,
         ease: [0.21, 0.47, 0.32, 0.98]
       }}
@@ -163,12 +163,8 @@ const Feature = ({
         <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-teal-400/50 to-transparent" />
       </div>
 
-      {/* Icon with enhanced styling */}
-      <motion.div 
-        className="mb-6 relative z-10"
-        whileHover={{ scale: 1.1, rotate: 5 }}
-        transition={{ type: "spring", stiffness: 400, damping: 10 }}
-      >
+      {/* Icon with CSS transitions instead of Framer Motion */}
+      <div className="mb-6 relative z-10 transition-transform duration-200 hover:scale-110 hover:rotate-[5deg]">
         <div className="relative inline-block">
           <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-cyan-500/20 rounded-xl blur-xl group-hover/feature:blur-2xl transition-all duration-500" />
           <div className="relative bg-gradient-to-br from-teal-500/10 to-cyan-500/10 p-4 rounded-xl border border-teal-500/20 group-hover/feature:border-teal-400/40 transition-all duration-500 backdrop-blur-sm">
@@ -177,7 +173,7 @@ const Feature = ({
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Title with accent bar */}
       <div className="relative z-10 mb-3">
