@@ -50,13 +50,7 @@ export function FeatureStepsDemo({ language }: FeatureStepsDemoProps) {
         progressRange={[0, 1]}
       />
 
-      <div 
-        className="absolute top-0 left-0 right-0 pointer-events-none z-[5]"
-        style={{
-          height: '128px',
-          background: 'linear-gradient(to bottom, rgba(3, 37, 43, 1) 0%, rgba(3, 11, 17, 0.95) 16%, rgba(2, 6, 23, 0.62) 46%, rgba(2, 6, 23, 0.28) 76%, transparent 100%)'
-        }}
-      />
+
 
       {/* Feature Steps Content */}
       <div className="relative z-10">

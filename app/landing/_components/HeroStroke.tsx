@@ -136,23 +136,7 @@ const Skiper19 = () => {
       {isInView && (
         <>
           {/* Bottom gradient blur fade - matches SnapScrollSection's teal-tinted dark background */}
-          <div
-            className="hidden md:block absolute bottom-0 left-0 right-0 pointer-events-none z-30"
-            style={{
-              height: '280px',
-              background: 'linear-gradient(to top, rgba(3, 37, 43, 1) 0%, rgba(3, 11, 17, 0.95) 10%, rgba(1, 11, 15, 0.88) 22%, rgba(2, 6, 23, 0.75) 38%, rgba(2, 6, 23, 0.55) 55%, rgba(2, 6, 23, 0.32) 72%, rgba(2, 6, 23, 0.12) 88%, transparent 100%)'
-            }}
-          />
-          <div
-            className="hidden md:block absolute bottom-0 left-0 right-0 pointer-events-none z-29"
-            style={{
-              height: '280px',
-              maskImage: 'linear-gradient(to top, black 0%, rgba(0, 0, 0, 0.95) 12%, rgba(0, 0, 0, 0.8) 30%, rgba(0, 0, 0, 0.55) 50%, rgba(0, 0, 0, 0.28) 70%, rgba(0, 0, 0, 0.1) 85%, transparent 100%)',
-              WebkitMaskImage: 'linear-gradient(to top, black 0%, rgba(0, 0, 0, 0.95) 12%, rgba(0, 0, 0, 0.8) 30%, rgba(0, 0, 0, 0.55) 50%, rgba(0, 0, 0, 0.28) 70%, rgba(0, 0, 0, 0.1) 85%, transparent 100%)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)'
-            }}
-          />
+
         </>
       )}
     </section>

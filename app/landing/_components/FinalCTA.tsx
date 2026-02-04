@@ -21,18 +21,9 @@ export default function FinalCTA() {
       <SlidePathDesigner slideKey="landing-final-cta" />
 
       {/* Static CSS Grid background - replaces animated canvas */}
-      <div className="absolute inset-0 -z-20" style={{
-        backgroundColor: '#020617',
-        backgroundImage: `
-          linear-gradient(to right, rgba(94, 234, 212, 0.08) 1px, transparent 1px),
-          linear-gradient(to bottom, rgba(94, 234, 212, 0.08) 1px, transparent 1px)
-        `,
-        backgroundSize: '44px 44px',
-      }} />
+
       {/* Radial vignette overlay */}
-      <div className="absolute inset-0 -z-19" style={{
-        background: 'radial-gradient(circle at center, transparent 0%, transparent 30%, rgba(2, 6, 23, 0.88) 100%)'
-      }} />
+
 
       {/* Ambient glow effects - same as Testimonials */}
       <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl -z-10" />
@@ -74,13 +65,7 @@ export default function FinalCTA() {
             <div className="absolute left-1/2 top-5 w-36 h-88 bg-emerald-400/25 rounded-full blur-3xl" />
           </div>
 
-          {/* Enhanced gradient mask with smoother fade-in - very light to show wisps */}
-          <div
-            className="absolute left-0 right-0 -top-[32rem] h-[32rem] pointer-events-none z-10"
-            style={{
-              background: 'linear-gradient(to bottom, transparent 0%, transparent 30%, rgba(2, 6, 23, 0.3) 70%, rgba(2, 6, 23, 0.7) 90%, #020617 100%)'
-            }}
-          />
+
 
           {/* Content - Positioned on top of LaserFlow */}
           <div className="absolute inset-0 flex items-center justify-center z-20">

@@ -196,16 +196,10 @@ const SnapScrollSection = () => {
   return (
     <section
       ref={containerRef}
-      className="relative isolate w-full overflow-hidden bg-[#010b0f] text-white"
+      className="relative isolate w-full overflow-hidden text-white"
       style={{ zIndex: 20 }}
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-      >
-        <div className="absolute inset-0 opacity-60 bg-gradient-to-b from-[#03252b]/50 via-[#030b11]/70 to-[#010203]/80" />
-        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.08),transparent_60%)]" />
-      </div>
+
       <div
         ref={(el) => {
           slideRefs.current[0] = el;

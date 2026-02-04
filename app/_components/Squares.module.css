@@ -1,8 +1,9 @@
 .container {
-  position: absolute;
+  position: fixed;
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+  z-index: 0;
 }
 
 .baseLayer {
@@ -16,7 +17,7 @@
   inset: -100%;
   width: 300%;
   height: 300%;
-  background-image: 
+  background-image:
     linear-gradient(to right, var(--border-color, rgba(94, 234, 212, 0.10)) 1px, transparent 1px),
     linear-gradient(to bottom, var(--border-color, rgba(94, 234, 212, 0.10)) 1px, transparent 1px);
   background-size: var(--square-size, 40px) var(--square-size, 40px);
@@ -26,47 +27,84 @@
 .vignetteLayer {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at center,
-    transparent 0%,
-    transparent 30%,
-    var(--vignette-color, rgba(6, 0, 16, 0.78)) 100%
-  );
+  background: radial-gradient(circle at center,
+      transparent 0%,
+      transparent 30%,
+      var(--vignette-color, rgba(6, 0, 16, 0.78)) 100%);
   pointer-events: none;
 }
 
 /* CSS Animations for grid movement - GPU accelerated via transform */
 @keyframes moveRight {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(var(--square-size, 40px), 0, 0); }
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(var(--square-size, 40px), 0, 0);
+  }
 }
 
 @keyframes moveLeft {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(calc(-1 * var(--square-size, 40px)), 0, 0); }
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(calc(-1 * var(--square-size, 40px)), 0, 0);
+  }
 }
 
 @keyframes moveUp {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(0, calc(-1 * var(--square-size, 40px)), 0); }
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, calc(-1 * var(--square-size, 40px)), 0);
+  }
 }
 
 @keyframes moveDown {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(0, var(--square-size, 40px), 0); }
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(0, var(--square-size, 40px), 0);
+  }
 }
 
 @keyframes moveDiagonal {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(var(--square-size, 40px), var(--square-size, 40px), 0); }
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(var(--square-size, 40px), var(--square-size, 40px), 0);
+  }
 }
 
 /* Export class names for JS access */
-.moveRight { animation-name: moveRight; }
-.moveLeft { animation-name: moveLeft; }
-.moveUp { animation-name: moveUp; }
-.moveDown { animation-name: moveDown; }
-.moveDiagonal { animation-name: moveDiagonal; }
+.moveRight {
+  animation-name: moveRight;
+}
+
+.moveLeft {
+  animation-name: moveLeft;
+}
+
+.moveUp {
+  animation-name: moveUp;
+}
+
+.moveDown {
+  animation-name: moveDown;
+}
+
+.moveDiagonal {
+  animation-name: moveDiagonal;
+}
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {

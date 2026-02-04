@@ -53,28 +53,11 @@ export default function TestimonialsSection() {
       <SlidePathDesigner slideKey="landing-testimonials" />
 
       {/* Static CSS Grid background - replaces animated canvas */}
-      <div className="absolute inset-0 -z-20" style={{
-        backgroundColor: '#020617',
-        backgroundImage: `
-          linear-gradient(to right, rgba(94, 234, 212, 0.08) 1px, transparent 1px),
-          linear-gradient(to bottom, rgba(94, 234, 212, 0.08) 1px, transparent 1px)
-        `,
-        backgroundSize: '44px 44px',
-      }} />
-      {/* Radial vignette overlay */}
-      <div className="absolute inset-0 -z-19" style={{
-        background: 'radial-gradient(circle at center, transparent 0%, transparent 30%, rgba(2, 6, 23, 0.88) 100%)'
-      }} />
 
-      {/* Simple gradient fade-out at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 h-64 pointer-events-none z-20">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: 'linear-gradient(to bottom, transparent 0%, rgba(2, 6, 23, 0.5) 60%, rgba(2, 6, 23, 0.9) 100%)'
-          }}
-        />
-      </div>
+      {/* Radial vignette overlay */}
+
+
+
 
       {/* Ambient glow effects - same as WhyChooseUs */}
       <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl" />
