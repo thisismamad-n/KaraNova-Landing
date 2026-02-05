@@ -5,7 +5,11 @@ import { ArrowRight } from "lucide-react";
 import LaserFlow from "@/components/ui/LaserFlow";
 import { SlidePathDesigner } from "@/components/ui/slide-path-designer";
 
-export default function FinalCTA() {
+interface FinalCTAProps {
+  showContent?: boolean;
+}
+
+export default function FinalCTA({ showContent = true }: FinalCTAProps) {
   // Configurable overlap between sections (in pixels)
   // Negative value creates overlap, positive creates gap
   const sectionOverlap = 0; // Adjust this to control overlap between Testimonials and FinalCTA
@@ -26,12 +30,14 @@ export default function FinalCTA() {
 
 
       {/* Ambient glow effects - same as Testimonials */}
-      <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl -z-10" />
-      <div className="absolute top-1/3 right-1/4 w-[30rem] h-[30rem] bg-cyan-400/14 rounded-full blur-3xl -z-10" />
-      <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -z-10" />
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10">
-        <div className="w-[22rem] h-[22rem] rounded-full bg-teal-500/12 blur-[120px]" />
-        <div className="absolute w-[28rem] h-[28rem] rounded-full border border-teal-500/15 blur-[60px]" />
+      <div className={`transition-opacity duration-1000 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
+        <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl -z-10" />
+        <div className="absolute top-1/3 right-1/4 w-[30rem] h-[30rem] bg-cyan-400/14 rounded-full blur-3xl -z-10" />
+        <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -z-10" />
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none -z-10">
+          <div className="w-[22rem] h-[22rem] rounded-full bg-teal-500/12 blur-[120px]" />
+          <div className="absolute w-[28rem] h-[28rem] rounded-full border border-teal-500/15 blur-[60px]" />
+        </div>
       </div>
 
       {/* LaserFlow + Footer Box - Unified Component */}
@@ -39,7 +45,9 @@ export default function FinalCTA() {
         {/* LaserFlow Container - Fixed height to maintain consistency */}
         <div className="relative w-full h-[500px] sm:h-[550px] md:h-[600px] overflow-visible">
           {/* Extended LaserFlow wrapper - extends upward significantly for smooth transition */}
-          <div className="absolute left-0 right-0 -top-[32rem] bottom-0 mix-blend-screen pointer-events-none">
+          <div
+            className={`absolute left-0 right-0 -top-[32rem] bottom-0 mix-blend-screen pointer-events-none transition-opacity duration-1000 ${showContent ? 'opacity-100' : 'opacity-0'}`}
+          >
             <LaserFlow
               color="#1FB5AD"
               wispDensity={1.8}
@@ -59,7 +67,7 @@ export default function FinalCTA() {
           {/* Bloom effects removed per request */}
 
           {/* Static glow effects - no animation */}
-          <div className="absolute left-0 right-0 -top-[32rem] h-96 pointer-events-none overflow-hidden">
+          <div className={`absolute left-0 right-0 -top-[32rem] h-96 pointer-events-none overflow-hidden transition-opacity duration-1000 ${showContent ? 'opacity-100' : 'opacity-0'}`}>
             <div className="absolute left-1/5 top-0 w-40 h-80 bg-teal-400/25 rounded-full blur-3xl" />
             <div className="absolute right-1/5 top-10 w-48 h-72 bg-cyan-400/30 rounded-full blur-3xl" />
             <div className="absolute left-1/2 top-5 w-36 h-88 bg-emerald-400/25 rounded-full blur-3xl" />
@@ -68,7 +76,7 @@ export default function FinalCTA() {
 
 
           {/* Content - Positioned on top of LaserFlow */}
-          <div className="absolute inset-0 flex items-center justify-center z-20">
+          <div className={`absolute inset-0 flex items-center justify-center z-20 transition-all duration-1000 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 sm:mb-6 tracking-tight leading-tight">
                 <span className="bg-gradient-to-r from-emerald-200 via-cyan-200 to-teal-300 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(94,234,212,0.3)]">

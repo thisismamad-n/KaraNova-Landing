@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useSpring, useTransform, useInView, useMotionValue } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform, useInView, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
@@ -10,6 +10,7 @@ interface ContinuousPathProps {
   gradientId?: string;
   strokeWidth?: number;
   enabled?: boolean;
+  onComplete?: (isComplete: boolean) => void;
 }
 
 export function ContinuousPath({
@@ -19,6 +20,7 @@ export function ContinuousPath({
   strokeWidth = 12,
 
   enabled = true,
+  onComplete,
 }: ContinuousPathProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -146,6 +148,17 @@ export function ContinuousPath({
     },
   );
   const pathLength = useTransform(normalizedProgress, [0, 1], [0, 1]);
+
+  useMotionValueEvent(pathLength, "change", (latest: number) => {
+    if (onComplete) {
+      if (latest >= 0.99) {
+        onComplete(true);
+      } else {
+        onComplete(false);
+      }
+    }
+  });
+
   const strokeDashoffset = useTransform(pathLength, (value) => 1 - value);
   const glowOpacity = useTransform(pathLength, [0, 0.3, 1], [0, 0.7, 1]);
   // Pre-calculate outer glow opacity to avoid hook in JSX
