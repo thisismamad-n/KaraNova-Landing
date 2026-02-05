@@ -15,6 +15,8 @@ export const BIQFeatureCard = ({
   width = 460,
   variant = "overlay",
 }: ProductCardPositionProps) => {
+  const isMobile = variant === "stacked";
+
   return (
     <motion.div
       className={
@@ -24,19 +26,19 @@ export const BIQFeatureCard = ({
       }
       style={variant === "overlay" ? { left, top, width } : undefined}
       dir="rtl"
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={isMobile ? undefined : { opacity: 0, y: 30 }}
+      whileInView={isMobile ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-20% 0px -15% 0px" }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
       {/* Radial gradient glow */}
-      <motion.div 
-        className="absolute -inset-10 rounded-full bg-gradient-to-br from-indigo-600/25 via-indigo-500/20 to-violet-600/25 blur-3xl"
-        animate={{ 
+      <motion.div
+        className="absolute -inset-10 rounded-full bg-gradient-to-br from-indigo-600/25 via-indigo-500/20 to-violet-600/25 blur-3xl opacity-40"
+        animate={isMobile ? undefined : {
           scale: [1, 1.12, 1],
           opacity: [0.35, 0.55, 0.35]
         }}
-        transition={{ 
+        transition={{
           duration: 3.5,
           repeat: Infinity,
           ease: "easeInOut"
@@ -45,26 +47,26 @@ export const BIQFeatureCard = ({
 
       <div className="relative space-y-3.5">
         {/* Metric badge with animated border */}
-        <motion.div 
+        <motion.div
           className="inline-flex items-center gap-3 relative"
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={isMobile ? undefined : { opacity: 0, x: -20 }}
+          whileInView={isMobile ? undefined : { opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1, duration: 0.6 }}
         >
           {/* Animated rotating border */}
           <motion.div
             className="absolute -inset-2 rounded-2xl bg-gradient-to-r from-indigo-500/45 via-indigo-600/45 to-violet-500/45 blur-sm"
-            animate={{ 
+            animate={isMobile ? undefined : {
               rotate: [0, 360]
             }}
-            transition={{ 
+            transition={{
               duration: 8,
               repeat: Infinity,
               ease: "linear"
             }}
           />
-          
+
           <div className="relative flex items-center gap-3 px-4 py-2 rounded-xl bg-slate-950/80 backdrop-blur-sm border border-indigo-400/35">
             <div className="flex flex-col items-end">
               <span className="text-3xl font-bold bg-gradient-to-l from-indigo-300 via-indigo-200 to-violet-300 bg-clip-text text-transparent">
@@ -72,18 +74,18 @@ export const BIQFeatureCard = ({
               </span>
               <span className="text-[10px] text-slate-400 font-medium">دقت تحلیل</span>
             </div>
-            
+
             {/* Animated pulse rings */}
             <div className="relative">
-              <motion.div 
+              <motion.div
                 className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center"
-                animate={{ 
+                animate={isMobile ? undefined : {
                   boxShadow: [
                     "0 0 0 0 rgba(99, 102, 241, 0.5)",
                     "0 0 0 15px rgba(99, 102, 241, 0)",
                   ]
                 }}
-                transition={{ 
+                transition={{
                   duration: 2,
                   repeat: Infinity,
                 }}
@@ -99,8 +101,8 @@ export const BIQFeatureCard = ({
         {/* Main headline with split reveal */}
         <motion.div
           className="space-y-2"
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={isMobile ? undefined : { opacity: 0, x: -20 }}
+          whileInView={isMobile ? undefined : { opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
@@ -114,36 +116,37 @@ export const BIQFeatureCard = ({
         {/* Subheadline with animated metrics */}
         <motion.div
           className="space-y-2.5"
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={isMobile ? undefined : { opacity: 0, x: -20 }}
+          whileInView={isMobile ? undefined : { opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.6 }}
         >
           <p className="text-lg font-medium text-slate-200/90 leading-relaxed">
             داشبوردهای تعاملی، گزارش‌های لحظه‌ای و بینش‌های عمیق از عملکرد کسب‌وکار
           </p>
-          
+
           {/* Animated data visualization bars */}
           <div className="flex items-end gap-1.5 pt-2">
             {[65, 85, 72, 92, 78, 88, 95].map((height, i) => (
               <motion.div
                 key={i}
                 className="relative flex-1 rounded-t-sm bg-gradient-to-t from-indigo-600/65 via-indigo-500/65 to-violet-500/65"
-                initial={{ height: 0 }}
-                whileInView={{ height: `${height * 0.4}px` }}
+                style={isMobile ? { height: `${height * 0.4}px` } : undefined}
+                initial={isMobile ? undefined : { height: 0 }}
+                whileInView={isMobile ? undefined : { height: `${height * 0.4}px` }}
                 viewport={{ once: true }}
-                transition={{ 
-                  delay: 0.7 + (i * 0.08), 
+                transition={{
+                  delay: 0.7 + (i * 0.08),
                   duration: 0.6,
                   ease: "easeOut"
                 }}
               >
                 <motion.div
                   className="absolute inset-0 rounded-t-sm bg-gradient-to-t from-indigo-500 via-indigo-400 to-violet-400"
-                  animate={{ 
+                  animate={isMobile ? undefined : {
                     opacity: [0.4, 0.8, 0.4]
                   }}
-                  transition={{ 
+                  transition={{
                     duration: 2.5,
                     repeat: Infinity,
                     delay: i * 0.15,
