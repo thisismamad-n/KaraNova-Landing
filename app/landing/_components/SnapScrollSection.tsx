@@ -6,8 +6,10 @@ import { Plus } from "lucide-react";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
 import { SlidePathDesigner } from "@/components/ui/slide-path-designer";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const SnapScrollSection = () => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const containerRef = useRef<HTMLElement | null>(null);
   const activeIndexRef = useRef(0);
@@ -139,12 +141,16 @@ const SnapScrollSection = () => {
       scrollToSlide(nextIndex);
     };
 
-    element.addEventListener("wheel", handleWheel, { passive: false });
+    if (!isMobile) {
+      element.addEventListener("wheel", handleWheel, { passive: false });
+    }
 
     return () => {
-      element.removeEventListener("wheel", handleWheel);
+      if (!isMobile) {
+        element.removeEventListener("wheel", handleWheel);
+      }
     };
-  }, [scrollToSlide]);
+  }, [scrollToSlide, isMobile]);
 
   useEffect(() => {
     const element = containerRef.current;
@@ -199,15 +205,14 @@ const SnapScrollSection = () => {
       className="relative isolate w-full overflow-hidden text-white"
       style={{ zIndex: 20 }}
     >
-
       <div
         ref={(el) => {
           slideRefs.current[0] = el;
         }}
         className="relative z-10"
-        style={{ height: "calc(var(--vh, 1vh) * 100)" }}
+        style={{ height: isMobile ? "auto" : "calc(var(--vh, 1vh) * 100)", minHeight: isMobile ? "min(100vh, 800px)" : "auto" }}
       >
-        <AnimatedNumber_001 />
+        <AnimatedNumber_001 isMobile={isMobile} />
         <SlidePathDesigner slideKey="landing-snap-001" />
       </div>
       <div
@@ -215,9 +220,9 @@ const SnapScrollSection = () => {
           slideRefs.current[1] = el;
         }}
         className="relative z-10"
-        style={{ height: "calc(var(--vh, 1vh) * 100)" }}
+        style={{ height: isMobile ? "auto" : "calc(var(--vh, 1vh) * 100)", minHeight: isMobile ? "min(100vh, 800px)" : "auto" }}
       >
-        <AnimatedNumber_002 />
+        <AnimatedNumber_002 isMobile={isMobile} />
         <SlidePathDesigner slideKey="landing-snap-002" />
       </div>
       <div
@@ -225,9 +230,9 @@ const SnapScrollSection = () => {
           slideRefs.current[2] = el;
         }}
         className="relative z-10"
-        style={{ height: "calc(var(--vh, 1vh) * 100)" }}
+        style={{ height: isMobile ? "auto" : "calc(var(--vh, 1vh) * 100)", minHeight: isMobile ? "min(100vh, 800px)" : "auto" }}
       >
-        <AnimatedNumber_003 />
+        <AnimatedNumber_003 isMobile={isMobile} />
         <SlidePathDesigner slideKey="landing-snap-003" />
       </div>
       <div
@@ -235,16 +240,16 @@ const SnapScrollSection = () => {
           slideRefs.current[3] = el;
         }}
         className="relative z-10"
-        style={{ height: "calc(var(--vh, 1vh) * 100)" }}
+        style={{ height: isMobile ? "auto" : "calc(var(--vh, 1vh) * 100)", minHeight: isMobile ? "min(100vh, 800px)" : "auto" }}
       >
-        <AnimatedNumber_004 />
+        <AnimatedNumber_004 isMobile={isMobile} />
         <SlidePathDesigner slideKey="landing-snap-004" />
       </div>
     </section>
   );
 };
 
-const AnimatedNumber_001 = () => {
+const AnimatedNumber_001 = ({ isMobile }: { isMobile?: boolean }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [resetTrigger, setResetTrigger] = useState(0);
 
@@ -282,17 +287,19 @@ const AnimatedNumber_001 = () => {
   };
 
   return (
-    <div ref={ref} className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100">
+    <div ref={ref} className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100 py-24 sm:py-0">
       <SlideHalo accent="teal" />
-      <div className="top-32 absolute left-1/2 grid -translate-x-1/2 content-start justify-items-center text-center text-slate-100">
-        <div className="flex flex-col items-center gap-5">
-          <span className="max-w-[28ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-6 py-2 text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
-            راه‌اندازی اولین فضای کار هوشمند شما در کمتر از 60 ثانیه
+      {/* Badge - positioned relative on mobile, absolute on desktop */}
+      <div className={`${isMobile ? "relative mb-4 mt-8" : "absolute left-1/2 -translate-x-1/2 top-32"} grid content-start justify-items-center text-center text-slate-100`}>
+        <div className="flex flex-col items-center gap-3 sm:gap-5">
+          <span className="max-w-[28ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-4 sm:px-6 py-2 text-xs sm:text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
+            راه‌اندازی در کمتر از 60 ثانیه
           </span>
-          <div className="h-16 w-px bg-gradient-to-b from-teal-300/90 via-teal-300/40 to-transparent shadow-[0_0_25px_rgba(45,212,191,0.6)]" />
+          <div className="h-10 sm:h-16 w-px bg-gradient-to-b from-teal-300/90 via-teal-300/40 to-transparent shadow-[0_0_25px_rgba(45,212,191,0.6)]" />
         </div>
       </div>
-      <div className="relative font-bebas-neue text-[20vw] tracking-tight">
+      {/* Large Number - smaller on mobile */}
+      <div className="relative font-bebas-neue text-[28vw] sm:text-[20vw] tracking-tight">
         <div aria-hidden className="absolute inset-0 -z-10">
           <div className="absolute left-1/2 top-1/2 h-[32vw] w-[32vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-400/15 blur-[130px]" />
           <div className="absolute left-1/2 top-1/2 h-[26vw] w-[26vw] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-35" />
@@ -362,7 +369,7 @@ const AnimatedNumber_001 = () => {
   );
 };
 
-export const AnimatedNumber_002 = () => {
+export const AnimatedNumber_002 = ({ isMobile }: { isMobile?: boolean }) => {
   const finalCount = 500;
   const [displaySubs, setDisplaySubs] = useState(0);
 
@@ -387,22 +394,24 @@ export const AnimatedNumber_002 = () => {
   };
 
   return (
-    <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100">
+    <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100 py-24 sm:py-0">
       <SlideHalo accent="cyan" />
-      <div className="top-32 absolute left-1/2 grid -translate-x-1/2 content-start justify-items-center text-center text-slate-100">
-        <div className="flex flex-col items-center gap-5">
-          <span className="max-w-[30ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-6 py-2 text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
+      {/* Badge - positioned relative on mobile, absolute on desktop */}
+      <div className={`${isMobile ? "relative mb-4 mt-8" : "absolute left-1/2 -translate-x-1/2 top-32"} grid content-start justify-items-center text-center text-slate-100`}>
+        <div className="flex flex-col items-center gap-3 sm:gap-5">
+          <span className="max-w-[30ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-4 sm:px-6 py-2 text-xs sm:text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
             پایش سیگنال‌ها و رویدادها در آی نوا ،تسک ایز و بی آی کیو
           </span>
-          <div className="h-16 w-px bg-gradient-to-b from-teal-300/90 via-teal-300/40 to-transparent shadow-[0_0_25px_rgba(45,212,191,0.6)]" />
+          <div className="h-10 sm:h-16 w-px bg-gradient-to-b from-teal-300/90 via-teal-300/40 to-transparent shadow-[0_0_25px_rgba(45,212,191,0.6)]" />
         </div>
       </div>
+      {/* Large Number - smaller on mobile */}
       <motion.div
         onViewportEnter={animateCount}
         onViewportLeave={() => {
           springSubCount.set(0);
         }}
-        className="relative font-bebas-neue text-[20vw] tracking-tight"
+        className="relative font-bebas-neue text-[28vw] sm:text-[20vw] tracking-tight"
       >
         <div aria-hidden className="absolute inset-0 -z-10">
           <div className="absolute left-1/2 top-1/2 h-[30vw] w-[30vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/14 blur-[120px]" />
@@ -424,7 +433,7 @@ export const AnimatedNumber_002 = () => {
   );
 };
 
-export const AnimatedNumber_003 = () => {
+export const AnimatedNumber_003 = ({ isMobile }: { isMobile?: boolean }) => {
   const [displayNumber, setDisplayNumber] = useState(1000000);
   const [isAnimating, setIsAnimating] = useState(false);
   const hasAnimated = useRef(false);
@@ -458,17 +467,19 @@ export const AnimatedNumber_003 = () => {
     }, 80);
   };
   return (
-    <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100">
+    <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100 py-24 sm:py-0">
       <SlideHalo accent="emerald" />
-      <div className="top-32 absolute left-1/2 grid -translate-x-1/2 content-start justify-items-center text-center text-slate-100">
-        <div className="flex flex-col items-center gap-5">
-          <span className="max-w-[30ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-6 py-2 text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
+      {/* Badge - positioned relative on mobile, absolute on desktop */}
+      <div className={`${isMobile ? "relative mb-4 mt-8" : "absolute left-1/2 -translate-x-1/2 top-32"} grid content-start justify-items-center text-center text-slate-100`}>
+        <div className="flex flex-col items-center gap-3 sm:gap-5">
+          <span className="max-w-[30ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-4 sm:px-6 py-2 text-xs sm:text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
             تحلیل میلیون‌ها داده برای سلامت کسب‌وکار شما در هر ماه
           </span>
-          <div className="h-16 w-px bg-gradient-to-b from-teal-300/90 via-teal-300/40 to-transparent shadow-[0_0_25px_rgba(45,212,191,0.6)]" />
+          <div className="h-10 sm:h-16 w-px bg-gradient-to-b from-teal-300/90 via-teal-300/40 to-transparent shadow-[0_0_25px_rgba(45,212,191,0.6)]" />
         </div>
       </div>
-      <div className="relative font-bebas-neue text-[20vw] tracking-tight">
+      {/* Large Number - smaller on mobile */}
+      <div className="relative font-bebas-neue text-[22vw] sm:text-[20vw] tracking-tight">
         <div aria-hidden className="absolute inset-0 -z-10">
           <div className="absolute left-1/2 top-1/2 h-[34vw] w-[34vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-400/14 blur-[150px]" />
           <div className="absolute left-1/2 top-1/2 h-[25vw] w-[25vw] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-28" />
@@ -498,7 +509,7 @@ export const AnimatedNumber_003 = () => {
   );
 };
 
-function AnimatedNumber_004() {
+export function AnimatedNumber_004({ isMobile }: { isMobile?: boolean }) {
   const [displayValue, setDisplayValue] = useState(0);
   const count = useMotionValue(3);
   const { ref, inView } = useInView({ triggerOnce: false });
@@ -521,17 +532,19 @@ function AnimatedNumber_004() {
   }, [inView, count]);
 
   return (
-    <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100">
+    <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100 py-24 sm:py-0">
       <SlideHalo accent="amber" />
-      <div className="top-32 absolute left-1/2 grid -translate-x-1/2 content-start justify-items-center text-center text-slate-100">
-        <div className="flex flex-col items-center gap-5">
-          <span className="max-w-[26ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-6 py-2 text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
+      {/* Badge - positioned relative on mobile, absolute on desktop */}
+      <div className={`${isMobile ? "relative mb-4 mt-8" : "absolute left-1/2 -translate-x-1/2 top-32"} grid content-start justify-items-center text-center text-slate-100`}>
+        <div className="flex flex-col items-center gap-3 sm:gap-5">
+          <span className="max-w-[26ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-4 sm:px-6 py-2 text-xs sm:text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
             تا 60٪ کاهش در هزینه‌های عملیاتی کسب‌وکار شما
           </span>
-          <div className="h-16 w-px bg-gradient-to-b from-teal-300/90 via-teal-300/40 to-transparent shadow-[0_0_25px_rgba(45,212,191,0.6)]" />
+          <div className="h-10 sm:h-16 w-px bg-gradient-to-b from-teal-300/90 via-teal-300/40 to-transparent shadow-[0_0_25px_rgba(45,212,191,0.6)]" />
         </div>
       </div>
-      <div ref={ref} className="relative font-bebas-neue text-[20vw] tracking-tight">
+      {/* Large Number - smaller on mobile */}
+      <div ref={ref} className="relative font-bebas-neue text-[28vw] sm:text-[20vw] tracking-tight">
         <div aria-hidden className="absolute inset-0 -z-10">
           <div className="absolute left-1/2 top-1/2 h-[30vw] w-[30vw] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-400/14 blur-[125px]" />
           <div className="absolute left-1/2 top-1/2 h-[22vw] w-[22vw] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 opacity-26" />

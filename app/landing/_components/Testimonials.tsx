@@ -52,13 +52,6 @@ export default function TestimonialsSection() {
       {/* Slide Path Designer */}
       <SlidePathDesigner slideKey="landing-testimonials" />
 
-      {/* Static CSS Grid background - replaces animated canvas */}
-
-      {/* Radial vignette overlay */}
-
-
-
-
       {/* Ambient glow effects - same as WhyChooseUs */}
       <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl" />
       <div className="absolute top-1/3 right-1/4 w-[30rem] h-[30rem] bg-cyan-400/14 rounded-full blur-3xl" />
@@ -161,35 +154,46 @@ export default function TestimonialsSection() {
               و رشد پایدار می‌سازند
             </h1>
           </div>
-          <div className="sm:flex grid grid-cols-2 gap-8 bg-slate-900/40 backdrop-blur-md mt-8 w-full mx-auto px-8 py-6 border rounded-md border-teal-500/20">
+
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 bg-slate-900/40 backdrop-blur-md mt-8 w-full mx-auto px-4 sm:px-8 py-6 border rounded-md border-teal-500/20">
             {stats.map((stat, index) => (
-              <div
-                key={stat?.label}
-                className="flex-1 flex gap-4 pl-10 relative"
-              >
+              <div key={stat?.label} className="flex-1 flex flex-col sm:flex-row gap-4 sm:pl-10 relative items-center sm:items-start text-center sm:text-right">
                 {index !== 0 && (
-                  <div className="w-0.5 h-9 border border-dashed border-teal-500/30 absolute left-0" />
+                  <div className="hidden sm:block absolute right-0 top-1/2 -translate-y-1/2 w-0.5 h-12 bg-gradient-to-b from-transparent via-teal-500/30 to-transparent" />
                 )}
-                <div className="w-full h-full group">
+                {/* Mobile divider */}
+                {index !== 0 && (
+                  <div className="block sm:hidden w-32 h-0.5 mx-auto bg-gradient-to-r from-transparent via-teal-500/30 to-transparent" />
+                )}
+
+                <div className="w-full h-full group flex flex-col sm:flex-row items-center sm:items-start gap-4">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`https://pro-section.ui-layouts.com/${stat?.logo}`}
-                    alt={stat.label}
-                    className="w-[85%] h-10 object-contain grayscale opacity-60 mx-auto translate-y-0 group-hover:-translate-y-12 group-hover:opacity-0 transition-all duration-300 ease-out"
-                    loading="lazy"
-                  />
-                  <div className="absolute left-0 top-8 opacity-0 flex flex-col items-center justify-center w-full group-hover:-top-3.5 group-hover:opacity-100 transition-all duration-300 ease-out">
-                    <div className="flex items-center justify-center gap-2 relative">
-                      {stat.isIncrease ? (
-                        <ArrowUp className="md:w-6 md:h-6 w-4 h-4 text-emerald-400" />
-                      ) : (
-                        <ArrowDown className="md:w-6 md:h-6 w-4 h-4 text-teal-400" />
-                      )}
-                      <span className="md:text-4xl text-2xl font-semibold text-slate-100">
-                        {stat.percentage}
-                      </span>
+                  <div className="relative h-10 w-fit sm:w-[85%]">
+                    <img
+                      src={`https://pro-section.ui-layouts.com/${stat?.logo}`}
+                      alt={stat.label}
+                      className="h-10 object-contain grayscale opacity-60 transition-all duration-300 ease-out group-hover:opacity-0 group-hover:-translate-y-12"
+                      loading="lazy"
+                    />
+                    <div className="absolute left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 top-8 opacity-0 flex flex-col items-center sm:items-start justify-center w-full group-hover:-top-1 group-hover:opacity-100 transition-all duration-300 ease-out">
+                      <div className="flex items-baseline gap-2 justify-center sm:justify-start">
+                        {stat.isIncrease ? (
+                          <ArrowUp className="w-4 h-4 text-emerald-400" />
+                        ) : (
+                          <ArrowDown className="w-4 h-4 text-teal-400" />
+                        )}
+                        <span className="text-2xl font-bold text-white tracking-tight">
+                          {stat.percentage}
+                        </span>
+                      </div>
+                      <p className="text-xs font-medium text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20 mt-1 w-fit mx-auto sm:mx-0">
+                        {stat.isIncrease ? "افزایش" : "کاهش"}
+                      </p>
                     </div>
-                    <p className="text-slate-300 md:text-sm text-xs text-center capitalize">
+                  </div>
+
+                  <div className="text-center sm:text-right">
+                    <p className="text-slate-300 md:text-sm text-xs capitalize whitespace-nowrap">
                       {stat.label}
                     </p>
                   </div>

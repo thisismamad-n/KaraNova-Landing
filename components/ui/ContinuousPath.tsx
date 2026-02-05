@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useSpring, useTransform, useInView, useMotionValue } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 interface ContinuousPathProps {
   sectionIds: string[];
@@ -14,11 +15,13 @@ interface ContinuousPathProps {
 export function ContinuousPath({
   sectionIds,
   pathData,
-  gradientId = "continuous-gradient",
+  gradientId = "continuous-path-gradient",
   strokeWidth = 12,
+
   enabled = true,
 }: ContinuousPathProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMediaQuery("(max-width: 768px)");
   // Reference design dimensions - the dimensions the path was designed for
   const DESIGN_WIDTH = 1920;
   const [dimensions, setDimensions] = useState({ width: DESIGN_WIDTH, height: 3000 });
@@ -113,7 +116,7 @@ export function ContinuousPath({
       clearTimeout(timeoutId);
       window.removeEventListener("resize", updateDimensions);
     };
-  }, [sectionIds, enabled, completionTarget, pathData, DESIGN_WIDTH]);
+  }, [sectionIds, enabled, completionTarget, pathData, DESIGN_WIDTH, isMobile]);
 
   // Scroll-based animation - complete the path by the time FinalCTA is visible
   const { scrollYProgress } = useScroll({
@@ -148,7 +151,7 @@ export function ContinuousPath({
   // Pre-calculate outer glow opacity to avoid hook in JSX
   const outerGlowOpacity = useTransform(glowOpacity, (v) => (typeof v === 'number' ? v * 0.7 : 0));
 
-  if (!enabled || !pathData) return null;
+  if (!enabled || !pathData || isMobile) return null;
 
   return (
     <div

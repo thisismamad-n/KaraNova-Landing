@@ -9,6 +9,7 @@ import TestimonialsSection from "./_components/Testimonials";
 import FinalCTA from "./_components/FinalCTA";
 import { ContinuousPath } from "@/components/ui/ContinuousPath";
 import Squares from "@/app/_components/Squares";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 // Lazy load heavy components
 const FeatureStepsDemo = lazy(() => import("@/components/ui/demo").then(mod => ({ default: mod.FeatureStepsDemo })));
@@ -22,6 +23,7 @@ const LoadingFallback = () => (
 
 export default function LandingPage() {
   const [language] = useState<"en" | "fa">("fa");
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   return (
     <div dir={language === "fa" ? "rtl" : "ltr"} className="overflow-x-hidden">
@@ -58,39 +60,41 @@ export default function LandingPage() {
 
         {/* Intense glow at the end point of continuous path - positioned at last coordinate (1151, 1918) */}
         {/* Using percentage-based positioning for responsiveness */}
-        <div
-          className="absolute pointer-events-none z-50"
-          style={{
-            left: 'calc(1151 / 1920 * 100%)', // Responsive positioning based on design width
-            top: '1918px',
-            transform: 'translate(-50%, -50%)',
-          }}
-        >
-          {/* Core bright spot - very intense */}
+        {!isMobile && (
           <div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32"
+            className="absolute pointer-events-none z-50"
             style={{
-              background: 'radial-gradient(circle, rgba(94, 234, 212, 1) 0%, rgba(94, 234, 212, 0.9) 20%, rgba(20, 184, 166, 0.6) 50%, transparent 100%)',
-              filter: 'blur(8px)',
+              left: 'calc(1151 / 1920 * 100%)', // Responsive positioning based on design width
+              top: '1918px',
+              transform: 'translate(-50%, -50%)',
             }}
-          />
-          {/* Inner glow layer */}
-          <div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48"
-            style={{
-              background: 'radial-gradient(circle, rgba(94, 234, 212, 0.8) 0%, rgba(20, 184, 166, 0.5) 40%, transparent 100%)',
-              filter: 'blur(20px)',
-            }}
-          />
-          {/* Outer atmospheric glow - smaller */}
-          <div
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80"
-            style={{
-              background: 'radial-gradient(circle, rgba(94, 234, 212, 0.4) 0%, rgba(20, 184, 166, 0.2) 50%, transparent 100%)',
-              filter: 'blur(40px)',
-            }}
-          />
-        </div>
+          >
+            {/* Core bright spot - very intense */}
+            <div
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32"
+              style={{
+                background: 'radial-gradient(circle, rgba(94, 234, 212, 1) 0%, rgba(94, 234, 212, 0.9) 20%, rgba(20, 184, 166, 0.6) 50%, transparent 100%)',
+                filter: 'blur(8px)',
+              }}
+            />
+            {/* Inner glow layer */}
+            <div
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48"
+              style={{
+                background: 'radial-gradient(circle, rgba(94, 234, 212, 0.8) 0%, rgba(20, 184, 166, 0.5) 40%, transparent 100%)',
+                filter: 'blur(20px)',
+              }}
+            />
+            {/* Outer atmospheric glow - smaller */}
+            <div
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80"
+              style={{
+                background: 'radial-gradient(circle, rgba(94, 234, 212, 0.4) 0%, rgba(20, 184, 166, 0.2) 50%, transparent 100%)',
+                filter: 'blur(40px)',
+              }}
+            />
+          </div>
+        )}
 
         <WhyChooseUs language={language} />
         <TestimonialsSection />
