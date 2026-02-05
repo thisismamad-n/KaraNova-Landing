@@ -2,6 +2,11 @@
  * Form submission utility with network error handling and retry logic
  */
 
+import disposableEmailDomains from 'disposable-email-domains';
+
+// Create a Set for O(1) lookup performance
+const disposableDomainSet = new Set(disposableEmailDomains);
+
 export interface SubmissionResult<T = unknown> {
   success: boolean;
   data?: T;
@@ -68,12 +73,12 @@ export async function submitFormWithRetry<T = unknown>(
       if (response.status === 429) {
         const retryAfter = response.headers.get("Retry-After");
         const delay = retryAfter ? parseInt(retryAfter) * 1000 : retryDelay * (attempt + 1);
-        
+
         if (attempt < maxRetries) {
           await new Promise((resolve) => setTimeout(resolve, delay));
           continue;
         }
-        
+
         return {
           success: false,
           error: {
@@ -141,11 +146,17 @@ export async function validateFormServerSide(
   const errors: Array<{ field: string; message: string }> = [];
 
   // Check for suspicious patterns (basic security)
+  // Enhanced XSS pattern detection
   const suspiciousPatterns = [
     /<script/i,
     /javascript:/i,
     /on\w+\s*=/i, // Event handlers
     /<iframe/i,
+    /<object/i,
+    /<embed/i,
+    /<form/i,
+    /data:/i, // Data URLs
+    /vbscript:/i,
   ];
 
   for (const [key, value] of Object.entries(data)) {
@@ -162,12 +173,11 @@ export async function validateFormServerSide(
     }
   }
 
-  // Email domain validation (example)
+  // Email domain validation using disposable-email-domains package (O(1) Set lookup)
   if (data.email && typeof data.email === "string") {
-    const disposableEmailDomains = ["tempmail.com", "throwaway.email", "guerrillamail.com"];
     const emailDomain = data.email.split("@")[1]?.toLowerCase();
-    
-    if (emailDomain && disposableEmailDomains.includes(emailDomain)) {
+
+    if (emailDomain && disposableDomainSet.has(emailDomain)) {
       errors.push({
         field: "email",
         message: "Please use a permanent email address",

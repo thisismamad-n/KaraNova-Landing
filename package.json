@@ -6,7 +6,10 @@
     "dev": "bun --bun next dev",
     "build": "bun --bun next build",
     "start": "bun --bun next start",
-    "lint": "bun eslint ."
+    "lint": "bun eslint .",
+    "security:audit": "bunx snyk test",
+    "security:auth": "bunx snyk auth",
+    "security:monitor": "bunx snyk monitor"
   },
   "dependencies": {
     "@number-flow/react": "^0.2.6",
@@ -18,6 +21,7 @@
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "disposable-email-domains": "^1.0.62",
     "framer-motion": "^11.11.17",
     "gsap": "^3.13.0",
     "highlight.js": "^11.11.1",
@@ -47,6 +51,7 @@
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-security": "^3.0.1",
     "postcss": "^8.4.49",
+    "snyk": "^1.1302.1",
     "tailwindcss": "^3.4.14",
     "typescript": "^5.6.3"
   },
