@@ -86,15 +86,24 @@ const Skiper19 = () => {
 
       <div dir="rtl" className="relative z-40 flex w-full max-w-7xl flex-col items-center justify-center gap-8 text-center pt-[13vh] md:-translate-x-12 lg:-translate-x-20">
         <div className="relative">
-          <h1 className="relative z-10 text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.08] mb-6 text-balance drop-shadow-[0_18px_48px_rgba(8,47,73,0.55)]" dir="rtl">
-            <span className="bg-gradient-to-r from-emerald-200 via-cyan-200 to-teal-300 bg-clip-text text-transparent">
-              گره گشایی کسب و کار
-            </span>
-            <br />
-            <span className="text-white drop-shadow-[0_14px_36px_rgba(20,184,166,0.55)]">
-              با کارانوا
-            </span>
-          </h1>
+          {/* Container for title to handle responsive layout */}
+          <div className="relative w-full max-w-4xl mx-auto mb-6">
+            <h1 className="relative z-10 text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.08] text-balance drop-shadow-[0_18px_48px_rgba(8,47,73,0.55)]" dir="rtl">
+              {/* Main Title - Centered */}
+              <span className="block w-full text-center">
+                <span className="bg-gradient-to-r from-emerald-200 via-cyan-200 to-teal-300 bg-clip-text text-transparent">
+                  گره گشایی کسب و کار
+                </span>
+              </span>
+
+              {/* Secondary Title - Positioned to the left on desktop, responsive */}
+              <span className="w-full flex justify-center md:justify-end md:pr-[55%]">
+                <span className="text-white drop-shadow-[0_14px_36px_rgba(20,184,166,0.55)]">
+                  با کارانوا
+                </span>
+              </span>
+            </h1>
+          </div>
 
           <p className="relative z-10 mt-6 max-w-2xl mx-auto text-xl md:text-2xl font-normal leading-relaxed text-slate-100/85 text-balance md:text-left" dir="rtl">
             راهکاری هوشمند برای یکپارچه‌سازی عملیات، بهینه‌سازی تصمیم‌ها و خلق مزیت رقابتی پایدار

@@ -8,6 +8,7 @@ import WhyChooseUs from "./_components/WhyChooseUs";
 import TestimonialsSection from "./_components/Testimonials";
 import FinalCTA from "./_components/FinalCTA";
 import { ContinuousPath } from "@/components/ui/ContinuousPath";
+import Squares from "@/app/_components/Squares";
 
 // Lazy load heavy components
 const FeatureStepsDemo = lazy(() => import("@/components/ui/demo").then(mod => ({ default: mod.FeatureStepsDemo })));
@@ -24,15 +25,26 @@ export default function LandingPage() {
 
   return (
     <div dir={language === "fa" ? "rtl" : "ltr"} className="overflow-x-hidden">
+      {/* Global animated background - fixed position, covers all slides */}
+      <Squares
+        speed={0.3}
+        direction="diagonal"
+        squareSize={44}
+        borderColor="rgba(94, 234, 212, 0.05)"
+        hoverFillColor="rgba(20, 184, 166, 0.04)"
+        baseColor="#010409"
+        vignetteColor="rgba(1, 4, 9, 0.92)"
+      />
+
       <HeroStroke />
       <SnapScrollSection />
-      
+
       <Suspense fallback={<LoadingFallback />}>
         <FeatureStepsDemo language={language} />
       </Suspense>
-      
+
       <FourAdvisorsSection />
-      
+
       {/* Wrapper for sections with continuous path */}
       <div className="relative">
         {/* Continuous animated path */}
@@ -43,10 +55,10 @@ export default function LandingPage() {
           strokeWidth={12}
           enabled={true}
         />
-        
+
         {/* Intense glow at the end point of continuous path - positioned at last coordinate (1151, 1918) */}
         {/* Using percentage-based positioning for responsiveness */}
-        <div 
+        <div
           className="absolute pointer-events-none z-50"
           style={{
             left: 'calc(1151 / 1920 * 100%)', // Responsive positioning based on design width
@@ -55,7 +67,7 @@ export default function LandingPage() {
           }}
         >
           {/* Core bright spot - very intense */}
-          <div 
+          <div
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32"
             style={{
               background: 'radial-gradient(circle, rgba(94, 234, 212, 1) 0%, rgba(94, 234, 212, 0.9) 20%, rgba(20, 184, 166, 0.6) 50%, transparent 100%)',
@@ -63,7 +75,7 @@ export default function LandingPage() {
             }}
           />
           {/* Inner glow layer */}
-          <div 
+          <div
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48"
             style={{
               background: 'radial-gradient(circle, rgba(94, 234, 212, 0.8) 0%, rgba(20, 184, 166, 0.5) 40%, transparent 100%)',
@@ -71,7 +83,7 @@ export default function LandingPage() {
             }}
           />
           {/* Outer atmospheric glow - smaller */}
-          <div 
+          <div
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80"
             style={{
               background: 'radial-gradient(circle, rgba(94, 234, 212, 0.4) 0%, rgba(20, 184, 166, 0.2) 50%, transparent 100%)',
@@ -79,7 +91,7 @@ export default function LandingPage() {
             }}
           />
         </div>
-        
+
         <WhyChooseUs language={language} />
         <TestimonialsSection />
         <FinalCTA />
