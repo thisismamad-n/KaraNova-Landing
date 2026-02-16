@@ -290,7 +290,7 @@ const AnimatedNumber_001 = ({ isMobile }: { isMobile?: boolean }) => {
     <div ref={ref} className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100 py-24 sm:py-0">
       <SlideHalo accent="teal" />
       {/* Badge - positioned relative on mobile, absolute on desktop */}
-      <div className={`${isMobile ? "relative mb-4 mt-8" : "absolute left-1/2 -translate-x-1/2 top-32"} grid content-start justify-items-center text-center text-slate-100`}>
+      <div className={`${isMobile ? "relative mb-4 mt-8" : "absolute left-1/2 -translate-x-1/2 top-32"} z-20 grid content-start justify-items-center text-center text-slate-100`}>
         <div className="flex flex-col items-center gap-3 sm:gap-5">
           <span className="max-w-[28ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-4 sm:px-6 py-2 text-xs sm:text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
             راه‌اندازی در کمتر از 60 ثانیه
@@ -397,7 +397,7 @@ export const AnimatedNumber_002 = ({ isMobile }: { isMobile?: boolean }) => {
     <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100 py-24 sm:py-0">
       <SlideHalo accent="cyan" />
       {/* Badge - positioned relative on mobile, absolute on desktop */}
-      <div className={`${isMobile ? "relative mb-4 mt-8" : "absolute left-1/2 -translate-x-1/2 top-32"} grid content-start justify-items-center text-center text-slate-100`}>
+      <div className={`${isMobile ? "relative mb-4 mt-8" : "absolute left-1/2 -translate-x-1/2 top-32"} z-20 grid content-start justify-items-center text-center text-slate-100`}>
         <div className="flex flex-col items-center gap-3 sm:gap-5">
           <span className="max-w-[30ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-4 sm:px-6 py-2 text-xs sm:text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
             پایش سیگنال‌ها و رویدادها در آی نوا ،تسک ایز و بی آی کیو
@@ -470,7 +470,7 @@ export const AnimatedNumber_003 = ({ isMobile }: { isMobile?: boolean }) => {
     <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100 py-24 sm:py-0">
       <SlideHalo accent="emerald" />
       {/* Badge - positioned relative on mobile, absolute on desktop */}
-      <div className={`${isMobile ? "relative mb-4 mt-8" : "absolute left-1/2 -translate-x-1/2 top-32"} grid content-start justify-items-center text-center text-slate-100`}>
+      <div className={`${isMobile ? "relative mb-4 mt-8" : "absolute left-1/2 -translate-x-1/2 top-32"} z-20 grid content-start justify-items-center text-center text-slate-100`}>
         <div className="flex flex-col items-center gap-3 sm:gap-5">
           <span className="max-w-[30ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-4 sm:px-6 py-2 text-xs sm:text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
             تحلیل میلیون‌ها داده برای سلامت کسب‌وکار شما در هر ماه
@@ -535,7 +535,7 @@ export function AnimatedNumber_004({ isMobile }: { isMobile?: boolean }) {
     <div className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 text-slate-100 py-24 sm:py-0">
       <SlideHalo accent="amber" />
       {/* Badge - positioned relative on mobile, absolute on desktop */}
-      <div className={`${isMobile ? "relative mb-4 mt-8" : "absolute left-1/2 -translate-x-1/2 top-32"} grid content-start justify-items-center text-center text-slate-100`}>
+      <div className={`${isMobile ? "relative mb-4 mt-8" : "absolute left-1/2 -translate-x-1/2 top-32"} z-20 grid content-start justify-items-center text-center text-slate-100`}>
         <div className="flex flex-col items-center gap-3 sm:gap-5">
           <span className="max-w-[26ch] rounded-full border border-teal-400/30 bg-slate-900/70 px-4 sm:px-6 py-2 text-xs sm:text-sm font-semibold leading-relaxed text-teal-50 shadow-[0_10px_45px_rgba(13,148,136,0.35)] backdrop-blur-md">
             تا 60٪ کاهش در هزینه‌های عملیاتی کسب‌وکار شما
