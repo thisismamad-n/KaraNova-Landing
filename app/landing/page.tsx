@@ -8,7 +8,6 @@ import WhyChooseUs from "./_components/WhyChooseUs";
 import TestimonialsSection from "./_components/Testimonials";
 import FinalCTA from "./_components/FinalCTA";
 import { ContinuousPath } from "@/components/ui/ContinuousPath";
-import Squares from "@/app/_components/Squares";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
 // Lazy load heavy components
@@ -27,18 +26,7 @@ export default function LandingPage() {
   const [isPathComplete, setIsPathComplete] = useState(false);
 
   return (
-    <div dir={language === "fa" ? "rtl" : "ltr"} className="overflow-x-hidden">
-      {/* Global animated background - fixed position, covers all slides */}
-      <Squares
-        speed={0.3}
-        direction="diagonal"
-        squareSize={44}
-        borderColor="rgba(94, 234, 212, 0.05)"
-        hoverFillColor="rgba(20, 184, 166, 0.04)"
-        baseColor="#010409"
-        vignetteColor="rgba(1, 4, 9, 0.92)"
-      />
-
+    <div dir={language === "fa" ? "rtl" : "ltr"}>
       <HeroStroke />
       <SnapScrollSection />
 
