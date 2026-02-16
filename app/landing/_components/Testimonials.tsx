@@ -8,6 +8,7 @@ import {
 } from "@radix-ui/react-tooltip";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
 import { SlidePathDesigner } from "@/components/ui/slide-path-designer";
 
 interface StatItem {
@@ -85,13 +86,13 @@ export default function TestimonialsSection() {
                         aria-expanded={hoveredImage === "ops"}
                         data-hovered={hoveredImage === "ops"}
                       >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={`https://pro-section.ui-layouts.com/people/aam1.png`}
+                        <Image
+                          src="https://pro-section.ui-layouts.com/people/aam1.png"
                           alt="مدیرعامل شرکت فناوری"
-                          className="object-cover w-full h-full"
+                          fill
+                          className="object-cover"
                           style={{ objectPosition: "center" }}
-                          loading="lazy"
+                          sizes="(max-width: 640px) 48px, 64px"
                         />
                       </div>
                     </div>
@@ -126,12 +127,12 @@ export default function TestimonialsSection() {
                         aria-expanded={hoveredImage === "finance"}
                         data-hovered={hoveredImage === "finance"}
                       >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={`https://pro-section.ui-layouts.com/people/aam3.jpg`}
+                        <Image
+                          src="https://pro-section.ui-layouts.com/people/aam3.jpg"
                           alt="مدیر عملیات"
-                          className="object-cover w-full h-full"
-                          loading="lazy"
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 56px, 64px"
                         />
                       </div>
                     </div>
@@ -167,13 +168,13 @@ export default function TestimonialsSection() {
                 )}
 
                 <div className="w-full h-full group flex flex-col sm:flex-row items-center sm:items-start gap-4">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <div className="relative h-10 w-fit sm:w-[85%]">
-                    <img
+                  <div className="relative h-10 w-32 sm:w-[85%]">
+                    <Image
                       src={`https://pro-section.ui-layouts.com/${stat?.logo}`}
                       alt={stat.label}
-                      className="h-10 object-contain grayscale opacity-60 transition-all duration-300 ease-out group-hover:opacity-0 group-hover:-translate-y-12"
-                      loading="lazy"
+                      fill
+                      className="object-contain grayscale opacity-60 transition-all duration-300 ease-out group-hover:opacity-0 group-hover:-translate-y-12"
+                      sizes="(max-width: 640px) 128px, 200px"
                     />
                     <div className="absolute left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 top-8 opacity-0 flex flex-col items-center sm:items-start justify-center w-full group-hover:-top-1 group-hover:opacity-100 transition-all duration-300 ease-out">
                       <div className="flex items-baseline gap-2 justify-center sm:justify-start">
