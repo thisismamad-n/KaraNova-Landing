@@ -63,26 +63,45 @@ const Squares: React.FC<SquaresProps> = ({
       const offsetX = gridOffset.current.x % squareSize;
       const offsetY = gridOffset.current.y % squareSize;
 
-      for (let x = -1; x < numSquaresX.current; x++) {
-        for (let y = -1; y < numSquaresY.current; y++) {
+      // Optimization: Batch canvas drawing operations
+      // 1. Draw hovered square fill
+      if (hoveredSquareRef.current) {
+        const { x, y } = hoveredSquareRef.current;
+        if (
+          x >= -1 &&
+          x < numSquaresX.current &&
+          y >= -1 &&
+          y < numSquaresY.current
+        ) {
           const squareX = x * squareSize + offsetX;
           const squareY = y * squareSize + offsetY;
-
-          // Check if this square is hovered
-          if (
-            hoveredSquareRef.current &&
-            hoveredSquareRef.current.x === x &&
-            hoveredSquareRef.current.y === y
-          ) {
-            ctx.fillStyle = hoverFillColor;
-            ctx.fillRect(squareX, squareY, squareSize, squareSize);
-          }
-
-          ctx.strokeStyle = borderColor;
-          ctx.lineWidth = 0.5;
-          ctx.strokeRect(squareX, squareY, squareSize, squareSize);
+          ctx.fillStyle = hoverFillColor;
+          ctx.fillRect(squareX, squareY, squareSize, squareSize);
         }
       }
+
+      // 2. Batch grid lines into a single path to reduce draw calls from O(N*M) to O(1)
+      ctx.beginPath();
+
+      // Vertical lines
+      // Loop covers x from -1 to numSquaresX inclusive to draw all vertical edges
+      for (let x = -1; x <= numSquaresX.current; x++) {
+        const lineX = x * squareSize + offsetX;
+        ctx.moveTo(lineX, 0);
+        ctx.lineTo(lineX, canvas.height);
+      }
+
+      // Horizontal lines
+      // Loop covers y from -1 to numSquaresY inclusive to draw all horizontal edges
+      for (let y = -1; y <= numSquaresY.current; y++) {
+        const lineY = y * squareSize + offsetY;
+        ctx.moveTo(0, lineY);
+        ctx.lineTo(canvas.width, lineY);
+      }
+
+      ctx.strokeStyle = borderColor;
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
 
       // Draw vignette overlay
       const gradient = ctx.createRadialGradient(

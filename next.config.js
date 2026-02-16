@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  reactCompiler: true, // Enable React Compiler for Next.js 16
+  // reactCompiler: true, // Enable React Compiler for Next.js 16
 
   // Security headers configuration (fallback for proxy.ts)
   async headers() {
