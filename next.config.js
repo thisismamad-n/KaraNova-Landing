@@ -1,9 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Disabled React Compiler due to build errors with babel-plugin-react-compiler
-  // This is necessary to ensure the build succeeds for security updates.
-  reactCompiler: false,
+  reactCompiler: false, // Enable React Compiler for Next.js 16
 
   // Security headers configuration (fallback for proxy.ts)
   async headers() {
@@ -45,6 +43,11 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'pro-section.ui-layouts.com',
         pathname: '/**',
       },
     ],
