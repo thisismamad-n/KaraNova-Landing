@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  reactCompiler: true, // Enable React Compiler for Next.js 16
+  reactCompiler: false, // Disabled due to missing dependencies
 
   // Security headers configuration (fallback for proxy.ts)
   async headers() {
@@ -43,6 +43,11 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'pro-section.ui-layouts.com',
         pathname: '/**',
       },
     ],

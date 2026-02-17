@@ -28,6 +28,8 @@ const Squares: React.FC<SquaresProps> = ({
   const numSquaresY = useRef<number>(0);
   const gridOffset = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const hoveredSquareRef = useRef<{ x: number; y: number } | null>(null);
+  // Cache the vignette gradient to avoid creating it every frame
+  const vignetteGradientRef = useRef<CanvasGradient | null>(null);
 
   const getDirection = useMemo(() => {
     const directions: Record<string, { x: number; y: number }> = {
@@ -51,6 +53,20 @@ const Squares: React.FC<SquaresProps> = ({
       canvas.height = canvas.offsetHeight;
       numSquaresX.current = Math.ceil(canvas.width / squareSize) + 1;
       numSquaresY.current = Math.ceil(canvas.height / squareSize) + 1;
+
+      // Update cached gradient on resize
+      const gradient = ctx.createRadialGradient(
+        canvas.width / 2,
+        canvas.height / 2,
+        0,
+        canvas.width / 2,
+        canvas.height / 2,
+        Math.max(canvas.width, canvas.height) * 0.7
+      );
+      gradient.addColorStop(0, "transparent");
+      gradient.addColorStop(0.5, "transparent");
+      gradient.addColorStop(1, vignetteColor);
+      vignetteGradientRef.current = gradient;
     };
 
     resizeCanvas();
@@ -63,41 +79,40 @@ const Squares: React.FC<SquaresProps> = ({
       const offsetX = gridOffset.current.x % squareSize;
       const offsetY = gridOffset.current.y % squareSize;
 
-      for (let x = -1; x < numSquaresX.current; x++) {
-        for (let y = -1; y < numSquaresY.current; y++) {
-          const squareX = x * squareSize + offsetX;
-          const squareY = y * squareSize + offsetY;
-
-          // Check if this square is hovered
-          if (
-            hoveredSquareRef.current &&
-            hoveredSquareRef.current.x === x &&
-            hoveredSquareRef.current.y === y
-          ) {
-            ctx.fillStyle = hoverFillColor;
-            ctx.fillRect(squareX, squareY, squareSize, squareSize);
-          }
-
-          ctx.strokeStyle = borderColor;
-          ctx.lineWidth = 0.5;
-          ctx.strokeRect(squareX, squareY, squareSize, squareSize);
-        }
+      // Draw hovered square directly without loop
+      if (hoveredSquareRef.current) {
+        const hx = hoveredSquareRef.current.x * squareSize + offsetX;
+        const hy = hoveredSquareRef.current.y * squareSize + offsetY;
+        ctx.fillStyle = hoverFillColor;
+        ctx.fillRect(hx, hy, squareSize, squareSize);
       }
 
-      // Draw vignette overlay
-      const gradient = ctx.createRadialGradient(
-        canvas.width / 2,
-        canvas.height / 2,
-        0,
-        canvas.width / 2,
-        canvas.height / 2,
-        Math.max(canvas.width, canvas.height) * 0.7
-      );
-      gradient.addColorStop(0, "transparent");
-      gradient.addColorStop(0.5, "transparent");
-      gradient.addColorStop(1, vignetteColor);
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Batch draw grid lines
+      ctx.beginPath();
+
+      // Vertical lines
+      for (let x = -1; x < numSquaresX.current; x++) {
+        const lx = x * squareSize + offsetX;
+        ctx.moveTo(lx, 0);
+        ctx.lineTo(lx, canvas.height);
+      }
+
+      // Horizontal lines
+      for (let y = -1; y < numSquaresY.current; y++) {
+        const ly = y * squareSize + offsetY;
+        ctx.moveTo(0, ly);
+        ctx.lineTo(canvas.width, ly);
+      }
+
+      ctx.strokeStyle = borderColor;
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+
+      // Draw vignette using cached gradient
+      if (vignetteGradientRef.current) {
+        ctx.fillStyle = vignetteGradientRef.current;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      }
     };
 
     const updateAnimation = () => {
