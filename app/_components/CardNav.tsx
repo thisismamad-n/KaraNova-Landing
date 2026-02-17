@@ -201,14 +201,14 @@ const CardNav: React.FC<CardNavProps> = ({
             <img src={logo} alt={logoAlt} className="logo" />
           </div>
 
-          <a href="https://app.karanovaa.com" target="_blank" rel="noopener noreferrer">
-            <button
-              type="button"
-              className="card-nav-cta-button"
-              aria-label="شروع کنید - ورود به صفحه آنبوردینگ"
-            >
-              شروع کنید
-            </button>
+          <a
+            href="https://app.karanovaa.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="card-nav-cta-button inline-flex items-center justify-center"
+            aria-label="شروع کنید - ورود به صفحه آنبوردینگ"
+          >
+            شروع کنید
           </a>
         </div>
 
