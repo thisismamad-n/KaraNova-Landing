@@ -16,7 +16,6 @@ import type { NextRequest } from 'next/server';
  */
 export function proxy(request: NextRequest) {
     const response = NextResponse.next();
-    const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
 
     // Content Security Policy
     // Balanced policy that works with Next.js while maintaining security
@@ -76,9 +75,6 @@ export function proxy(request: NextRequest) {
             'max-age=31536000; includeSubDomains; preload'
         );
     }
-
-    // Pass nonce to the request for use in components if needed
-    response.headers.set('x-nonce', nonce);
 
     return response;
 }
