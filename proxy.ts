@@ -16,7 +16,6 @@ import type { NextRequest } from 'next/server';
  */
 export function proxy(request: NextRequest) {
     const response = NextResponse.next();
-    const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
 
     // Content Security Policy
     // Balanced policy that works with Next.js while maintaining security
@@ -66,7 +65,7 @@ export function proxy(request: NextRequest) {
     response.headers.set('X-Frame-Options', 'DENY');
     response.headers.set('X-XSS-Protection', '1; mode=block');
     response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-    response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
+    response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), magnetometer=(), accelerometer=(), gyroscope=()');
 
     // HSTS - Enable only in production for HTTPS
     // max-age=31536000 = 1 year, includeSubDomains for all subdomains
@@ -76,9 +75,6 @@ export function proxy(request: NextRequest) {
             'max-age=31536000; includeSubDomains; preload'
         );
     }
-
-    // Pass nonce to the request for use in components if needed
-    response.headers.set('x-nonce', nonce);
 
     return response;
 }
