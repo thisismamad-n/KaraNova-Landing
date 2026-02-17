@@ -105,7 +105,7 @@ const Squares: React.FC<SquaresProps> = ({
       }
 
       ctx.strokeStyle = borderColor;
-      ctx.lineWidth = 0.5;
+      ctx.lineWidth = 1; // Increased to 1px to restore visibility after optimization
       ctx.stroke();
 
       // Draw vignette using cached gradient
