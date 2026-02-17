@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  reactCompiler: true, // Enable React Compiler for Next.js 16
+  // Disabled React Compiler due to build errors with babel-plugin-react-compiler
+  // This is necessary to ensure the build succeeds for security updates.
+  reactCompiler: false,
 
   // Security headers configuration (fallback for proxy.ts)
   async headers() {
@@ -31,7 +33,7 @@ const nextConfig = {
           },
           {
             key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=(), payment=()'
+            value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), magnetometer=(), accelerometer=(), gyroscope=()'
           }
         ],
       },
