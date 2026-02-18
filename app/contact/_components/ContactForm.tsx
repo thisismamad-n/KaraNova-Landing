@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -57,6 +57,13 @@ export default function ContactForm({ language }: ContactFormProps) {
   const [submitStatus, setSubmitStatus] = useState<
     "idle" | "success" | "error"
   >("idle");
+  const successRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (submitStatus === "success" && successRef.current) {
+      successRef.current.focus();
+    }
+  }, [submitStatus]);
 
   const content = {
     fa: {
@@ -253,9 +260,11 @@ export default function ContactForm({ language }: ContactFormProps) {
         >
           {submitStatus === "success" ? (
             <motion.div
+              ref={successRef}
+              tabIndex={-1}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-12"
+              className="text-center py-12 focus:outline-none"
             >
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-full backdrop-blur-md bg-teal-500/20 border border-teal-500/30 mb-6 shadow-[0_0_30px_rgba(20,184,166,0.3)]">
                 <CheckCircle className="w-10 h-10 text-teal-400" />
@@ -299,6 +308,8 @@ export default function ContactForm({ language }: ContactFormProps) {
                     value={formData.name}
                     onChange={handleChange}
                     placeholder={currentContent.placeholders.name}
+                    aria-invalid={!!errors.name}
+                    aria-describedby={errors.name ? "name-error" : undefined}
                     className={cn(
                       "w-full px-4 py-3 rounded-lg",
                       "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -313,11 +324,13 @@ export default function ContactForm({ language }: ContactFormProps) {
                   />
                   {errors.name && (
                     <motion.p
+                      id="name-error"
+                      role="alert"
                       initial={{ opacity: 0, y: -5 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
                     >
-                      <AlertCircle className="w-3 h-3" />
+                      <AlertCircle className="w-3 h-3" aria-hidden="true" />
                       {errors.name}
                     </motion.p>
                   )}
@@ -384,6 +397,8 @@ export default function ContactForm({ language }: ContactFormProps) {
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder={currentContent.placeholders.phone}
+                    aria-invalid={!!errors.phone}
+                    aria-describedby={errors.phone ? "phone-error" : undefined}
                     className={cn(
                       "w-full px-4 py-3 rounded-lg",
                       "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -398,11 +413,13 @@ export default function ContactForm({ language }: ContactFormProps) {
                   />
                   {errors.phone && (
                     <motion.p
+                      id="phone-error"
+                      role="alert"
                       initial={{ opacity: 0, y: -5 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
                     >
-                      <AlertCircle className="w-3 h-3" />
+                      <AlertCircle className="w-3 h-3" aria-hidden="true" />
                       {errors.phone}
                     </motion.p>
                   )}
@@ -450,6 +467,8 @@ export default function ContactForm({ language }: ContactFormProps) {
                   value={formData.subject}
                   onChange={handleChange}
                   placeholder={currentContent.placeholders.subject}
+                  aria-invalid={!!errors.subject}
+                  aria-describedby={errors.subject ? "subject-error" : undefined}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
                     "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -464,11 +483,13 @@ export default function ContactForm({ language }: ContactFormProps) {
                 />
                 {errors.subject && (
                   <motion.p
+                    id="subject-error"
+                    role="alert"
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
                   >
-                    <AlertCircle className="w-3 h-3" />
+                    <AlertCircle className="w-3 h-3" aria-hidden="true" />
                     {errors.subject}
                   </motion.p>
                 )}
@@ -488,6 +509,8 @@ export default function ContactForm({ language }: ContactFormProps) {
                   value={formData.message}
                   onChange={handleChange}
                   placeholder={currentContent.placeholders.message}
+                  aria-invalid={!!errors.message}
+                  aria-describedby={errors.message ? "message-error" : undefined}
                   rows={5}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
@@ -504,11 +527,13 @@ export default function ContactForm({ language }: ContactFormProps) {
                 />
                 {errors.message && (
                   <motion.p
+                    id="message-error"
+                    role="alert"
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
                   >
-                    <AlertCircle className="w-3 h-3" />
+                    <AlertCircle className="w-3 h-3" aria-hidden="true" />
                     {errors.message}
                   </motion.p>
                 )}
@@ -555,6 +580,8 @@ export default function ContactForm({ language }: ContactFormProps) {
                     name="consent"
                     checked={formData.consent}
                     onChange={handleChange}
+                    aria-invalid={!!errors.consent}
+                    aria-describedby={errors.consent ? "consent-error" : undefined}
                     className={cn(
                       "mt-1 w-5 h-5 rounded",
                       "border-2",
@@ -575,11 +602,13 @@ export default function ContactForm({ language }: ContactFormProps) {
                 </label>
                 {errors.consent && (
                   <motion.p
+                    id="consent-error"
+                    role="alert"
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
                   >
-                    <AlertCircle className="w-3 h-3" />
+                    <AlertCircle className="w-3 h-3" aria-hidden="true" />
                     {errors.consent}
                   </motion.p>
                 )}
@@ -588,6 +617,7 @@ export default function ContactForm({ language }: ContactFormProps) {
               {/* Error Message */}
               {submitStatus === "error" && (
                 <motion.div
+                  role="alert"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className={cn(
@@ -636,7 +666,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                           ease: "linear",
                         }}
                       >
-                        <Send className="w-5 h-5" />
+                        <Send className="w-5 h-5" aria-hidden="true" />
                       </motion.div>
                       {currentContent.submitting}
                     </>
