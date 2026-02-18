@@ -145,30 +145,29 @@ export async function validateFormServerSide(
   // Simulate server-side validation
   const errors: Array<{ field: string; message: string }> = [];
 
-  // Check for suspicious patterns (basic security)
-  // Enhanced XSS pattern detection
-  const suspiciousPatterns = [
-    /<script/i,
-    /javascript:/i,
-    /on\w+\s*=/i, // Event handlers
-    /<iframe/i,
-    /<object/i,
-    /<embed/i,
-    /<form/i,
-    /data:/i, // Data URLs
-    /vbscript:/i,
+  // Robust XSS detection (Server-side validation fallback)
+  // NOTE: In a production environment with internet access, this should be replaced
+  // with a robust library like 'sanitize-html' or 'dompurify' for better security.
+  // This comprehensive regex-based approach is used as a fallback to identify potential XSS attacks.
+  const xssPatterns = [
+    /<\s*(script|iframe|object|embed|form|style|meta|link|base)/i, // Dangerous HTML tags
+    /on\w+\s*=/i, // Event handlers (e.g., onclick=, onerror=)
+    /javascript:/i, // JavaScript pseudo-protocol
+    /vbscript:/i, // VBScript pseudo-protocol
+    /data:/i, // Data URLs (can contain base64 encoded scripts)
+    /expression\s*\(/i, // CSS expressions (older IE)
+    /url\s*\(.*javascript:/i, // CSS URLs with javascript
+    /&\s*#\s*(?:[xX][0-9a-fA-F]+|\d+);/i // Encoded HTML entities (potential bypass)
   ];
 
   for (const [key, value] of Object.entries(data)) {
     if (typeof value === "string") {
-      for (const pattern of suspiciousPatterns) {
-        if (pattern.test(value)) {
-          errors.push({
-            field: key,
-            message: "Invalid input detected",
-          });
-          break;
-        }
+      const isSuspicious = xssPatterns.some((pattern) => pattern.test(value));
+      if (isSuspicious) {
+        errors.push({
+          field: key,
+          message: "Invalid input detected (Security Check)",
+        });
       }
     }
   }
