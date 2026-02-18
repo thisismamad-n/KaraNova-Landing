@@ -32,7 +32,7 @@ export function proxy(request: NextRequest) {
         // Font sources
         "font-src 'self' https://fonts.gstatic.com data:",
         // Image sources - allow external images
-        "img-src 'self' data: blob: https: http:",
+        "img-src 'self' data: blob: https:",
         // Connect sources - API endpoints and external services
         isDevelopment
             ? "connect-src 'self' https://api.karanova.io https://app.karanovaa.com ws: wss:"
