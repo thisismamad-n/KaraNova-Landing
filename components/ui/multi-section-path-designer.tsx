@@ -314,16 +314,21 @@ function MultiSectionOverlay({
   onPointerLeave: () => void;
   cursor: { x: number; y: number; sectionId: string } | null;
 }) {
-  const sectionPoints = allPoints.filter((p) => p.sectionId === sectionId);
-  const currentOffset = sectionOffsets.get(sectionId) ?? 0;
+  const sectionPoints = useMemo(
+    () => allPoints.filter((p) => p.sectionId === sectionId),
+    [allPoints, sectionId],
+  );
 
-  // Create a local path with coordinates adjusted relative to this section
-  const localOffsets = new Map<string, number>();
-  sectionOffsets.forEach((offset, id) => {
-    localOffsets.set(id, offset - currentOffset);
-  });
+  const localOffsets = useMemo(() => {
+    const offsets = new Map<string, number>();
+    const currentOffset = sectionOffsets.get(sectionId) ?? 0;
+    sectionOffsets.forEach((offset, id) => {
+      offsets.set(id, offset - currentOffset);
+    });
+    return offsets;
+  }, [sectionOffsets, sectionId]);
 
-  const localPathData = toPathData(allPoints, localOffsets);
+  const localPathData = useMemo(() => toPathData(allPoints, localOffsets), [allPoints, localOffsets]);
 
   // Get the section element to portal the overlay into it
   const sectionElement = document.getElementById(sectionId);
