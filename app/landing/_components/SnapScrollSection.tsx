@@ -520,9 +520,6 @@ export function AnimatedNumber_004({ isMobile }: { isMobile?: boolean }) {
         duration: 1,
         ease: "easeInOut",
         onUpdate: (latest) => setDisplayValue(Math.round(latest)),
-        onComplete: () => {
-          console.log("complete");
-        },
       });
       return () => controls.stop();
     } else {
