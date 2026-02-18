@@ -4,6 +4,51 @@ import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CardNav, { CardNavItem } from "./CardNav";
 
+const NAV_ITEMS: CardNavItem[] = [
+  {
+    label: "درباره کارانوا",
+    bgColor: "rgba(13, 20, 32, 0.82)",
+    textColor: "#e2e8f0",
+    links: [
+      { label: "معرفی شرکت", href: "/about", ariaLabel: "معرفی کارانوا" },
+      { label: "مسیرهای شغلی", href: "/careers", ariaLabel: "فرصت‌های شغلی کارانوا" },
+      { label: "تماس با ما", href: "/contact", ariaLabel: "تماس با کارانوا" },
+    ],
+  },
+  {
+    label: "محصولات",
+    bgColor: "rgba(13, 20, 32, 0.82)",
+    textColor: "#e2e8f0",
+    links: [
+      { label: "اینووا - هوش تجاری", href: "/products/inova", ariaLabel: "اینووا - چهار مشاور هوشمند" },
+      { label: "تسک‌ایز - مدیریت پروژه", href: "/products/taskease", ariaLabel: "تسک‌ایز - مدیریت پروژه با AI" },
+      { label: "بی‌آی‌کیو - داشبورد", href: "/products/biq", ariaLabel: "بی‌آی‌کیو - داشبورد تحلیلی" },
+      { label: "قیمت‌گذاری", href: "/pricing", ariaLabel: "قیمت‌گذاری کارانوا" },
+    ],
+  },
+  {
+    label: "منابع",
+    bgColor: "rgba(13, 20, 32, 0.82)",
+    textColor: "#e2e8f0",
+    links: [
+      { label: "مستندات", href: "/resources/documentation", ariaLabel: "مستندات کارانوا" },
+      { label: "راهنمای API", href: "/resources/api", ariaLabel: "راهنمای API کارانوا" },
+      { label: "وبلاگ", href: "/resources/blog", ariaLabel: "وبلاگ کارانوا" },
+      { label: "پشتیبانی", href: "/support", ariaLabel: "پشتیبانی کارانوا" },
+    ],
+  },
+  {
+    label: "ارتباط با ما",
+    bgColor: "rgba(13, 20, 32, 0.82)",
+    textColor: "#e2e8f0",
+    links: [
+      { label: "ایمیل پشتیبانی", href: "mailto:hello@karanova.io", ariaLabel: "ارسال ایمیل به کارانوا" },
+      { label: "تلگرام", href: "https://t.me/karanova", ariaLabel: "تلگرام کارانوا" },
+      { label: "لینکدین", href: "https://linkedin.com/company/karanova", ariaLabel: "لینکدین کارانوا" },
+    ],
+  },
+];
+
 const StickyHeader: React.FC = () => {
   const [visible, setVisible] = useState(false);
 
@@ -16,51 +61,6 @@ const StickyHeader: React.FC = () => {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  const items: CardNavItem[] = [
-    {
-      label: "درباره کارانوا",
-      bgColor: "rgba(13, 20, 32, 0.82)",
-      textColor: "#e2e8f0",
-      links: [
-        { label: "معرفی شرکت", href: "/about", ariaLabel: "معرفی کارانوا" },
-        { label: "مسیرهای شغلی", href: "/careers", ariaLabel: "فرصت‌های شغلی کارانوا" },
-        { label: "تماس با ما", href: "/contact", ariaLabel: "تماس با کارانوا" },
-      ],
-    },
-    {
-      label: "محصولات",
-      bgColor: "rgba(13, 20, 32, 0.82)",
-      textColor: "#e2e8f0",
-      links: [
-        { label: "اینووا - هوش تجاری", href: "/products/inova", ariaLabel: "اینووا - چهار مشاور هوشمند" },
-        { label: "تسک‌ایز - مدیریت پروژه", href: "/products/taskease", ariaLabel: "تسک‌ایز - مدیریت پروژه با AI" },
-        { label: "بی‌آی‌کیو - داشبورد", href: "/products/biq", ariaLabel: "بی‌آی‌کیو - داشبورد تحلیلی" },
-        { label: "قیمت‌گذاری", href: "/pricing", ariaLabel: "قیمت‌گذاری کارانوا" },
-      ],
-    },
-    {
-      label: "منابع",
-      bgColor: "rgba(13, 20, 32, 0.82)",
-      textColor: "#e2e8f0",
-      links: [
-        { label: "مستندات", href: "/resources/documentation", ariaLabel: "مستندات کارانوا" },
-        { label: "راهنمای API", href: "/resources/api", ariaLabel: "راهنمای API کارانوا" },
-        { label: "وبلاگ", href: "/resources/blog", ariaLabel: "وبلاگ کارانوا" },
-        { label: "پشتیبانی", href: "/support", ariaLabel: "پشتیبانی کارانوا" },
-      ],
-    },
-    {
-      label: "ارتباط با ما",
-      bgColor: "rgba(13, 20, 32, 0.82)",
-      textColor: "#e2e8f0",
-      links: [
-        { label: "ایمیل پشتیبانی", href: "mailto:hello@karanova.io", ariaLabel: "ارسال ایمیل به کارانوا" },
-        { label: "تلگرام", href: "https://t.me/karanova", ariaLabel: "تلگرام کارانوا" },
-        { label: "لینکدین", href: "https://linkedin.com/company/karanova", ariaLabel: "لینکدین کارانوا" },
-      ],
-    },
-  ];
 
   return (
     <AnimatePresence mode="wait">
@@ -89,7 +89,7 @@ const StickyHeader: React.FC = () => {
           className="fixed top-3 left-0 right-0 z-50"
         >
           <CardNav
-            items={items}
+            items={NAV_ITEMS}
             baseColor="rgba(2, 6, 23, 0.44)"
             menuColor="#e2e8f0"
             buttonBgColor="#14b8a6"
