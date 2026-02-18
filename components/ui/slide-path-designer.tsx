@@ -85,29 +85,41 @@ export function SlidePathDesigner({ slideKey, enabled, label, className }: Slide
 
   const isActive = typeof enabled === "boolean" ? enabled : isSlidePathDesignerEnabled(slideKey);
 
-  // Load saved points - use lazy initialization to avoid setState in effect
-  const [points, setPoints] = useState<Point[]>(() => {
-    if (typeof window === "undefined") return [];
-    const saved = window.localStorage.getItem(storageKey);
-    if (!saved) return [];
+  const [points, setPoints] = useState<Point[]>([]);
+  const [loadedKey, setLoadedKey] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isActive) return;
+
+    if (typeof window === "undefined") return;
 
     try {
-      const parsed = JSON.parse(saved);
-      if (isPointArray(parsed)) {
-        return parsed.map((point) => ({ x: Number(point.x), y: Number(point.y) }));
+      const saved = window.localStorage.getItem(storageKey);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (isPointArray(parsed)) {
+          setPoints(parsed.map((point) => ({ x: Number(point.x), y: Number(point.y) })));
+        } else {
+          setPoints([]);
+        }
+      } else {
+        setPoints([]);
       }
     } catch {
       window.localStorage.removeItem(storageKey);
+      setPoints([]);
+    } finally {
+      setLoadedKey(storageKey);
     }
-    return [];
-  });
+  }, [storageKey, isActive]);
 
   useEffect(() => {
+    if (!isActive || loadedKey !== storageKey) return;
     if (typeof window === "undefined") {
       return;
     }
     window.localStorage.setItem(storageKey, JSON.stringify(points));
-  }, [points, storageKey]);
+  }, [points, storageKey, isActive, loadedKey]);
 
   useEffect(() => {
     if (!copied) {
