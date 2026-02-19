@@ -2,8 +2,10 @@
 
 import React, { useLayoutEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
+import Image, { type StaticImageData } from 'next/image';
 import { gsap } from 'gsap';
 import { GoArrowUpRight } from 'react-icons/go';
+import defaultLogo from '../../public/logo.png';
 
 export type CardNavLink = {
   label: string;
@@ -19,7 +21,7 @@ export type CardNavItem = {
 };
 
 export interface CardNavProps {
-  logo?: string;
+  logo?: string | StaticImageData;
   logoAlt?: string;
   items: CardNavItem[];
   className?: string;
@@ -31,7 +33,7 @@ export interface CardNavProps {
 }
 
 const CardNav: React.FC<CardNavProps> = ({
-  logo = "/logo.png",
+  logo = defaultLogo,
   logoAlt = 'KaraNovaa',
   items,
   className = '',
@@ -197,8 +199,17 @@ const CardNav: React.FC<CardNavProps> = ({
           </div>
 
           <div className="logo-container">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logo} alt={logoAlt} className="logo" />
+            {typeof logo === 'string' ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={logo} alt={logoAlt} className="logo" />
+            ) : (
+              <Image
+                src={logo}
+                alt={logoAlt}
+                className="logo"
+                priority
+              />
+            )}
           </div>
 
           <a
