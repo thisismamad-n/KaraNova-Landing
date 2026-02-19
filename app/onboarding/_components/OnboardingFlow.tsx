@@ -70,7 +70,14 @@ export default function OnboardingFlow() {
             exit={{ opacity: 0, y: -20 }}
             className="mb-8 sm:mb-10 md:mb-12 relative"
           >
-            <div className="h-2 w-full border border-transparent bg-slate-900/20 rounded-full overflow-hidden">
+            <div
+              role="progressbar"
+              aria-valuenow={Math.round(progress)}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={`مرحله ${step + 1} از ۵`}
+              className="h-2 w-full border border-transparent bg-slate-900/20 rounded-full overflow-hidden"
+            >
               <motion.div 
                 className="h-full bg-gradient-to-l from-[hsl(177,100%,35%)] via-[hsl(190,95%,42%)] to-[hsl(177,100%,35%)]"
                 initial={{ width: 0 }}
@@ -78,7 +85,7 @@ export default function OnboardingFlow() {
                 transition={{ duration: 0.5, ease: "easeInOut" }}
               />
             </div>
-            <div className="absolute top-4 left-0 text-white/60 text-xs sm:text-sm font-medium">
+            <div className="absolute top-4 left-0 text-white/60 text-xs sm:text-sm font-medium" aria-hidden="true">
               مرحله {step + 1} از ۵
             </div>
           </motion.div>
@@ -196,10 +203,11 @@ function StepAuth({ onComplete }: { onComplete: () => void }) {
       <div className="flex flex-col gap-4 w-full">
         {!isLogin && (
           <div className="space-y-1">
-            <label className="text-xs text-white/40 mr-1">نام و نام خانوادگی</label>
+            <label htmlFor="auth-name" className="text-xs text-white/40 mr-1">نام و نام خانوادگی</label>
             <div className="relative group">
               <User className="absolute right-3 top-3 w-5 h-5 text-white/30 group-focus-within:text-[hsl(190,95%,42%)] transition-colors z-10" />
               <input 
+                id="auth-name"
                 type="text" 
                 className="relative w-full border border-transparent rounded-xl px-10 py-3 text-white bg-slate-900/10 focus:outline-none transition-all placeholder:text-white/20"
                 placeholder="مثال: علی محمدی"
@@ -209,10 +217,11 @@ function StepAuth({ onComplete }: { onComplete: () => void }) {
         )}
         
         <div className="space-y-1">
-          <label className="text-xs text-white/40 mr-1">ایمیل</label>
+          <label htmlFor="auth-email" className="text-xs text-white/40 mr-1">ایمیل</label>
           <div className="relative group">
             <Mail className="absolute right-3 top-3 w-5 h-5 text-white/30 group-focus-within:text-[hsl(177,100%,35%)] transition-colors z-10" />
             <input 
+              id="auth-email"
               type="email" 
               className="relative w-full border border-transparent rounded-xl px-10 py-3 text-white bg-slate-900/10 focus:outline-none transition-all placeholder:text-white/20"
               placeholder="name@company.com"
@@ -221,10 +230,11 @@ function StepAuth({ onComplete }: { onComplete: () => void }) {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs text-white/40 mr-1">رمز عبور</label>
+          <label htmlFor="auth-password" className="text-xs text-white/40 mr-1">رمز عبور</label>
           <div className="relative group">
             <Lock className="absolute right-3 top-3 w-5 h-5 text-white/30 group-focus-within:text-[hsl(190,95%,42%)] transition-colors z-10" />
             <input 
+              id="auth-password"
               type="password" 
               className="relative w-full border border-transparent rounded-xl px-10 py-3 text-white bg-slate-900/10 focus:outline-none transition-all placeholder:text-white/20"
               placeholder="••••••••"
@@ -476,6 +486,7 @@ function OptionCard({ selected, onClick, icon: Icon, title, desc, horizontal }: 
   return (
     <button
       onClick={onClick}
+      aria-pressed={selected}
       className={cn(
         "relative group flex flex-col items-start text-right p-5 sm:p-6 rounded-2xl border border-transparent transition-all duration-300 w-full overflow-hidden",
         "hover:shadow-[0_0_40px_-10px_hsl(177,100%,35%,0.15)]",
