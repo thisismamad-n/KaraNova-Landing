@@ -2,7 +2,7 @@ import { expect, test, describe, mock, beforeEach, afterEach } from "bun:test";
 
 // Mock the external dependency before importing the module under test
 mock.module("disposable-email-domains", () => {
-  return ["disposable.com"];
+  return { default: ["disposable.com"] };
 });
 
 import { submitFormWithRetry, validateFormServerSide, isOnline, waitForConnection } from "./formSubmission";

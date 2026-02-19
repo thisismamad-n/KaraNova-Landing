@@ -2,10 +2,8 @@
  * Form submission utility with network error handling and retry logic
  */
 
-import disposableEmailDomains from 'disposable-email-domains';
-
-// Create a Set for O(1) lookup performance
-const disposableDomainSet = new Set(disposableEmailDomains);
+// Cache for the disposable domain set to avoid re-creation
+let disposableDomainSet: Set<string> | null = null;
 
 export interface SubmissionResult<T = unknown> {
   success: boolean;
@@ -174,6 +172,18 @@ export async function validateFormServerSide(
 
   // Email domain validation using disposable-email-domains package (O(1) Set lookup)
   if (data.email && typeof data.email === "string") {
+    // Lazy load the disposable email domains
+    if (!disposableDomainSet) {
+      try {
+        const { default: disposableEmailDomains } = await import('disposable-email-domains');
+        disposableDomainSet = new Set(disposableEmailDomains);
+      } catch (error) {
+        console.warn('Failed to load disposable email domains list', error);
+        // Fallback or empty set if import fails
+        disposableDomainSet = new Set();
+      }
+    }
+
     const emailDomain = data.email.split("@")[1]?.toLowerCase();
 
     if (emailDomain && disposableDomainSet.has(emailDomain)) {
