@@ -9,7 +9,12 @@ import {
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
-import { SlidePathDesigner } from "@/components/ui/slide-path-designer";
+import dynamic from "next/dynamic";
+
+const SlidePathDesigner = dynamic(
+  () => import("@/components/ui/slide-path-designer").then((mod) => mod.SlidePathDesigner),
+  { ssr: false }
+);
 
 interface StatItem {
   percentage: string;
@@ -50,8 +55,10 @@ export default function TestimonialsSection() {
 
   return (
     <section id="testimonials-section" className="relative w-full min-h-screen pt-20 pb-0 overflow-hidden" dir="rtl">
-      {/* Slide Path Designer */}
-      <SlidePathDesigner slideKey="landing-testimonials" />
+      {/* Slide Path Designer - Only loaded in development */}
+      {process.env.NODE_ENV === "development" && (
+        <SlidePathDesigner slideKey="landing-testimonials" />
+      )}
 
       {/* Ambient glow effects - same as WhyChooseUs */}
       <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl" />
