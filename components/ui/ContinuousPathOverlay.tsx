@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
+import { debounce } from "@/lib/utils";
 
 interface ContinuousPathOverlayProps {
   startSectionId: string;
@@ -78,8 +79,12 @@ export function ContinuousPathOverlay({
     };
 
     updateViewBox();
-    window.addEventListener("resize", updateViewBox);
-    return () => window.removeEventListener("resize", updateViewBox);
+    const handleResize = debounce(updateViewBox, 100);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      handleResize.cancel();
+    };
   }, [startSectionId, endSectionId, pathData, DESIGN_WIDTH]);
 
   return (

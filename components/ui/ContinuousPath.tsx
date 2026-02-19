@@ -3,6 +3,7 @@
 import { motion, useScroll, useSpring, useTransform, useInView, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { debounce } from "@/lib/utils";
 
 interface ContinuousPathProps {
   sectionIds: string[];
@@ -112,11 +113,13 @@ export function ContinuousPath({
 
     const timeoutId = setTimeout(updateDimensions, 100);
 
-    window.addEventListener("resize", updateDimensions);
+    const handleResize = debounce(updateDimensions, 100);
+    window.addEventListener("resize", handleResize);
 
     return () => {
       clearTimeout(timeoutId);
-      window.removeEventListener("resize", updateDimensions);
+      window.removeEventListener("resize", handleResize);
+      handleResize.cancel();
     };
   }, [sectionIds, enabled, completionTarget, pathData, DESIGN_WIDTH, isMobile]);
 
