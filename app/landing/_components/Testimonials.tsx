@@ -18,35 +18,35 @@ interface StatItem {
   isIncrease: boolean;
 }
 
+const stats: StatItem[] = [
+  {
+    percentage: "٪۶۰",
+    label: "کاهش زمان مدیریت پروژه",
+    isIncrease: false,
+    logo: "/customer/netflix.png",
+  },
+  {
+    percentage: "٪۸۵",
+    label: "افزایش بهره‌وری تیم",
+    isIncrease: true,
+    logo: "/customer/vercel.png",
+  },
+  {
+    percentage: "۴×",
+    label: "سرعت تصمیم‌گیری",
+    isIncrease: true,
+    logo: "/customer/amazon.png",
+  },
+  {
+    percentage: "۲۴/۷",
+    label: "پشتیبانی هوش مصنوعی",
+    isIncrease: true,
+    logo: "/customer/alibaba.png",
+  },
+];
+
 export default function TestimonialsSection() {
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
-
-  const stats: StatItem[] = [
-    {
-      percentage: "٪۶۰",
-      label: "کاهش زمان مدیریت پروژه",
-      isIncrease: false,
-      logo: "/customer/netflix.png",
-    },
-    {
-      percentage: "٪۸۵",
-      label: "افزایش بهره‌وری تیم",
-      isIncrease: true,
-      logo: "/customer/vercel.png",
-    },
-    {
-      percentage: "۴×",
-      label: "سرعت تصمیم‌گیری",
-      isIncrease: true,
-      logo: "/customer/amazon.png",
-    },
-    {
-      percentage: "۲۴/۷",
-      label: "پشتیبانی هوش مصنوعی",
-      isIncrease: true,
-      logo: "/customer/alibaba.png",
-    },
-  ];
 
   return (
     <section id="testimonials-section" className="relative w-full min-h-screen pt-20 pb-0 overflow-hidden" dir="rtl">
