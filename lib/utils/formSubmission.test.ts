@@ -151,6 +151,55 @@ describe("validateFormServerSide", () => {
     expect(result.error?.field).toBe("email");
     expect(result.error?.message).toBe("Server validation failed");
   });
+
+  test("should reject javascript protocol with whitespace", async () => {
+    const data = { message: "<a href='java\tscript:alert(1)'>" };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(false);
+  });
+
+  test("should reject svg tag without event handler", async () => {
+    const data = { message: "<svg><desc>test</desc></svg>" };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(false);
+  });
+
+  test("should NOT reject innocent input like 'onion='", async () => {
+    const data = { message: "The price of onion=5 dollars" };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(true);
+  });
+
+  test("should NOT reject innocent input like 'online='", async () => {
+    const data = { status: "online=true" };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(true);
+  });
+
+  test("should reject dangerous event handlers", async () => {
+    const inputs = [
+      "<img onload=alert(1)>",
+      "<div onclick=alert(1)>",
+      "<input onfocus=alert(1)>"
+    ];
+    for (const input of inputs) {
+      const data = { message: input };
+      const result = await validateFormServerSide("contact", data);
+      expect(result.success).toBe(false);
+    }
+  });
+
+  test("should reject video/audio tags", async () => {
+    const inputs = [
+      "<video><source src=x onerror=alert(1)></video>",
+      "<audio src=x onerror=alert(1)></audio>"
+    ];
+    for (const input of inputs) {
+      const data = { message: input };
+      const result = await validateFormServerSide("contact", data);
+      expect(result.success).toBe(false);
+    }
+  });
 });
 
 describe("isOnline", () => {

@@ -150,13 +150,13 @@ export async function validateFormServerSide(
   // with a robust library like 'sanitize-html' or 'dompurify' for better security.
   // This comprehensive regex-based approach is used as a fallback to identify potential XSS attacks.
   const xssPatterns = [
-    /<\s*(script|iframe|object|embed|form|style|meta|link|base)/i, // Dangerous HTML tags
-    /on\w+\s*=/i, // Event handlers (e.g., onclick=, onerror=)
-    /javascript:/i, // JavaScript pseudo-protocol
-    /vbscript:/i, // VBScript pseudo-protocol
+    /<\s*(script|iframe|object|embed|form|style|meta|link|base|svg|details|audio|video)/i, // Dangerous HTML tags
+    /on(click|dblclick|mousedown|mouseup|mouseover|mousemove|mouseout|mouseenter|mouseleave|keydown|keypress|keyup|load|unload|abort|error|resize|scroll|select|change|submit|reset|focus|blur|input|contextmenu|wheel|copy|cut|paste|drag|drop|toggle)\w*\s*=/i, // Event handlers (whitelist to avoid false positives)
+    /j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:/i, // JavaScript pseudo-protocol (handles whitespace)
+    /v\s*b\s*s\s*c\s*r\s*i\s*p\s*t\s*:/i, // VBScript pseudo-protocol
     /data:/i, // Data URLs (can contain base64 encoded scripts)
     /expression\s*\(/i, // CSS expressions (older IE)
-    /url\s*\(.*javascript:/i, // CSS URLs with javascript
+    /url\s*\(.*j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:/i, // CSS URLs with javascript
     /&\s*#\s*(?:[xX][0-9a-fA-F]+|\d+);/i // Encoded HTML entities (potential bypass)
   ];
 
