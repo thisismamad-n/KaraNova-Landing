@@ -51,13 +51,13 @@ type Props = {
   color?: string;
 };
 
-const VERT = `precision highp float;
+const vertexShader = `precision highp float;
 attribute vec3 position;
 void main(){
 gl_Position = vec4(position, 1.0);
 }`;
 
-const FRAG = `#ifdef GL_ES
+const fragmentShader = `#ifdef GL_ES
 #extension GL_OES_standard_derivatives : enable
 #endif
 precision highp float;
@@ -434,8 +434,8 @@ export const LaserFlow: React.FC<Props> = ({
     uniformsRef.current = uniforms;
 
     const material = new THREE.RawShaderMaterial({
-      vertexShader: VERT,
-      fragmentShader: FRAG,
+      vertexShader,
+      fragmentShader,
       uniforms: uniforms as unknown as Record<string, Uniform<any>>,
 
       transparent: false,
