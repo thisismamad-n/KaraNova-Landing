@@ -12,6 +12,7 @@ import type { NextRequest } from 'next/server';
  * - X-XSS-Protection
  * - Referrer-Policy
  * - Permissions-Policy
+ * - Cross-Origin-Opener-Policy (COOP)
  * - Strict-Transport-Security (HSTS)
  */
 export function proxy(request: NextRequest) {
@@ -66,6 +67,7 @@ export function proxy(request: NextRequest) {
     response.headers.set('X-XSS-Protection', '1; mode=block');
     response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
     response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=(), bluetooth=(), magnetometer=(), accelerometer=(), gyroscope=()');
+    response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
 
     // HSTS - Enable only in production for HTTPS
     // max-age=31536000 = 1 year, includeSubDomains for all subdomains
