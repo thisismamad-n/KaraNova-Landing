@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, memo } from "react";
 import { createPortal } from "react-dom";
 
 type Point = { x: number; y: number; sectionId: string };
@@ -182,6 +182,20 @@ export function MultiSectionPathDesigner({
     [enabled, getSectionFromPoint],
   );
 
+  // Stable handlers to prevent re-renders of MultiSectionOverlay
+  const handleSectionMove = useCallback((e: React.PointerEvent<HTMLDivElement>, sectionId: string) => {
+    const section = sectionsRef.current.get(sectionId);
+    if (!section) return;
+    const rect = section.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setCursor({ x: Number(x.toFixed(2)), y: Number(y.toFixed(2)), sectionId });
+  }, []);
+
+  const handleSectionLeave = useCallback(() => {
+    setCursor(null);
+  }, []);
+
   // Keyboard shortcuts
   useEffect(() => {
     if (!enabled) return;
@@ -222,13 +236,8 @@ export function MultiSectionPathDesigner({
             sectionOffsets={sectionOffsets}
             allPoints={points}
             onPointerDown={addPoint}
-            onPointerMove={(e) => {
-              const rect = section.getBoundingClientRect();
-              const x = e.clientX - rect.left;
-              const y = e.clientY - rect.top;
-              setCursor({ x: Number(x.toFixed(2)), y: Number(y.toFixed(2)), sectionId });
-            }}
-            onPointerLeave={() => setCursor(null)}
+            onSectionMove={handleSectionMove}
+            onSectionLeave={handleSectionLeave}
             cursor={cursor?.sectionId === sectionId ? cursor : null}
           />
         );
@@ -295,14 +304,15 @@ export function MultiSectionPathDesigner({
   );
 }
 
-function MultiSectionOverlay({
+// Memoized overlay component to prevent re-rendering all sections when cursor moves in one
+const MultiSectionOverlay = memo(function MultiSectionOverlay({
   sectionId,
   points,
   sectionOffsets,
   allPoints,
   onPointerDown,
-  onPointerMove,
-  onPointerLeave,
+  onSectionMove,
+  onSectionLeave,
   cursor,
 }: {
   sectionId: string;
@@ -310,8 +320,8 @@ function MultiSectionOverlay({
   sectionOffsets: Map<string, number>;
   allPoints: Point[];
   onPointerDown: (e: React.PointerEvent<HTMLDivElement>) => void;
-  onPointerMove: (e: React.PointerEvent<HTMLDivElement>) => void;
-  onPointerLeave: () => void;
+  onSectionMove: (e: React.PointerEvent<HTMLDivElement>, sectionId: string) => void;
+  onSectionLeave: () => void;
   cursor: { x: number; y: number; sectionId: string } | null;
 }) {
   const sectionPoints = useMemo(
@@ -338,8 +348,8 @@ function MultiSectionOverlay({
     <div
       className="absolute inset-0 z-40 pointer-events-auto cursor-crosshair"
       onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerLeave={onPointerLeave}
+      onPointerMove={(e) => onSectionMove(e, sectionId)}
+      onPointerLeave={onSectionLeave}
       style={{
         position: "absolute",
         top: 0,
@@ -409,4 +419,4 @@ function MultiSectionOverlay({
       )}
     </div>
   );
-}
+});
