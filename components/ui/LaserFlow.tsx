@@ -436,7 +436,8 @@ export const LaserFlow: React.FC<Props> = ({
     const material = new THREE.RawShaderMaterial({
       vertexShader: VERT,
       fragmentShader: FRAG,
-      uniforms,
+      uniforms: uniforms as unknown as Record<string, Uniform<any>>,
+
       transparent: false,
       depthTest: false,
       depthWrite: false,
