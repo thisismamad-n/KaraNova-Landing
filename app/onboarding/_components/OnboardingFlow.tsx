@@ -174,9 +174,11 @@ function StepAuth({ onComplete }: { onComplete: () => void }) {
       {/* Toggle */}
       <div className="flex flex-col sm:flex-row gap-2 p-1 rounded-xl w-full border border-transparent bg-slate-900/10">
         <button 
+          type="button"
+          aria-pressed={isLogin}
           onClick={() => setIsLogin(true)}
           className={cn(
-            "flex-1 py-2 rounded-lg text-sm font-medium transition-all relative overflow-hidden border border-transparent",
+            "flex-1 py-2 rounded-lg text-sm font-medium transition-all relative overflow-hidden border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(177,100%,35%)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950",
             isLogin ? "text-[hsl(177,100%,45%)]" : "text-white/40 hover:text-white/60"
           )}
         >
@@ -186,9 +188,11 @@ function StepAuth({ onComplete }: { onComplete: () => void }) {
           <span className="relative">ورود</span>
         </button>
         <button 
+          type="button"
+          aria-pressed={!isLogin}
           onClick={() => setIsLogin(false)}
           className={cn(
-            "flex-1 py-2 rounded-lg text-sm font-medium transition-all relative overflow-hidden border border-transparent",
+            "flex-1 py-2 rounded-lg text-sm font-medium transition-all relative overflow-hidden border border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(190,95%,42%)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950",
             !isLogin ? "text-[hsl(190,95%,52%)]" : "text-white/40 hover:text-white/60"
           )}
         >
@@ -209,7 +213,7 @@ function StepAuth({ onComplete }: { onComplete: () => void }) {
               <input 
                 id="auth-name"
                 type="text" 
-                className="relative w-full border border-transparent rounded-xl px-10 py-3 text-white bg-slate-900/10 focus:outline-none transition-all placeholder:text-white/20"
+                className="relative w-full border border-transparent rounded-xl px-10 py-3 text-white bg-slate-900/10 transition-all placeholder:text-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(177,100%,35%)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 placeholder="مثال: علی محمدی"
               />
             </div>
@@ -223,7 +227,7 @@ function StepAuth({ onComplete }: { onComplete: () => void }) {
             <input 
               id="auth-email"
               type="email" 
-              className="relative w-full border border-transparent rounded-xl px-10 py-3 text-white bg-slate-900/10 focus:outline-none transition-all placeholder:text-white/20"
+              className="relative w-full border border-transparent rounded-xl px-10 py-3 text-white bg-slate-900/10 transition-all placeholder:text-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(177,100%,35%)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               placeholder="name@company.com"
             />
           </div>
@@ -236,7 +240,7 @@ function StepAuth({ onComplete }: { onComplete: () => void }) {
             <input 
               id="auth-password"
               type="password" 
-              className="relative w-full border border-transparent rounded-xl px-10 py-3 text-white bg-slate-900/10 focus:outline-none transition-all placeholder:text-white/20"
+              className="relative w-full border border-transparent rounded-xl px-10 py-3 text-white bg-slate-900/10 transition-all placeholder:text-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(177,100%,35%)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               placeholder="••••••••"
             />
           </div>
@@ -443,7 +447,7 @@ function Step5Info({ data, updateData, onBack, onNext }: any) {
   return (
     <div className="flex flex-col gap-8">
       <div className="text-center md:text-right">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 mb-3 sm:mb-4">
+        <h2 id="step5-title" className="text-2xl sm:text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 mb-3 sm:mb-4">
           توضیحات تکمیلی
         </h2>
         <p className="text-sm sm:text-base md:text-lg text-white/60">آیا نکته دیگری هست که باید بدانیم؟ (اختیاری)</p>
@@ -451,10 +455,11 @@ function Step5Info({ data, updateData, onBack, onNext }: any) {
 
       <div className="relative group">
         <textarea
+          aria-labelledby="step5-title"
           value={data.additionalInfo}
           onChange={(e) => updateData({ additionalInfo: e.target.value })}
           placeholder="توضیحات خود را اینجا بنویسید..."
-          className="relative w-full h-32 sm:h-40 border border-transparent rounded-2xl p-4 sm:p-6 text-base sm:text-lg text-white bg-slate-900/10 placeholder:text-white/30 focus:outline-none transition-all resize-none selection:bg-[hsl(190,95%,42%)]/30"
+          className="relative w-full h-32 sm:h-40 border border-transparent rounded-2xl p-4 sm:p-6 text-base sm:text-lg text-white bg-slate-900/10 placeholder:text-white/30 transition-all resize-none selection:bg-[hsl(190,95%,42%)]/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(177,100%,35%)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
         />
       </div>
 
@@ -488,7 +493,7 @@ function OptionCard({ selected, onClick, icon: Icon, title, desc, horizontal }: 
       onClick={onClick}
       aria-pressed={selected}
       className={cn(
-        "relative group flex flex-col items-start text-right p-5 sm:p-6 rounded-2xl border border-transparent transition-all duration-300 w-full overflow-hidden",
+        "relative group flex flex-col items-start text-right p-5 sm:p-6 rounded-2xl border border-transparent transition-all duration-300 w-full overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(177,100%,35%)] focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:rounded-2xl",
         "hover:shadow-[0_0_40px_-10px_hsl(177,100%,35%,0.15)]",
         horizontal ? "sm:flex-row sm:items-center gap-4 sm:gap-6" : "gap-4",
         selected 
