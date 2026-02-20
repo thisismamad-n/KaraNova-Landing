@@ -1,6 +1,33 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 
+type Uniform<T> = { value: T };
+
+interface LaserFlowUniforms {
+  iTime: Uniform<number>;
+  iResolution: Uniform<THREE.Vector3>;
+  iMouse: Uniform<THREE.Vector4>;
+  uWispDensity: Uniform<number>;
+  uTiltScale: Uniform<number>;
+  uFlowTime: Uniform<number>;
+  uFogTime: Uniform<number>;
+  uBeamXFrac: Uniform<number>;
+  uBeamYFrac: Uniform<number>;
+  uFlowSpeed: Uniform<number>;
+  uVLenFactor: Uniform<number>;
+  uHLenFactor: Uniform<number>;
+  uFogIntensity: Uniform<number>;
+  uFogScale: Uniform<number>;
+  uWSpeed: Uniform<number>;
+  uWIntensity: Uniform<number>;
+  uFlowStrength: Uniform<number>;
+  uDecay: Uniform<number>;
+  uFalloffStart: Uniform<number>;
+  uFogFallSpeed: Uniform<number>;
+  uColor: Uniform<THREE.Vector3>;
+  uFade: Uniform<number>;
+}
+
 type Props = {
   className?: string;
   style?: React.CSSProperties;
@@ -328,7 +355,7 @@ export const LaserFlow: React.FC<Props> = ({
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const uniformsRef = useRef<any>(null);
+  const uniformsRef = useRef<LaserFlowUniforms | null>(null);
   const hasFadedRef = useRef(false);
   const rectRef = useRef<DOMRect | null>(null);
   const baseDprRef = useRef<number>(1);
@@ -380,7 +407,7 @@ export const LaserFlow: React.FC<Props> = ({
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]), 3));
 
-    const uniforms = {
+    const uniforms: LaserFlowUniforms = {
       iTime: { value: 0 },
       iResolution: { value: new THREE.Vector3(1, 1, 1) },
       iMouse: { value: new THREE.Vector4(0, 0, 0, 0) },
@@ -544,8 +571,8 @@ export const LaserFlow: React.FC<Props> = ({
       fpsSamplesRef.current.push(instFps);
       uniforms.iTime.value = t;
       const cdt = Math.min(0.033, Math.max(0.001, dt));
-      (uniforms.uFlowTime.value as number) += cdt;
-      (uniforms.uFogTime.value as number) += cdt;
+      uniforms.uFlowTime.value += cdt;
+      uniforms.uFogTime.value += cdt;
       if (!hasFadedRef.current) {
         const fadeDur = 1.0;
         fade = Math.min(1, fade + cdt / fadeDur);
