@@ -17,7 +17,8 @@ import {
   Mail,
   Lock,
   User,
-  Github
+  Github,
+  LucideIcon
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -26,7 +27,8 @@ import {
   ActivityType, 
   BusinessSize, 
   BusinessStyle, 
-  BusinessAge 
+  BusinessAge,
+  StepProps
 } from '../types';
 
 // --- Utility ---
@@ -42,6 +44,15 @@ const INITIAL_DATA: OnboardingData = {
   businessAge: null,
   additionalInfo: '',
 };
+
+interface OptionCardProps {
+  selected: boolean;
+  onClick: () => void;
+  icon?: LucideIcon;
+  title: string;
+  desc?: string;
+  horizontal?: boolean;
+}
 
 // --- Component ---
 export default function OnboardingFlow() {
@@ -274,7 +285,7 @@ function StepAuth({ onComplete }: { onComplete: () => void }) {
 }
 
 // Step 1: Activity Type
-function Step1Activity({ data, updateData, onNext }: any) {
+function Step1Activity({ data, updateData, onNext }: Omit<StepProps, 'onBack'>) {
   const options = [
     { id: ActivityType.SERVICES, label: 'خدمات', icon: Briefcase, desc: 'ارائه خدمات حرفه‌ای به مشتریان' },
     { id: ActivityType.PRODUCTION, label: 'تولید', icon: Building2, desc: 'ساخت و تولید محصولات فیزیکی' },
@@ -311,7 +322,7 @@ function Step1Activity({ data, updateData, onNext }: any) {
 }
 
 // Step 2: Business Size
-function Step2Size({ data, updateData, onNext, onBack }: any) {
+function Step2Size({ data, updateData, onNext, onBack }: StepProps) {
   const options = [
     { id: BusinessSize.SOLO, label: 'تک نفره', icon: Users, desc: 'فریلنسر یا کارآفرین مستقل' },
     { id: BusinessSize.SMALL, label: 'کوچک', icon: Users, desc: '۲ تا ۱۰ نفر پرسنل' },
@@ -350,7 +361,7 @@ function Step2Size({ data, updateData, onNext, onBack }: any) {
 }
 
 // Step 3: Business Style
-function Step3Style({ data, updateData, onNext, onBack }: any) {
+function Step3Style({ data, updateData, onNext, onBack }: StepProps) {
   const options = [
     { id: BusinessStyle.ONLINE, label: 'آنلاین', icon: Laptop, desc: 'فروشگاه اینترنتی، وب‌سایت، اپلیکیشن' },
     { id: BusinessStyle.OFFLINE, label: 'حضوری', icon: Store, desc: 'فروشگاه فیزیکی، دفتر کار' },
@@ -389,7 +400,7 @@ function Step3Style({ data, updateData, onNext, onBack }: any) {
 }
 
 // Step 4: Business Age
-function Step4Age({ data, updateData, onNext, onBack }: any) {
+function Step4Age({ data, updateData, onNext, onBack }: StepProps) {
   const options = [
     { id: BusinessAge.NEW, label: 'تازه‌تاسیس', desc: 'کمتر از ۱ سال' },
     { id: BusinessAge.YOUNG, label: 'نوپا', desc: '۱ تا ۳ سال' },
@@ -428,7 +439,7 @@ function Step4Age({ data, updateData, onNext, onBack }: any) {
 }
 
 // Step 5: Additional Info
-function Step5Info({ data, updateData, onBack, onNext }: any) {
+function Step5Info({ data, updateData, onBack, onNext }: StepProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = () => {
@@ -482,7 +493,7 @@ function Step5Info({ data, updateData, onBack, onNext }: any) {
 
 // --- Sub-Components ---
 
-function OptionCard({ selected, onClick, icon: Icon, title, desc, horizontal }: any) {
+function OptionCard({ selected, onClick, icon: Icon, title, desc, horizontal }: OptionCardProps) {
   return (
     <button
       onClick={onClick}
@@ -505,7 +516,7 @@ function OptionCard({ selected, onClick, icon: Icon, title, desc, horizontal }: 
         "relative p-2.5 sm:p-3 rounded-xl transition-all duration-300",
         selected ? "bg-[hsl(177,100%,35%)] text-white rotate-3 scale-110" : "bg-white/5 text-white group-hover:bg-white/10"
       )}>
-        <Icon className="w-7 h-7 sm:w-8 sm:h-8" />
+        {Icon && <Icon className="w-7 h-7 sm:w-8 sm:h-8" />}
       </div>
       <div className="relative flex flex-col gap-1">
         <span className={cn("text-lg sm:text-xl font-semibold transition-colors", selected ? "text-white" : "text-white/90") }>
