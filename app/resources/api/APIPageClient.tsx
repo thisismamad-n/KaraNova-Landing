@@ -165,6 +165,7 @@ export default function APIPageClient() {
           <div className="flex flex-wrap gap-2 mb-8">
             <button
               onClick={() => setSelectedCategory("all")}
+              aria-pressed={selectedCategory === "all"}
               className={cn(
                 "px-4 py-2 rounded-lg font-medium transition-all duration-300",
                 selectedCategory === "all"
@@ -178,6 +179,7 @@ export default function APIPageClient() {
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
+                aria-pressed={selectedCategory === category}
                 className={cn(
                   "px-4 py-2 rounded-lg font-medium transition-all duration-300",
                   selectedCategory === category
@@ -240,7 +242,17 @@ export default function APIPageClient() {
                         )}
                       </div>
                       {hasDetails && (
-                        <button className="flex-shrink-0 p-1 text-slate-400 hover:text-teal-400 transition-colors">
+                        <button
+                          className="flex-shrink-0 p-1 text-slate-400 hover:text-teal-400 transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setExpandedEndpoint(isExpanded ? null : endpoint.id);
+                          }}
+                          aria-label={
+                            isExpanded ? "بستن جزئیات" : "نمایش جزئیات"
+                          }
+                          aria-expanded={isExpanded}
+                        >
                           {isExpanded ? (
                             <ChevronUp className="w-5 h-5" />
                           ) : (
