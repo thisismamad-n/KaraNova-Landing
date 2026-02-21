@@ -11,7 +11,7 @@ import { ContinuousPath } from "@/components/ui/ContinuousPath";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
 // Lazy load heavy components
-const FeatureStepsDemo = lazy(() => import("@/components/ui/demo").then(mod => ({ default: mod.FeatureStepsDemo })));
+const FeatureStepsDemo = lazy(() => import("@/components/ui/feature-steps-showcase").then(mod => ({ default: mod.FeatureStepsDemo })));
 
 // Loading fallback
 const LoadingFallback = () => (
