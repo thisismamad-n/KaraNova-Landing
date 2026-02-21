@@ -1,3 +1,4 @@
+
 # Project Structure
 
 ## Directory Organization
@@ -27,7 +28,6 @@
   /support                    # Support center
   /pricing                    # Pricing page
   /legal                      # Legal pages (privacy, terms, compliance)
-  /onboarding                 # User onboarding flow
   
   /_components                # Shared app components
     /shared                   # Reusable shared components
@@ -174,3 +174,4 @@ export default function Component({ language = "fa", className }: ComponentProps
 - Semantic HTML structure
 - ARIA labels where needed
 - Keyboard navigation support
+
