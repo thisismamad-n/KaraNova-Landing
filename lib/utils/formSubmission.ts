@@ -1,6 +1,7 @@
 /**
  * Form submission utility with network error handling and retry logic
  */
+import DOMPurify from 'isomorphic-dompurify';
 
 // Cache for the disposable domain set to avoid re-creation
 let disposableDomainSet: Set<string> | null = null;
@@ -130,6 +131,18 @@ export async function submitFormWithRetry<T = unknown>(
 }
 
 /**
+ * Decode HTML entities to basic characters
+ */
+function decodeHtmlEntities(str: string): string {
+  return str
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'");
+}
+
+/**
  * Validate form data on server-side (simulation)
  * In production, this would be an API endpoint
  */
@@ -143,30 +156,42 @@ export async function validateFormServerSide(
   // Simulate server-side validation
   const errors: Array<{ field: string; message: string }> = [];
 
-  // Robust XSS detection (Server-side validation fallback)
-  // NOTE: In a production environment with internet access, this should be replaced
-  // with a robust library like 'sanitize-html' or 'dompurify' for better security.
-  // This comprehensive regex-based approach is used as a fallback to identify potential XSS attacks.
-  const xssPatterns = [
-    /<\s*(script|iframe|object|embed|form|style|meta|link|base|svg|details|audio|video|marquee|applet|isindex)/i, // Dangerous HTML tags
-    /on(click|dblclick|mousedown|mouseup|mouseover|mousemove|mouseout|mouseenter|mouseleave|keydown|keypress|keyup|load|unload|abort|error|resize|scroll|select|change|submit|reset|focus|blur|input|contextmenu|wheel|copy|cut|paste|drag|drop|toggle|start|finish|animation\w+|transition\w+|pointer\w+|search)\w*\s*=/i, // Event handlers (whitelist to avoid false positives)
-    /j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*(:|&colon;|&#58;|&#x3a;)/i, // JavaScript pseudo-protocol (handles whitespace and entities)
-    /v\s*b\s*s\s*c\s*r\s*i\s*p\s*t\s*(:|&colon;|&#58;|&#x3a;)/i, // VBScript pseudo-protocol
-    /data:/i, // Data URLs (can contain base64 encoded scripts)
-    /expression\s*\(/i, // CSS expressions (older IE)
-    /url\s*\(.*j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:/i, // CSS URLs with javascript
-    /&\s*#\s*(?:[xX][0-9a-fA-F]+|\d+);/i // Encoded HTML entities (potential bypass)
-  ];
-
+  // Robust XSS detection using DOMPurify
+  // Replaces custom regex solution for better security and maintainability
   for (const [key, value] of Object.entries(data)) {
     if (typeof value === "string") {
-      const isSuspicious = xssPatterns.some((pattern) => pattern.test(value));
-      if (isSuspicious) {
+      // 1. Check for dangerous HTML tags (HTML Context)
+      // DOMPurify removes dangerous tags/attributes.
+      // We decode entities because DOMPurify encodes special chars in text (e.g. & -> &amp;),
+      // which we want to allow if they were plain text inputs.
+      const cleanHtml = DOMPurify.sanitize(value, { USE_PROFILES: { html: true } });
+      const decodedHtml = decodeHtmlEntities(cleanHtml);
+
+      // If content changed (other than entity encoding), it likely contained dangerous HTML
+      if (decodedHtml !== value) {
         errors.push({
           field: key,
-          message: "Invalid input detected (Security Check)",
+          message: "Invalid input detected (Security Check - HTML)",
         });
-        break; // Stop at first error
+        break;
+      }
+
+      // 2. Check for dangerous URL schemes (Attribute Context)
+      // Some vectors like 'javascript:alert(1)' are safe in text but dangerous in attributes.
+      // We wrap the input in an <a> tag to see if DOMPurify removes the href attribute.
+      // We use a heuristic: if href is removed, it was considered dangerous.
+      // Note: We intentionally don't escape quotes in value here to allow DOMPurify to parse the attribute context naturally,
+      // but wrapping in quotes ensures valid syntax for safe inputs.
+      const wrapper = `<a href="${value}"></a>`;
+      const cleanUrl = DOMPurify.sanitize(wrapper);
+
+      // If href is missing from the output, DOMPurify removed it (e.g. javascript:)
+      if (!cleanUrl.includes('href=')) {
+        errors.push({
+          field: key,
+          message: "Invalid input detected (Security Check - URL)",
+        });
+        break;
       }
     }
   }

@@ -200,6 +200,21 @@ describe("validateFormServerSide", () => {
       expect(result.success).toBe(false);
     }
   });
+
+  test("should reject obfuscated javascript protocol (bypass attempt)", async () => {
+    // Entities in protocol that might bypass simple regex
+    const inputs = [
+      "javascript&colon;alert(1)",
+      "javascript&#58;alert(1)",
+      "java\tscript:alert(1)",
+      "jav&#x09;ascript:alert(1)"
+    ];
+    for (const input of inputs) {
+      const data = { message: input };
+      const result = await validateFormServerSide("contact", data);
+      expect(result.success).toBe(false);
+    }
+  });
 });
 
 describe("isOnline", () => {
