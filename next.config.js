@@ -25,9 +25,9 @@ const nextConfig = {
         isDevelopment
             ? "connect-src 'self' https://api.karanova.io https://app.karanovaa.com ws: wss:"
             : "connect-src 'self' https://api.karanova.io https://app.karanovaa.com",
-        // Frame sources - prevent embedding
+        // Frame sources - allow Google Maps embedding
         "frame-ancestors 'none'",
-        "frame-src 'none'",
+        "frame-src 'self' https://www.google.com",
         // Base URI restriction
         "base-uri 'self'",
         // Form action restriction
