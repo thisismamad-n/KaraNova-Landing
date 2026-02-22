@@ -56,6 +56,22 @@ export function AnimatedPath({
             <stop offset="55%" stopColor="hsl(185, 85%, 70%)" />
             <stop offset="100%" stopColor="var(--landing-accent)" />
           </linearGradient>
+          {/* Performance: SVG Filter is faster than multiple CSS drop-shadows */}
+          <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="blur1" />
+            <feFlood floodColor="rgba(20, 184, 166, 0.6)" result="color1" />
+            <feComposite in="color1" in2="blur1" operator="in" result="shadow1" />
+
+            <feGaussianBlur in="SourceAlpha" stdDeviation="24" result="blur2" />
+            <feFlood floodColor="rgba(14, 165, 233, 0.4)" result="color2" />
+            <feComposite in="color2" in2="blur2" operator="in" result="shadow2" />
+
+            <feMerge>
+              <feMergeNode in="shadow2" />
+              <feMergeNode in="shadow1" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
         <motion.path
           d={pathData}
@@ -64,9 +80,9 @@ export function AnimatedPath({
           style={{
             pathLength,
             strokeDashoffset: useTransform(pathLength, (value) => 1 - value),
-            filter:
-              "drop-shadow(0 0 18px rgba(20, 184, 166, 0.6)) drop-shadow(0 0 42px rgba(20, 184, 166, 0.45)) drop-shadow(0 0 64px rgba(14, 165, 233, 0.35))",
+            filter: "url(#neonGlow)",
             strokeOpacity: 0.78,
+            willChange: "stroke-dashoffset",
           }}
           strokeLinecap="round"
           fill="none"
