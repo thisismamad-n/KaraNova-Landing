@@ -13,3 +13,7 @@
 ## 2025-02-21 - Micro-interactions Accessibility
 **Learning:** Visual-only indicators for state (like color changes on active filters or icon rotations) are invisible to screen readers. Buttons acting as toggles or filters must use `aria-pressed` or `aria-expanded` to communicate their state programmatically.
 **Action:** When creating filter lists or collapsible sections, always pair visual state changes with the corresponding ARIA attribute (`aria-pressed` for filters, `aria-expanded` for collapsibles).
+
+## 2025-02-23 - Semantic Lists for Visual Grids
+**Learning:** Common UI patterns like "Feature Showcases" or "Card Grids" often use `div` soup for layout flexibility. This misses a huge accessibility win: screen readers can announce "List of X items" if semantic `ul`/`li` structure is used.
+**Action:** Always refactor grid layouts of similar items (features, products, testimonials) to use `ul` and `li` tags, ensuring `role="list"` is preserved if CSS resets interfere. Consider adding `tabIndex={0}` if the cards have hover effects that keyboard users should also experience.
