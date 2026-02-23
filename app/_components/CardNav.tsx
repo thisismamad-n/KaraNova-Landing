@@ -199,17 +199,19 @@ const CardNav: React.FC<CardNavProps> = ({
           </div>
 
           <div className="logo-container">
-            {typeof logo === 'string' ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={logo} alt={logoAlt} className="logo" />
-            ) : (
-              <Image
-                src={logo}
-                alt={logoAlt}
-                className="logo"
-                priority
-              />
-            )}
+            <Link href="/" aria-label="صفحه اصلی کارانوا">
+              {typeof logo === 'string' ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={logo} alt={logoAlt} className="logo" />
+              ) : (
+                <Image
+                  src={logo}
+                  alt={logoAlt}
+                  className="logo"
+                  priority
+                />
+              )}
+            </Link>
           </div>
 
           <a
@@ -217,7 +219,7 @@ const CardNav: React.FC<CardNavProps> = ({
             target="_blank"
             rel="noopener noreferrer"
             className="card-nav-cta-button inline-flex items-center justify-center"
-            aria-label="شروع کنید - ورود به صفحه آنبوردینگ"
+            aria-label="شروع کنید - ورود به صفحه آنبوردینگ (در تب جدید باز می‌شود)"
           >
             شروع کنید
           </a>
