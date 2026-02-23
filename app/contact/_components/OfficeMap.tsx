@@ -91,6 +91,7 @@ export default function OfficeMap({ language }: OfficeMapProps) {
             referrerPolicy="no-referrer-when-downgrade"
             title={currentContent.title}
             className="w-full h-full"
+            sandbox="allow-scripts allow-same-origin allow-popups"
           />
         </div>
 
