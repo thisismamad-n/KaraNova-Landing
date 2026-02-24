@@ -42,7 +42,7 @@ export default function EmptyState({
       )}
     >
       {/* Icon */}
-      <div className="relative mb-6">
+      <div className="relative mb-6" aria-hidden="true">
         <div className={cn("absolute inset-0 rounded-full blur-xl", glowColor)} />
         <Icon className={cn("relative w-16 h-16", iconColor)} />
       </div>
@@ -74,13 +74,15 @@ export default function EmptyState({
                 "transition-all duration-300",
                 "shadow-[0_0_20px_rgba(20,184,166,0.4)]",
                 "hover:shadow-[0_0_30px_rgba(20,184,166,0.6)]",
-                "hover:scale-105"
+                "hover:scale-105",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               )}
             >
               {action.label}
             </Link>
           ) : (
             <button
+              type="button"
               onClick={action.onClick}
               className={cn(
                 "inline-flex items-center justify-center gap-2",
@@ -93,7 +95,8 @@ export default function EmptyState({
                 "transition-all duration-300",
                 "shadow-[0_0_20px_rgba(20,184,166,0.4)]",
                 "hover:shadow-[0_0_30px_rgba(20,184,166,0.6)]",
-                "hover:scale-105"
+                "hover:scale-105",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               )}
             >
               {action.label}
