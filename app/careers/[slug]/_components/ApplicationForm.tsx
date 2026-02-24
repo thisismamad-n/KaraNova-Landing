@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Send, Upload, CheckCircle, AlertCircle } from "lucide-react";
 import type { JobPosting } from "@/app/careers/_data/jobs";
 import type { Language } from "@/lib/translations";
+import { formContent } from "../_data/formContent";
 
 interface ApplicationFormProps {
   job: JobPosting;
@@ -44,52 +45,7 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const content = {
-    en: {
-      title: "Apply for this position",
-      fullName: "Full Name",
-      email: "Email Address",
-      phone: "Phone Number",
-      linkedIn: "LinkedIn Profile (Optional)",
-      portfolio: "Portfolio URL (Optional)",
-      coverLetter: "Cover Letter",
-      resume: "Upload Resume",
-      submit: "Submit Application",
-      submitting: "Submitting...",
-      successTitle: "Application Submitted!",
-      successMessage: "Thank you for applying. We'll review your application and get back to you soon.",
-      errors: {
-        required: "This field is required",
-        invalidEmail: "Please enter a valid email address",
-        invalidPhone: "Please enter a valid phone number",
-        minLength: "Must be at least {min} characters",
-        fileRequired: "Please upload your resume",
-      },
-    },
-    fa: {
-      title: "درخواست برای این موقعیت",
-      fullName: "نام و نام خانوادگی",
-      email: "آدرس ایمیل",
-      phone: "شماره تلفن",
-      linkedIn: "پروفایل لینکدین (اختیاری)",
-      portfolio: "آدرس نمونه کارها (اختیاری)",
-      coverLetter: "نامه انگیزه",
-      resume: "بارگذاری رزومه",
-      submit: "ارسال درخواست",
-      submitting: "در حال ارسال...",
-      successTitle: "درخواست ارسال شد!",
-      successMessage: "از درخواست شما متشکریم. ما درخواست شما را بررسی کرده و به زودی با شما تماس خواهیم گرفت.",
-      errors: {
-        required: "این فیلد الزامی است",
-        invalidEmail: "لطفا یک آدرس ایمیل معتبر وارد کنید",
-        invalidPhone: "لطفا یک شماره تلفن معتبر وارد کنید",
-        minLength: "حداقل {min} کاراکتر باید باشد",
-        fileRequired: "لطفا رزومه خود را بارگذاری کنید",
-      },
-    },
-  };
-
-  const t = content[language];
+  const t = formContent[language];
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -219,7 +175,7 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
               errors.fullName ? "focus:ring-red-500/50" : "focus:ring-teal-500/50",
               "transition-all duration-200"
             )}
-            placeholder={language === "fa" ? "نام کامل خود را وارد کنید" : "Enter your full name"}
+            placeholder={t.placeholders.fullName}
           />
           {errors.fullName && (
             <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
@@ -251,7 +207,7 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
               errors.email ? "focus:ring-red-500/50" : "focus:ring-teal-500/50",
               "transition-all duration-200"
             )}
-            placeholder={language === "fa" ? "ایمیل خود را وارد کنید" : "Enter your email"}
+            placeholder={t.placeholders.email}
           />
           {errors.email && (
             <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
@@ -283,7 +239,7 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
               errors.phone ? "focus:ring-red-500/50" : "focus:ring-teal-500/50",
               "transition-all duration-200"
             )}
-            placeholder={language === "fa" ? "شماره تلفن خود را وارد کنید" : "Enter your phone"}
+            placeholder={t.placeholders.phone}
           />
           {errors.phone && (
             <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
@@ -358,11 +314,7 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
               "transition-all duration-200",
               "resize-none"
             )}
-            placeholder={
-              language === "fa"
-                ? "چرا برای این موقعیت مناسب هستید؟"
-                : "Why are you a good fit for this position?"
-            }
+            placeholder={t.placeholders.coverLetter}
           />
           {errors.coverLetter && (
             <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
@@ -394,11 +346,7 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
             <div className="text-center">
               <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
               <p className="text-sm text-slate-400">
-                {formData.resume
-                  ? formData.resume.name
-                  : language === "fa"
-                  ? "فایل PDF یا Word را بارگذاری کنید"
-                  : "Upload PDF or Word file"}
+                {formData.resume ? formData.resume.name : t.placeholders.resume}
               </p>
             </div>
           </div>
