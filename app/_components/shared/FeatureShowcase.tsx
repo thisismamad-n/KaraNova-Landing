@@ -75,15 +75,16 @@ export default function FeatureShowcase({
         )}
 
         {/* Features */}
-        <div
+        <ul
           className={cn(
             layout === "grid"
               ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
               : "space-y-6"
           )}
+          role="list"
         >
           {features.map((feature, index) => (
-            <motion.div
+            <motion.li
               key={index}
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -99,7 +100,8 @@ export default function FeatureShowcase({
                 "rounded-2xl p-6 lg:p-8",
                 "hover:border-slate-700/70",
                 "transition-all duration-300",
-                "hover:shadow-lg"
+                "hover:shadow-lg",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-teal-500"
               )}
               style={{
                 boxShadow: `0 0 0 0 ${accentColor}00`,
@@ -107,6 +109,7 @@ export default function FeatureShowcase({
               whileHover={{
                 boxShadow: `0 0 30px 0 ${accentColor}20`,
               }}
+              tabIndex={0}
             >
               {/* Icon */}
               <div
@@ -139,9 +142,9 @@ export default function FeatureShowcase({
                   background: `radial-gradient(circle at center, ${feature.color || accentColor}15, transparent 70%)`,
                 }}
               />
-            </motion.div>
+            </motion.li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

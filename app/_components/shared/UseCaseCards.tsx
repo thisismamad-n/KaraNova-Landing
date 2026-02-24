@@ -72,9 +72,9 @@ export default function UseCaseCards({
         )}
 
         {/* Use Cases Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+        <ul className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8" role="list">
           {useCases.map((useCase, index) => (
-            <motion.div
+            <motion.li
               key={index}
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
@@ -89,8 +89,10 @@ export default function UseCaseCards({
                 "border border-slate-800/50",
                 "rounded-2xl p-8",
                 "hover:border-slate-700/70",
-                "transition-all duration-300"
+                "transition-all duration-300",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-teal-500"
               )}
+              tabIndex={0}
             >
               {/* Icon */}
               {useCase.icon && (
@@ -115,9 +117,9 @@ export default function UseCaseCards({
               </p>
 
               {/* Benefits */}
-              <div className="space-y-3">
+              <ul className="space-y-3" role="list">
                 {useCase.benefits.map((benefit, benefitIndex) => (
-                  <motion.div
+                  <motion.li
                     key={benefitIndex}
                     initial={{ opacity: 0, x: -10 }}
                     animate={
@@ -141,6 +143,7 @@ export default function UseCaseCards({
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
+                        aria-hidden="true"
                       >
                         <path
                           strokeLinecap="round"
@@ -153,9 +156,9 @@ export default function UseCaseCards({
                     <span className="text-slate-400 text-sm leading-relaxed">
                       {benefit}
                     </span>
-                  </motion.div>
+                  </motion.li>
                 ))}
-              </div>
+              </ul>
 
               {/* Hover glow effect */}
               <div
@@ -164,9 +167,9 @@ export default function UseCaseCards({
                   background: `radial-gradient(circle at top right, ${accentColor}10, transparent 60%)`,
                 }}
               />
-            </motion.div>
+            </motion.li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
