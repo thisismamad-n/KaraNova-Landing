@@ -200,6 +200,25 @@ describe("validateFormServerSide", () => {
       expect(result.success).toBe(false);
     }
   });
+
+  test("should reject XSS in nested objects", async () => {
+    const data = {
+      user: {
+        name: "John",
+        bio: "<script>alert('xss')</script>"
+      }
+    };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(false);
+  });
+
+  test("should reject XSS in arrays", async () => {
+    const data = {
+      tags: ["safe", "<script>alert('xss')</script>"]
+    };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(false);
+  });
 });
 
 describe("isOnline", () => {

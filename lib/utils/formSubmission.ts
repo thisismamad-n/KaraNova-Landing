@@ -158,17 +158,35 @@ export async function validateFormServerSide(
     /&\s*#\s*(?:[xX][0-9a-fA-F]+|\d+);/i // Encoded HTML entities (potential bypass)
   ];
 
-  for (const [key, value] of Object.entries(data)) {
+  /**
+   * Recursive helper to check for XSS patterns in nested objects and arrays
+   */
+  const checkXSSRecursively = (value: unknown, path: string): { found: boolean; field?: string } => {
     if (typeof value === "string") {
       const isSuspicious = xssPatterns.some((pattern) => pattern.test(value));
       if (isSuspicious) {
-        errors.push({
-          field: key,
-          message: "Invalid input detected (Security Check)",
-        });
-        break; // Stop at first error
+        return { found: true, field: path };
+      }
+    } else if (Array.isArray(value)) {
+      for (let i = 0; i < value.length; i++) {
+        const result = checkXSSRecursively(value[i], `${path}[${i}]`);
+        if (result.found) return result;
+      }
+    } else if (value !== null && typeof value === "object") {
+      for (const [key, val] of Object.entries(value)) {
+        const result = checkXSSRecursively(val, path ? `${path}.${key}` : key);
+        if (result.found) return result;
       }
     }
+    return { found: false };
+  };
+
+  const xssCheck = checkXSSRecursively(data, "");
+  if (xssCheck.found) {
+    errors.push({
+      field: xssCheck.field || "unknown",
+      message: "Invalid input detected (Security Check)",
+    });
   }
 
   // Email domain validation using disposable-email-domains package (O(1) Set lookup)
