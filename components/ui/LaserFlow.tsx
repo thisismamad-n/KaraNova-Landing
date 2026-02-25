@@ -178,17 +178,6 @@ export const LaserFlow: React.FC<Props> = ({
     const ro = new ResizeObserver(scheduleResize);
     ro.observe(mount);
 
-    const io = new IntersectionObserver(entries => {
-      inViewRef.current = entries[0]?.isIntersecting ?? true;
-    },
-      { root: null, threshold: 0 });
-    io.observe(mount);
-
-    const onVis = () => {
-      pausedRef.current = document.hidden;
-    };
-    document.addEventListener('visibilitychange', onVis, { passive: true });
-
     const updateMouse = (clientX: number, clientY: number) => {
       const rect = rectRef.current;
       if (!rect) return;
@@ -206,19 +195,6 @@ export const LaserFlow: React.FC<Props> = ({
     canvas.addEventListener('pointerdown', onMove as any, { passive: true });
     canvas.addEventListener('pointerenter', onMove as any, { passive: true });
     canvas.addEventListener('pointerleave', onLeave as any, { passive: true });
-
-    const onCtxLost = (e: Event) => {
-      e.preventDefault();
-      pausedRef.current = true;
-    };
-
-    const onCtxRestored = () => {
-      pausedRef.current = false;
-      scheduleResize();
-    };
-
-    canvas.addEventListener('webglcontextlost', onCtxLost, false);
-    canvas.addEventListener('webglcontextrestored', onCtxRestored, false);
 
     let raf = 0;
     const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
@@ -254,8 +230,12 @@ export const LaserFlow: React.FC<Props> = ({
     };
 
     const animate = () => {
+      if (pausedRef.current || !inViewRef.current) {
+        raf = 0;
+        return;
+      }
       raf = requestAnimationFrame(animate);
-      if (pausedRef.current || !inViewRef.current) return;
+
       const t = clock.getElapsedTime();
       const dt = Math.max(0, t - prevTime);
       prevTime = t;
@@ -281,10 +261,48 @@ export const LaserFlow: React.FC<Props> = ({
       adjustDprIfNeeded(performance.now());
     };
 
-    animate();
+    const startLoop = () => {
+      if (!raf && !pausedRef.current && inViewRef.current) {
+        prevTime = clock.getElapsedTime();
+        raf = requestAnimationFrame(animate);
+      }
+    };
+
+    const io = new IntersectionObserver(entries => {
+      inViewRef.current = entries[0]?.isIntersecting ?? true;
+      if (inViewRef.current) {
+        startLoop();
+      }
+    }, { root: null, threshold: 0 });
+    io.observe(mount);
+
+    const onVis = () => {
+      pausedRef.current = document.hidden;
+      if (!pausedRef.current) {
+        startLoop();
+      }
+    };
+    document.addEventListener('visibilitychange', onVis, { passive: true });
+
+    const onCtxLost = (e: Event) => {
+      e.preventDefault();
+      pausedRef.current = true;
+    };
+
+    const onCtxRestored = () => {
+      pausedRef.current = false;
+      scheduleResize();
+      startLoop();
+    };
+
+    canvas.addEventListener('webglcontextlost', onCtxLost, false);
+    canvas.addEventListener('webglcontextrestored', onCtxRestored, false);
+
+    startLoop();
 
     return () => {
-      cancelAnimationFrame(raf);
+      if (raf) cancelAnimationFrame(raf);
+      if (resizeRaf) cancelAnimationFrame(resizeRaf);
       ro.disconnect();
       io.disconnect();
       document.removeEventListener('visibilitychange', onVis);
