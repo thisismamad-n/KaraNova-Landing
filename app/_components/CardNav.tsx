@@ -163,10 +163,6 @@ const CardNav: React.FC<CardNavProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      toggleMenu();
-    }
     if (e.key === 'Escape' && isExpanded) {
       toggleMenu();
     }
@@ -184,19 +180,18 @@ const CardNav: React.FC<CardNavProps> = ({
         style={{ backgroundColor: baseColor }}
       >
         <div className="card-nav-top">
-          <div
+          <button
+            type="button"
             className={`hamburger-menu ${isHamburgerOpen ? "open" : ""}`}
             onClick={toggleMenu}
             onKeyDown={handleKeyDown}
-            role="button"
             aria-label={isExpanded ? "بستن منوی ناوبری" : "باز کردن منوی ناوبری"}
             aria-expanded={isExpanded}
-            tabIndex={0}
-            style={{ color: menuColor || "#000" }}
+            style={{ color: menuColor || "#000", background: "transparent", border: "none", padding: 0 }}
           >
             <div className="hamburger-line" />
             <div className="hamburger-line" />
-          </div>
+          </button>
 
           <div className="logo-container">
             <Link href="/" aria-label="صفحه اصلی کارانوا">
@@ -218,10 +213,11 @@ const CardNav: React.FC<CardNavProps> = ({
             href="https://app.karanovaa.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="card-nav-cta-button inline-flex items-center justify-center"
+            className="card-nav-cta-button inline-flex items-center justify-center gap-2"
             aria-label="شروع کنید - ورود به صفحه آنبوردینگ (در تب جدید باز می‌شود)"
           >
             شروع کنید
+            <GoArrowUpRight className="w-4 h-4" aria-hidden="true" />
           </a>
         </div>
 
