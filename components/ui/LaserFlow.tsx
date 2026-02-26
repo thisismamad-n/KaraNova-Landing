@@ -180,12 +180,14 @@ export const LaserFlow: React.FC<Props> = ({
 
     const io = new IntersectionObserver(entries => {
       inViewRef.current = entries[0]?.isIntersecting ?? true;
+      if (inViewRef.current && !pausedRef.current) startLoop();
     },
       { root: null, threshold: 0 });
     io.observe(mount);
 
     const onVis = () => {
       pausedRef.current = document.hidden;
+      if (!pausedRef.current && inViewRef.current) startLoop();
     };
     document.addEventListener('visibilitychange', onVis, { passive: true });
 
@@ -215,6 +217,7 @@ export const LaserFlow: React.FC<Props> = ({
     const onCtxRestored = () => {
       pausedRef.current = false;
       scheduleResize();
+      if (inViewRef.current) startLoop();
     };
 
     canvas.addEventListener('webglcontextlost', onCtxLost, false);
@@ -254,8 +257,11 @@ export const LaserFlow: React.FC<Props> = ({
     };
 
     const animate = () => {
+      if (pausedRef.current || !inViewRef.current) {
+        raf = 0;
+        return;
+      }
       raf = requestAnimationFrame(animate);
-      if (pausedRef.current || !inViewRef.current) return;
       const t = clock.getElapsedTime();
       const dt = Math.max(0, t - prevTime);
       prevTime = t;
@@ -281,7 +287,16 @@ export const LaserFlow: React.FC<Props> = ({
       adjustDprIfNeeded(performance.now());
     };
 
-    animate();
+    const startLoop = () => {
+      if (!raf && !pausedRef.current && inViewRef.current) {
+        prevTime = clock.getElapsedTime();
+        fpsSamplesRef.current = [];
+        lastFpsCheckRef.current = performance.now();
+        raf = requestAnimationFrame(animate);
+      }
+    };
+
+    startLoop();
 
     return () => {
       cancelAnimationFrame(raf);
