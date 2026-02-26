@@ -163,10 +163,6 @@ const CardNav: React.FC<CardNavProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      toggleMenu();
-    }
     if (e.key === 'Escape' && isExpanded) {
       toggleMenu();
     }
@@ -184,19 +180,18 @@ const CardNav: React.FC<CardNavProps> = ({
         style={{ backgroundColor: baseColor }}
       >
         <div className="card-nav-top">
-          <div
+          <button
             className={`hamburger-menu ${isHamburgerOpen ? "open" : ""}`}
             onClick={toggleMenu}
             onKeyDown={handleKeyDown}
-            role="button"
             aria-label={isExpanded ? "بستن منوی ناوبری" : "باز کردن منوی ناوبری"}
             aria-expanded={isExpanded}
-            tabIndex={0}
-            style={{ color: menuColor || "#000" }}
+            style={{ color: menuColor || "#000", background: 'transparent', border: 'none', padding: 0 }}
+            type="button"
           >
             <div className="hamburger-line" />
             <div className="hamburger-line" />
-          </div>
+          </button>
 
           <div className="logo-container">
             <Link href="/" aria-label="صفحه اصلی کارانوا">
@@ -226,7 +221,7 @@ const CardNav: React.FC<CardNavProps> = ({
         </div>
 
         <div className="card-nav-content" aria-hidden={!isExpanded}>
-          {(items || []).slice(0, 3).map((item, idx) => (
+          {(items || []).map((item, idx) => (
             <div
               key={`${item.label}-${idx}`}
               className="nav-card"
