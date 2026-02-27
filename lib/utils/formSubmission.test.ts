@@ -200,6 +200,19 @@ describe("validateFormServerSide", () => {
       expect(result.success).toBe(false);
     }
   });
+
+  test("should reject nested XSS patterns", async () => {
+    const data = {
+      user: {
+        name: "John",
+        profile: {
+          bio: "<script>alert('xss')</script>"
+        }
+      }
+    };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(false);
+  });
 });
 
 describe("isOnline", () => {

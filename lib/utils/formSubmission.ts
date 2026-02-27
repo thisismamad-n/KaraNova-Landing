@@ -158,16 +158,27 @@ export async function validateFormServerSide(
     /&\s*#\s*(?:[xX][0-9a-fA-F]+|\d+);/i // Encoded HTML entities (potential bypass)
   ];
 
-  for (const [key, value] of Object.entries(data)) {
+  // Helper function to recursively check for XSS
+  const containsXSS = (value: unknown): boolean => {
     if (typeof value === "string") {
-      const isSuspicious = xssPatterns.some((pattern) => pattern.test(value));
-      if (isSuspicious) {
-        errors.push({
-          field: key,
-          message: "Invalid input detected (Security Check)",
-        });
-        break; // Stop at first error
-      }
+      return xssPatterns.some((pattern) => pattern.test(value));
+    }
+    if (Array.isArray(value)) {
+      return value.some((item) => containsXSS(item));
+    }
+    if (typeof value === "object" && value !== null) {
+      return Object.values(value).some((item) => containsXSS(item));
+    }
+    return false;
+  };
+
+  for (const [key, value] of Object.entries(data)) {
+    if (containsXSS(value)) {
+      errors.push({
+        field: key,
+        message: "Invalid input detected (Security Check)",
+      });
+      break;
     }
   }
 
