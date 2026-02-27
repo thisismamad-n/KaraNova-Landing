@@ -148,8 +148,8 @@ export async function validateFormServerSide(
   // with a robust library like 'sanitize-html' or 'dompurify' for better security.
   // This comprehensive regex-based approach is used as a fallback to identify potential XSS attacks.
   const xssPatterns = [
-    /<\s*(script|iframe|object|embed|form|style|meta|link|base|svg|details|audio|video|marquee|applet|isindex)/i, // Dangerous HTML tags
-    /on(click|dblclick|mousedown|mouseup|mouseover|mousemove|mouseout|mouseenter|mouseleave|keydown|keypress|keyup|load|unload|abort|error|resize|scroll|select|change|submit|reset|focus|blur|input|contextmenu|wheel|copy|cut|paste|drag|drop|toggle|start|finish|animation\w+|transition\w+|pointer\w+|search)\w*\s*=/i, // Event handlers (whitelist to avoid false positives)
+    /<\s*(script|iframe|object|embed|form|style|meta|link|base|svg|details|audio|video|marquee|applet|isindex|math|template|set|animate|body|head|html|title)/i, // Dangerous HTML tags
+    /on(click|dblclick|mousedown|mouseup|mouseover|mousemove|mouseout|mouseenter|mouseleave|keydown|keypress|keyup|load|unload|abort|error|resize|scroll|select|change|submit|reset|focus|blur|input|contextmenu|wheel|copy|cut|paste|drag|drop|toggle|start|finish|animation\w+|transition\w+|pointer\w+|search|page\w+|touch\w+|message|storage|hashchange|popstate)\w*\s*=/i, // Event handlers (whitelist to avoid false positives)
     /j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*(:|&colon;|&#58;|&#x3a;)/i, // JavaScript pseudo-protocol (handles whitespace and entities)
     /v\s*b\s*s\s*c\s*r\s*i\s*p\s*t\s*(:|&colon;|&#58;|&#x3a;)/i, // VBScript pseudo-protocol
     /data:/i, // Data URLs (can contain base64 encoded scripts)
