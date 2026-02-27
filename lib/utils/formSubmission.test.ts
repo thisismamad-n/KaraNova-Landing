@@ -141,7 +141,7 @@ describe("validateFormServerSide", () => {
     const result = await validateFormServerSide("contact", data);
     expect(result.success).toBe(false);
     expect(result.error?.field).toBe("message");
-    expect(result.error?.message).toBe("Server validation failed");
+    expect(result.error?.message).toBe("Invalid input detected (Security Check)");
   });
 
   test("should reject disposable email domains", async () => {
@@ -149,7 +149,7 @@ describe("validateFormServerSide", () => {
     const result = await validateFormServerSide("contact", data);
     expect(result.success).toBe(false);
     expect(result.error?.field).toBe("email");
-    expect(result.error?.message).toBe("Server validation failed");
+    expect(result.error?.message).toBe("Please use a permanent email address");
   });
 
   test("should reject javascript protocol with whitespace", async () => {
@@ -210,6 +210,7 @@ describe("validateFormServerSide", () => {
     };
     const result = await validateFormServerSide("contact", data);
     expect(result.success).toBe(false);
+    expect(result.error?.field).toBe("user.bio");
   });
 
   test("should reject XSS in arrays", async () => {
@@ -218,6 +219,21 @@ describe("validateFormServerSide", () => {
     };
     const result = await validateFormServerSide("contact", data);
     expect(result.success).toBe(false);
+    expect(result.error?.field).toBe("tags[1]");
+  });
+
+  test("should reject excessively deep structures", async () => {
+    // create object nested 101 levels deep
+    let data: any = "safe";
+    for (let i = 0; i < 105; i++) {
+        data = { nested: data };
+    }
+
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(false);
+    expect(result.error?.message).toBe("Invalid input detected (Security Check)");
+    // Depending on how depth is counted, it will fail at depth 101 or similar
+    expect(result.error?.field).toContain("nested");
   });
 });
 

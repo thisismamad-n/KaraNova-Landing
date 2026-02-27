@@ -5,6 +5,50 @@
 // Cache for the disposable domain set to avoid re-creation
 let disposableDomainSet: Set<string> | null = null;
 
+// Robust XSS detection (Server-side validation fallback)
+// NOTE: In a production environment with internet access, this should be replaced
+// with a robust library like 'sanitize-html' or 'dompurify' for better security.
+// This comprehensive regex-based approach is used as a fallback to identify potential XSS attacks.
+const XSS_PATTERNS = [
+  /<\s*(script|iframe|object|embed|form|style|meta|link|base|svg|details|audio|video|marquee|applet|isindex)/i, // Dangerous HTML tags
+  /on(click|dblclick|mousedown|mouseup|mouseover|mousemove|mouseout|mouseenter|mouseleave|keydown|keypress|keyup|load|unload|abort|error|resize|scroll|select|change|submit|reset|focus|blur|input|contextmenu|wheel|copy|cut|paste|drag|drop|toggle|start|finish|animation\w+|transition\w+|pointer\w+|search)\w*\s*=/i, // Event handlers (whitelist to avoid false positives)
+  /j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*(:|&colon;|&#58;|&#x3a;)/i, // JavaScript pseudo-protocol (handles whitespace and entities)
+  /v\s*b\s*s\s*c\s*r\s*i\s*p\s*t\s*(:|&colon;|&#58;|&#x3a;)/i, // VBScript pseudo-protocol
+  /data:/i, // Data URLs (can contain base64 encoded scripts)
+  /expression\s*\(/i, // CSS expressions (older IE)
+  /url\s*\(.*j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:/i, // CSS URLs with javascript
+  /&\s*#\s*(?:[xX][0-9a-fA-F]+|\d+);/i // Encoded HTML entities (potential bypass)
+];
+
+const MAX_RECURSION_DEPTH = 100;
+
+/**
+ * Recursive helper to check for XSS patterns in nested objects and arrays
+ */
+const checkXSSRecursively = (value: unknown, path: string, depth = 0): { found: boolean; field?: string } => {
+  if (depth > MAX_RECURSION_DEPTH) {
+    return { found: true, field: path };
+  }
+
+  if (typeof value === "string") {
+    const isSuspicious = XSS_PATTERNS.some((pattern) => pattern.test(value));
+    if (isSuspicious) {
+      return { found: true, field: path };
+    }
+  } else if (Array.isArray(value)) {
+    for (let i = 0; i < value.length; i++) {
+      const result = checkXSSRecursively(value[i], `${path}[${i}]`, depth + 1);
+      if (result.found) return result;
+    }
+  } else if (value !== null && typeof value === "object") {
+    for (const [key, val] of Object.entries(value)) {
+      const result = checkXSSRecursively(val, path ? `${path}.${key}` : key, depth + 1);
+      if (result.found) return result;
+    }
+  }
+  return { found: false };
+};
+
 export interface SubmissionResult<T = unknown> {
   success: boolean;
   data?: T;
@@ -142,44 +186,6 @@ export async function validateFormServerSide(
 
   // Simulate server-side validation
   const errors: Array<{ field: string; message: string }> = [];
-
-  // Robust XSS detection (Server-side validation fallback)
-  // NOTE: In a production environment with internet access, this should be replaced
-  // with a robust library like 'sanitize-html' or 'dompurify' for better security.
-  // This comprehensive regex-based approach is used as a fallback to identify potential XSS attacks.
-  const xssPatterns = [
-    /<\s*(script|iframe|object|embed|form|style|meta|link|base|svg|details|audio|video|marquee|applet|isindex)/i, // Dangerous HTML tags
-    /on(click|dblclick|mousedown|mouseup|mouseover|mousemove|mouseout|mouseenter|mouseleave|keydown|keypress|keyup|load|unload|abort|error|resize|scroll|select|change|submit|reset|focus|blur|input|contextmenu|wheel|copy|cut|paste|drag|drop|toggle|start|finish|animation\w+|transition\w+|pointer\w+|search)\w*\s*=/i, // Event handlers (whitelist to avoid false positives)
-    /j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*(:|&colon;|&#58;|&#x3a;)/i, // JavaScript pseudo-protocol (handles whitespace and entities)
-    /v\s*b\s*s\s*c\s*r\s*i\s*p\s*t\s*(:|&colon;|&#58;|&#x3a;)/i, // VBScript pseudo-protocol
-    /data:/i, // Data URLs (can contain base64 encoded scripts)
-    /expression\s*\(/i, // CSS expressions (older IE)
-    /url\s*\(.*j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:/i, // CSS URLs with javascript
-    /&\s*#\s*(?:[xX][0-9a-fA-F]+|\d+);/i // Encoded HTML entities (potential bypass)
-  ];
-
-  /**
-   * Recursive helper to check for XSS patterns in nested objects and arrays
-   */
-  const checkXSSRecursively = (value: unknown, path: string): { found: boolean; field?: string } => {
-    if (typeof value === "string") {
-      const isSuspicious = xssPatterns.some((pattern) => pattern.test(value));
-      if (isSuspicious) {
-        return { found: true, field: path };
-      }
-    } else if (Array.isArray(value)) {
-      for (let i = 0; i < value.length; i++) {
-        const result = checkXSSRecursively(value[i], `${path}[${i}]`);
-        if (result.found) return result;
-      }
-    } else if (value !== null && typeof value === "object") {
-      for (const [key, val] of Object.entries(value)) {
-        const result = checkXSSRecursively(val, path ? `${path}.${key}` : key);
-        if (result.found) return result;
-      }
-    }
-    return { found: false };
-  };
 
   const xssCheck = checkXSSRecursively(data, "");
   if (xssCheck.found) {
