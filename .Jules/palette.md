@@ -17,3 +17,7 @@
 ## 2025-02-23 - Semantic Lists for Visual Grids
 **Learning:** Common UI patterns like "Feature Showcases" or "Card Grids" often use `div` soup for layout flexibility. This misses a huge accessibility win: screen readers can announce "List of X items" if semantic `ul`/`li` structure is used.
 **Action:** Always refactor grid layouts of similar items (features, products, testimonials) to use `ul` and `li` tags, ensuring `role="list"` is preserved if CSS resets interfere. Consider adding `tabIndex={0}` if the cards have hover effects that keyboard users should also experience.
+
+## 2025-02-25 - Native Buttons over Divs
+**Learning:** Using `div`s with `role="button"` and `tabIndex={0}` requires manual keyboard handling for `Enter` and `Space`, which is often missed or implemented incompletely. Native `<button>` elements handle this automatically and provide better semantic meaning for assistive technologies.
+**Action:** Refactor interactive `div` elements to native `<button>` tags, using `type="button"` and CSS resets (`background: transparent`, `border: none`, `padding: 0`) to maintain design while gaining free accessibility features.
