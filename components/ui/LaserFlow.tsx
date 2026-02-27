@@ -71,6 +71,7 @@ export const LaserFlow: React.FC<Props> = ({
   const inViewRef = useRef<boolean>(true);
 
   useEffect(() => {
+    pausedRef.current = document.hidden;
     const mount = mountRef.current!;
     const renderer = new THREE.WebGLRenderer({
       antialias: false,
@@ -204,6 +205,7 @@ export const LaserFlow: React.FC<Props> = ({
     const onCtxRestored = () => {
       pausedRef.current = false;
       scheduleResize();
+      startLoop();
     };
 
     canvas.addEventListener('webglcontextlost', onCtxLost, false);
