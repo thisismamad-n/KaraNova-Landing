@@ -33,13 +33,15 @@ export default function LegalSection({
     >
       {/* Section Header - Collapsible */}
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "w-full flex items-center justify-between",
           "px-6 py-4",
           "bg-slate-900/50 hover:bg-slate-900/70",
           "transition-colors duration-200",
-          "text-right"
+          "text-right",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
         )}
         aria-expanded={isOpen}
         aria-controls={`${id}-content`}

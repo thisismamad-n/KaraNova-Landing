@@ -44,10 +44,12 @@ export default function VersionHistory({
         </h3>
         {previousVersions.length > 0 && (
           <button
+            type="button"
             onClick={() => setIsExpanded(!isExpanded)}
             className={cn(
               "text-sm text-teal-400 hover:text-teal-300",
-              "flex items-center gap-1 transition-colors"
+              "flex items-center gap-1 transition-colors",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 rounded"
             )}
           >
             {isExpanded ? "بستن" : `نمایش ${previousVersions.length} نسخه قبلی`}
@@ -130,6 +132,7 @@ export default function VersionHistory({
                 )}
               >
                 <button
+                  type="button"
                   onClick={() =>
                     setSelectedVersion(
                       selectedVersion === version.version
@@ -137,7 +140,10 @@ export default function VersionHistory({
                         : version.version
                     )
                   }
-                  className="w-full flex items-center justify-between text-right"
+                  className={cn(
+                    "w-full flex items-center justify-between text-right",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 rounded"
+                  )}
                 >
                   <ChevronDown
                     className={cn(

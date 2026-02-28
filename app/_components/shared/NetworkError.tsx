@@ -35,12 +35,14 @@ export default function NetworkError({
         <p className="text-xs text-orange-400/80 mb-2">{message}</p>
         {onRetry && (
           <button
+            type="button"
             onClick={onRetry}
             className={cn(
-              "inline-flex items-center gap-1.5",
+              "inline-flex items-center gap-1.5 rounded",
               "text-xs font-medium text-orange-400",
               "hover:text-orange-300",
-              "transition-colors"
+              "transition-colors",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
             )}
           >
             <RefreshCw className="w-3.5 h-3.5" />

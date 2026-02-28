@@ -106,11 +106,12 @@ export default function LegalContent({
                   {tocItems.map((item) => (
                     <button
                       key={item.id}
+                      type="button"
                       onClick={() => scrollToSection(item.id)}
                       className={cn(
                         "w-full text-right flex items-center gap-2",
                         "py-2 px-3 rounded-lg transition-all duration-200",
-                        "text-sm",
+                        "text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950",
                         item.level === 3 && "pr-6",
                         activeSection === item.id
                           ? "bg-teal-500/20 text-teal-300 font-medium"
