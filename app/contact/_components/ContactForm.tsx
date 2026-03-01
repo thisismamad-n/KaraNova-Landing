@@ -59,6 +59,27 @@ export default function ContactForm({ language }: ContactFormProps) {
   >("idle");
   const successRef = useRef<HTMLDivElement>(null);
 
+  // Refs for focusing on first error
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const phoneRef = useRef<HTMLInputElement>(null);
+  const companyRef = useRef<HTMLInputElement>(null);
+  const subjectRef = useRef<HTMLInputElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
+  const preferredContactRef = useRef<HTMLSelectElement>(null);
+  const consentRef = useRef<HTMLInputElement>(null);
+
+  const fieldRefs: Record<keyof FormErrors, React.RefObject<HTMLElement | null>> = {
+    name: nameRef,
+    email: emailRef,
+    phone: phoneRef,
+    company: companyRef,
+    subject: subjectRef,
+    message: messageRef,
+    preferredContact: preferredContactRef,
+    consent: consentRef,
+  };
+
   useEffect(() => {
     if (submitStatus === "success" && successRef.current) {
       successRef.current.focus();
@@ -189,6 +210,29 @@ export default function ContactForm({ language }: ContactFormProps) {
     e.preventDefault();
 
     if (!validateForm()) {
+      // Focus on the first field with an error
+      // validateForm updates the errors state synchronously, but to be safe and ensure
+      // the DOM is updated (e.g. error messages rendered), we use a small timeout,
+      // and we access the latest state using a functional update, BUT we execute the
+      // side effect outside of the updater function to avoid React anti-patterns.
+      setTimeout(() => {
+        setErrors((currentErrors) => {
+          // We only use the updater to GET the current errors reliably,
+          // we don't modify them. The side effect is safe here because
+          // we are just reading and calling .focus() on a ref.
+          // A better approach would be validateForm returning the errors,
+          // but this works with the current architecture.
+          const firstErrorField = Object.keys(currentErrors)[0] as keyof FormErrors;
+          if (firstErrorField && fieldRefs[firstErrorField]?.current) {
+             // Use setTimeout to push the focus action to the end of the event loop,
+             // ensuring it happens AFTER the render cycle triggered by any state updates.
+             setTimeout(() => {
+               fieldRefs[firstErrorField]!.current!.focus();
+             }, 0);
+          }
+          return currentErrors;
+        });
+      }, 10);
       return;
     }
 
@@ -302,6 +346,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     {currentContent.fields.name}
                   </label>
                   <input
+                    ref={nameRef}
                     type="text"
                     id="name"
                     name="name"
@@ -345,6 +390,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     {currentContent.fields.email}
                   </label>
                   <input
+                    ref={emailRef}
                     type="email"
                     id="email"
                     name="email"
@@ -391,6 +437,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     {currentContent.fields.phone}
                   </label>
                   <input
+                    ref={phoneRef}
                     type="tel"
                     id="phone"
                     name="phone"
@@ -434,6 +481,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     {currentContent.fields.company}
                   </label>
                   <input
+                    ref={companyRef}
                     type="text"
                     id="company"
                     name="company"
@@ -461,6 +509,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   {currentContent.fields.subject}
                 </label>
                 <input
+                  ref={subjectRef}
                   type="text"
                   id="subject"
                   name="subject"
@@ -504,6 +553,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   {currentContent.fields.message}
                 </label>
                 <textarea
+                  ref={messageRef}
                   id="message"
                   name="message"
                   value={formData.message}
@@ -548,6 +598,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   {currentContent.fields.preferredContact}
                 </label>
                 <select
+                  ref={preferredContactRef}
                   id="preferredContact"
                   name="preferredContact"
                   value={formData.preferredContact}
@@ -575,6 +626,7 @@ export default function ContactForm({ language }: ContactFormProps) {
               <div>
                 <label className="flex items-start gap-3 cursor-pointer group">
                   <input
+                    ref={consentRef}
                     type="checkbox"
                     id="consent"
                     name="consent"
