@@ -232,39 +232,31 @@ const StaticLinePath = ({ className }: { className: string }) => {
       preserveAspectRatio="xMidYMid meet"
     >
       <defs>
-        <linearGradient id="tealStroke" x1="0" y1="0" x2="1" y2="1">
+        <linearGradient id="tealStrokeStatic" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="var(--landing-primary)" />
           <stop offset="55%" stopColor="hsl(185, 85%, 70%)" />
           <stop offset="100%" stopColor="var(--landing-accent)" />
         </linearGradient>
+        {/* Optimized SVG glow filter - replaces expensive CSS drop-shadow */}
+        <filter id="staticHeroPathGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="6" result="glow" />
+          <feMerge>
+            <feMergeNode in="glow" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
       <path
         d={PATH_DATA}
-        stroke="url(#tealStroke)"
+        stroke="url(#tealStrokeStatic)"
         strokeWidth="14"
         vectorEffect="non-scaling-stroke"
+        filter="url(#staticHeroPathGlow)"
         pathLength="1"
         strokeDasharray="1"
         strokeDashoffset={dashOffset}
         strokeOpacity="0.85"
         strokeLinecap="round"
-        style={{
-          filter: 'drop-shadow(0 0 8px rgba(20, 184, 166, 0.8)) drop-shadow(0 0 16px rgba(20, 184, 166, 0.6))',
-        }}
-      />
-      <path
-        d={PATH_DATA}
-        stroke="rgba(94, 234, 212, 0.2)"
-        strokeWidth="24"
-        vectorEffect="non-scaling-stroke"
-        pathLength="1"
-        strokeDasharray="1"
-        strokeDashoffset={dashOffset}
-        strokeLinecap="round"
-        style={{
-          filter: 'blur(10px)',
-          mixBlendMode: 'screen',
-        }}
       />
     </svg>
   );
