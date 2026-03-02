@@ -36,7 +36,7 @@ const nextConfig = {
         "object-src 'none'",
         // Media sources
         "media-src 'self' data: blob:",
-        // Worker sources for web workers
+        // Worker sources for web workerst
         "worker-src 'self' blob:",
         // Manifest source
         "manifest-src 'self'",

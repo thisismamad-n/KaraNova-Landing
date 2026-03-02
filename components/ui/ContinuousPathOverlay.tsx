@@ -105,6 +105,30 @@ export function ContinuousPathOverlay({
             <stop offset="50%" stopColor="hsl(185, 85%, 70%)" />
             <stop offset="100%" stopColor="var(--landing-accent)" />
           </linearGradient>
+
+          <filter id="continuousPathOverlayGlow" x="-50%" y="-50%" width="200%" height="200%">
+            {/* Layer 1: 18px blur equivalent */}
+            <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="blur1" />
+            <feFlood floodColor="rgba(20, 184, 166, 0.55)" result="color1" />
+            <feComposite in="color1" in2="blur1" operator="in" result="shadow1" />
+
+            {/* Layer 2: 42px blur equivalent */}
+            <feGaussianBlur in="SourceAlpha" stdDeviation="21" result="blur2" />
+            <feFlood floodColor="rgba(20, 184, 166, 0.45)" result="color2" />
+            <feComposite in="color2" in2="blur2" operator="in" result="shadow2" />
+
+            {/* Layer 3: 64px blur equivalent */}
+            <feGaussianBlur in="SourceAlpha" stdDeviation="32" result="blur3" />
+            <feFlood floodColor="rgba(14, 165, 233, 0.35)" result="color3" />
+            <feComposite in="color3" in2="blur3" operator="in" result="shadow3" />
+
+            <feMerge>
+              <feMergeNode in="shadow3" />
+              <feMergeNode in="shadow2" />
+              <feMergeNode in="shadow1" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
         <motion.path
           d={scaledPathData}
@@ -117,9 +141,9 @@ export function ContinuousPathOverlay({
           style={{
             pathLength,
             strokeDashoffset,
-            filter:
-              "drop-shadow(0 0 18px rgba(20, 184, 166, 0.55)) drop-shadow(0 0 42px rgba(20, 184, 166, 0.45)) drop-shadow(0 0 64px rgba(14, 165, 233, 0.35))",
+            filter: "url(#continuousPathOverlayGlow)",
             strokeOpacity: 0.82,
+            willChange: "stroke-dashoffset",
           }}
         />
       </svg>
