@@ -71,6 +71,7 @@ export default function SupportForm({ language }: SupportFormProps) {
         subjectRequired: "موضوع الزامی است",
         messageRequired: "پیام الزامی است",
         messageMinLength: "پیام باید حداقل ۱۰ کاراکتر باشد",
+        maxLength: "حداکثر {max} کاراکتر مجاز است",
       },
     },
     en: {
@@ -107,6 +108,7 @@ export default function SupportForm({ language }: SupportFormProps) {
         subjectRequired: "Subject is required",
         messageRequired: "Message is required",
         messageMinLength: "Message must be at least 10 characters",
+        maxLength: "Maximum {max} characters allowed",
       },
     },
   };
@@ -118,22 +120,30 @@ export default function SupportForm({ language }: SupportFormProps) {
 
     if (!formData.name.trim()) {
       newErrors.name = currentContent.validation.nameRequired;
+    } else if (formData.name.length > 100) {
+      newErrors.name = currentContent.validation.maxLength.replace("{max}", "100");
     }
 
     if (!formData.email.trim()) {
       newErrors.email = currentContent.validation.emailRequired;
+    } else if (formData.email.length > 255) {
+      newErrors.email = currentContent.validation.maxLength.replace("{max}", "255");
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = currentContent.validation.emailInvalid;
     }
 
     if (!formData.subject.trim()) {
       newErrors.subject = currentContent.validation.subjectRequired;
+    } else if (formData.subject.length > 200) {
+      newErrors.subject = currentContent.validation.maxLength.replace("{max}", "200");
     }
 
     if (!formData.message.trim()) {
       newErrors.message = currentContent.validation.messageRequired;
     } else if (formData.message.trim().length < 10) {
       newErrors.message = currentContent.validation.messageMinLength;
+    } else if (formData.message.length > 2000) {
+      newErrors.message = currentContent.validation.maxLength.replace("{max}", "2000");
     }
 
     setErrors(newErrors);

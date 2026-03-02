@@ -55,11 +55,15 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
       newErrors.fullName = t.errors.required;
     } else if (formData.fullName.trim().length < 2) {
       newErrors.fullName = t.errors.minLength.replace("{min}", "2");
+    } else if (formData.fullName.length > 100) {
+      newErrors.fullName = t.errors.maxLength.replace("{max}", "100");
     }
 
     // Email validation
     if (!formData.email.trim()) {
       newErrors.email = t.errors.required;
+    } else if (formData.email.length > 255) {
+      newErrors.email = t.errors.maxLength.replace("{max}", "255");
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = t.errors.invalidEmail;
     }
@@ -67,6 +71,8 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
     // Phone validation
     if (!formData.phone.trim()) {
       newErrors.phone = t.errors.required;
+    } else if (formData.phone.length > 20) {
+      newErrors.phone = t.errors.maxLength.replace("{max}", "20");
     } else if (!/^[0-9+\-\s()]+$/.test(formData.phone)) {
       newErrors.phone = t.errors.invalidPhone;
     }
@@ -76,6 +82,17 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
       newErrors.coverLetter = t.errors.required;
     } else if (formData.coverLetter.trim().length < 50) {
       newErrors.coverLetter = t.errors.minLength.replace("{min}", "50");
+    } else if (formData.coverLetter.length > 3000) {
+      newErrors.coverLetter = t.errors.maxLength.replace("{max}", "3000");
+    }
+
+    // LinkedIn and Portfolio lengths
+    if (formData.linkedIn.length > 200) {
+      newErrors.linkedIn = t.errors.maxLength.replace("{max}", "200");
+    }
+
+    if (formData.portfolio.length > 200) {
+      newErrors.portfolio = t.errors.maxLength.replace("{max}", "200");
     }
 
     // Resume validation
@@ -257,17 +274,28 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
           <input
             type="url"
             value={formData.linkedIn}
-            onChange={(e) => setFormData({ ...formData, linkedIn: e.target.value })}
+            onChange={(e) => {
+              setFormData({ ...formData, linkedIn: e.target.value });
+              setErrors({ ...errors, linkedIn: undefined });
+            }}
             className={cn(
               "w-full px-4 py-2.5 rounded-lg",
               "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
-              "bg-slate-900/60 border border-slate-700/50",
+              "bg-slate-900/60 border",
+              errors.linkedIn ? "border-red-500/50" : "border-slate-700/50",
               "text-slate-200 placeholder-slate-500",
-              "focus:outline-none focus:ring-2 focus:ring-teal-500/50",
+              "focus:outline-none focus:ring-2",
+              errors.linkedIn ? "focus:ring-red-500/50" : "focus:ring-teal-500/50",
               "transition-all duration-200"
             )}
             placeholder="https://linkedin.com/in/..."
           />
+          {errors.linkedIn && (
+            <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+              <AlertCircle className="w-4 h-4" />
+              {errors.linkedIn}
+            </p>
+          )}
         </div>
 
         {/* Portfolio (Optional) */}
@@ -278,17 +306,28 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
           <input
             type="url"
             value={formData.portfolio}
-            onChange={(e) => setFormData({ ...formData, portfolio: e.target.value })}
+            onChange={(e) => {
+              setFormData({ ...formData, portfolio: e.target.value });
+              setErrors({ ...errors, portfolio: undefined });
+            }}
             className={cn(
               "w-full px-4 py-2.5 rounded-lg",
               "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
-              "bg-slate-900/60 border border-slate-700/50",
+              "bg-slate-900/60 border",
+              errors.portfolio ? "border-red-500/50" : "border-slate-700/50",
               "text-slate-200 placeholder-slate-500",
-              "focus:outline-none focus:ring-2 focus:ring-teal-500/50",
+              "focus:outline-none focus:ring-2",
+              errors.portfolio ? "focus:ring-red-500/50" : "focus:ring-teal-500/50",
               "transition-all duration-200"
             )}
             placeholder="https://..."
           />
+          {errors.portfolio && (
+            <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+              <AlertCircle className="w-4 h-4" />
+              {errors.portfolio}
+            </p>
+          )}
         </div>
 
         {/* Cover Letter */}
