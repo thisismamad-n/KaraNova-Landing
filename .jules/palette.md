@@ -1,0 +1,3 @@
+## 2025-03-03 - Accessible Custom Accordions
+**Learning:** Custom toggle buttons for accordions often lack the necessary ARIA attributes to properly convey their state to screen readers. Elements like `<motion.div>` for content require corresponding attributes to link them to the controlling button.
+**Action:** When creating custom accordions, always apply `aria-expanded` and `aria-controls` to the `<button>` element. Ensure the button has an `id` and `type="button"`. On the content container, apply `role="region"`, `id` (matching `aria-controls`), and `aria-labelledby` (matching the button's `id`). Ensure focus rings (`focus-visible:ring-2`, etc) are consistent.
