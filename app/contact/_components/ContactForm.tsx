@@ -12,16 +12,17 @@ interface ContactFormProps {
 
 // Zod validation schema
 const contactFormSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
+  name: z.string().min(2, "Name must be at least 2 characters").max(100, "Name must be less than 100 characters"),
+  email: z.string().email("Please enter a valid email address").max(100, "Email must be less than 100 characters"),
   phone: z
     .string()
     .regex(/^[0-9+\-\s()]+$/, "Invalid phone number")
+    .max(20, "Phone number must be less than 20 characters")
     .optional()
     .or(z.literal("")),
-  company: z.string().optional(),
-  subject: z.string().min(3, "Subject must be at least 3 characters"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  company: z.string().max(100, "Company name must be less than 100 characters").optional(),
+  subject: z.string().min(3, "Subject must be at least 3 characters").max(150, "Subject must be less than 150 characters"),
+  message: z.string().min(10, "Message must be at least 10 characters").max(1000, "Message must be less than 1000 characters"),
   preferredContact: z.enum(["email", "phone"]),
   consent: z.boolean().refine((val) => val === true, {
     message: "You must accept the privacy policy",
@@ -99,11 +100,17 @@ export default function ContactForm({ language }: ContactFormProps) {
       errorMessage: "لطفاً دوباره تلاش کنید یا با ما تماس بگیرید.",
       validation: {
         nameMin: "نام باید حداقل ۲ کاراکتر باشد",
+        nameMax: "نام نباید بیشتر از ۱۰۰ کاراکتر باشد",
         emailRequired: "ایمیل الزامی است",
         emailInvalid: "ایمیل معتبر نیست",
+        emailMax: "ایمیل نباید بیشتر از ۱۰۰ کاراکتر باشد",
         phoneInvalid: "شماره تلفن معتبر نیست",
+        phoneMax: "شماره تلفن نباید بیشتر از ۲۰ کاراکتر باشد",
+        companyMax: "نام شرکت نباید بیشتر از ۱۰۰ کاراکتر باشد",
         subjectMin: "موضوع باید حداقل ۳ کاراکتر باشد",
+        subjectMax: "موضوع نباید بیشتر از ۱۵۰ کاراکتر باشد",
         messageMin: "پیام باید حداقل ۱۰ کاراکتر باشد",
+        messageMax: "پیام نباید بیشتر از ۱۰۰۰ کاراکتر باشد",
         consentRequired: "باید سیاست حفظ حریم خصوصی را بپذیرید",
       },
     },
@@ -140,11 +147,17 @@ export default function ContactForm({ language }: ContactFormProps) {
       errorMessage: "Please try again or contact us directly.",
       validation: {
         nameMin: "Name must be at least 2 characters",
+        nameMax: "Name must be less than 100 characters",
         emailRequired: "Email is required",
         emailInvalid: "Invalid email address",
+        emailMax: "Email must be less than 100 characters",
         phoneInvalid: "Invalid phone number",
+        phoneMax: "Phone number must be less than 20 characters",
+        companyMax: "Company name must be less than 100 characters",
         subjectMin: "Subject must be at least 3 characters",
+        subjectMax: "Subject must be less than 150 characters",
         messageMin: "Message must be at least 10 characters",
+        messageMax: "Message must be less than 1000 characters",
         consentRequired: "You must accept the privacy policy",
       },
     },
@@ -163,16 +176,29 @@ export default function ContactForm({ language }: ContactFormProps) {
         error.issues.forEach((err) => {
           const field = err.path[0] as keyof FormErrors;
           // Map Zod error messages to localized messages
-          if (field === "name" && err.message.includes("at least 2")) {
-            newErrors[field] = currentContent.validation.nameMin;
-          } else if (field === "email" && err.message.includes("email")) {
-            newErrors[field] = currentContent.validation.emailInvalid;
-          } else if (field === "phone" && err.message.includes("Invalid")) {
-            newErrors[field] = currentContent.validation.phoneInvalid;
-          } else if (field === "subject" && err.message.includes("at least 3")) {
-            newErrors[field] = currentContent.validation.subjectMin;
-          } else if (field === "message" && err.message.includes("at least 10")) {
-            newErrors[field] = currentContent.validation.messageMin;
+          if (field === "name") {
+            if (err.message.includes("at least 2")) newErrors[field] = currentContent.validation.nameMin;
+            else if (err.message.includes("less than 100")) newErrors[field] = currentContent.validation.nameMax;
+            else newErrors[field] = err.message;
+          } else if (field === "email") {
+            if (err.message.includes("less than 100")) newErrors[field] = currentContent.validation.emailMax;
+            else if (err.message.includes("email")) newErrors[field] = currentContent.validation.emailInvalid;
+            else newErrors[field] = err.message;
+          } else if (field === "phone") {
+            if (err.message.includes("less than 20")) newErrors[field] = currentContent.validation.phoneMax;
+            else if (err.message.includes("Invalid")) newErrors[field] = currentContent.validation.phoneInvalid;
+            else newErrors[field] = err.message;
+          } else if (field === "company") {
+            if (err.message.includes("less than 100")) newErrors[field] = currentContent.validation.companyMax;
+            else newErrors[field] = err.message;
+          } else if (field === "subject") {
+            if (err.message.includes("at least 3")) newErrors[field] = currentContent.validation.subjectMin;
+            else if (err.message.includes("less than 150")) newErrors[field] = currentContent.validation.subjectMax;
+            else newErrors[field] = err.message;
+          } else if (field === "message") {
+            if (err.message.includes("at least 10")) newErrors[field] = currentContent.validation.messageMin;
+            else if (err.message.includes("less than 1000")) newErrors[field] = currentContent.validation.messageMax;
+            else newErrors[field] = err.message;
           } else if (field === "consent") {
             newErrors[field] = currentContent.validation.consentRequired;
           } else {
