@@ -18,52 +18,55 @@ interface WhyChooseUsProps {
   language?: "en" | "fa";
 }
 
+// Optimization: Moved static content and array of features outside the component
+// to prevent memory re-allocation and unnecessary object creation on every render.
+const STATIC_TITLE = "چرا کارانووا؟";
+const STATIC_SUBTITLE = "ساخته شده برای کسب‌وکارهای مدرن که به تعالی نیاز دارند";
+const STATIC_FEATURES = [
+  {
+    title: "هوش مصنوعی پیشرفته",
+    description: "۴ عامل هوش مصنوعی تخصصی که ۲۴/۷ برای بهینه‌سازی عملیات کسب‌وکار شما کار می‌کنند.",
+    icon: <Brain className="w-6 h-6" />,
+  },
+  {
+    title: "کاهش ۶۰٪ زمان",
+    description: "زمان مدیریت پروژه را با اتوماسیون هوشمند و گردش کار به نصف کاهش دهید.",
+    icon: <Clock className="w-6 h-6" />,
+  },
+  {
+    title: "پشتیبانی دوزبانه",
+    description: "پشتیبانی کامل RTL برای فارسی با یکپارچگی یکپارچه انگلیسی.",
+    icon: <Languages className="w-6 h-6" />,
+  },
+  {
+    title: "همکاری لحظه‌ای",
+    description: "معماری چند مستاجره با سلسله مراتب و جداسازی مبتنی بر سازمان.",
+    icon: <Users className="w-6 h-6" />,
+  },
+  {
+    title: "هوش تجاری",
+    description: "ردیابی جامع KPI و نظارت بر سلامت از طریق داشبورد BIQ.",
+    icon: <BarChart3 className="w-6 h-6" />,
+  },
+  {
+    title: "امنیت سازمانی",
+    description: "امنیت در سطح بانکی با جداسازی کامل داده‌ها و انطباق.",
+    icon: <ShieldCheck className="w-6 h-6" />,
+  },
+  {
+    title: "استقرار سریع",
+    description: "در عرض چند دقیقه با راه‌اندازی و تنظیم شهودی شروع کنید.",
+    icon: <Rocket className="w-6 h-6" />,
+  },
+  {
+    title: "نوآوری مستمر",
+    description: "به‌روزرسانی‌های منظم با ویژگی‌های هوش مصنوعی پیشرفته و بهبودها.",
+    icon: <Sparkles className="w-6 h-6" />,
+  },
+];
+
 export default function WhyChooseUs({ language = "en" }: WhyChooseUsProps) {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const title = "چرا کارانووا؟";
-  const subtitle = "ساخته شده برای کسب‌وکارهای مدرن که به تعالی نیاز دارند";
-  const features = [
-    {
-      title: "هوش مصنوعی پیشرفته",
-      description: "۴ عامل هوش مصنوعی تخصصی که ۲۴/۷ برای بهینه‌سازی عملیات کسب‌وکار شما کار می‌کنند.",
-      icon: <Brain className="w-6 h-6" />,
-    },
-    {
-      title: "کاهش ۶۰٪ زمان",
-      description: "زمان مدیریت پروژه را با اتوماسیون هوشمند و گردش کار به نصف کاهش دهید.",
-      icon: <Clock className="w-6 h-6" />,
-    },
-    {
-      title: "پشتیبانی دوزبانه",
-      description: "پشتیبانی کامل RTL برای فارسی با یکپارچگی یکپارچه انگلیسی.",
-      icon: <Languages className="w-6 h-6" />,
-    },
-    {
-      title: "همکاری لحظه‌ای",
-      description: "معماری چند مستاجره با سلسله مراتب و جداسازی مبتنی بر سازمان.",
-      icon: <Users className="w-6 h-6" />,
-    },
-    {
-      title: "هوش تجاری",
-      description: "ردیابی جامع KPI و نظارت بر سلامت از طریق داشبورد BIQ.",
-      icon: <BarChart3 className="w-6 h-6" />,
-    },
-    {
-      title: "امنیت سازمانی",
-      description: "امنیت در سطح بانکی با جداسازی کامل داده‌ها و انطباق.",
-      icon: <ShieldCheck className="w-6 h-6" />,
-    },
-    {
-      title: "استقرار سریع",
-      description: "در عرض چند دقیقه با راه‌اندازی و تنظیم شهودی شروع کنید.",
-      icon: <Rocket className="w-6 h-6" />,
-    },
-    {
-      title: "نوآوری مستمر",
-      description: "به‌روزرسانی‌های منظم با ویژگی‌های هوش مصنوعی پیشرفته و بهبودها.",
-      icon: <Sparkles className="w-6 h-6" />,
-    },
-  ];
 
   return (
     <section id="why-choose-section" ref={sectionRef} className="relative w-full min-h-screen py-20 overflow-hidden" dir="rtl">
@@ -97,7 +100,7 @@ export default function WhyChooseUs({ language = "en" }: WhyChooseUsProps) {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-teal-500/20 via-cyan-500/20 to-emerald-500/20 blur-2xl" />
               <h2 className="relative text-5xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-teal-200 via-cyan-200 to-emerald-200 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(20,184,166,0.3)]">
-                {title}
+                {STATIC_TITLE}
               </h2>
             </div>
           </motion.div>
@@ -108,13 +111,13 @@ export default function WhyChooseUs({ language = "en" }: WhyChooseUsProps) {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            {subtitle}
+            {STATIC_SUBTITLE}
           </motion.p>
         </motion.div>
 
         {/* Features Grid with enhanced styling */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-gradient-to-r from-teal-500/20 via-cyan-500/20 to-emerald-500/20 rounded-2xl overflow-hidden backdrop-blur-sm shadow-2xl shadow-teal-500/10">
-          {features.map((feature, index) => (
+          {STATIC_FEATURES.map((feature, index) => (
             <Feature key={feature.title} {...feature} index={index} />
           ))}
         </div>
