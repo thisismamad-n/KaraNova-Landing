@@ -71,6 +71,8 @@ export default function SupportForm({ language }: SupportFormProps) {
         subjectRequired: "موضوع الزامی است",
         messageRequired: "پیام الزامی است",
         messageMinLength: "پیام باید حداقل ۱۰ کاراکتر باشد",
+        maxLength: "این فیلد نباید بیشتر از ۱۰۰ کاراکتر باشد",
+        messageMaxLength: "پیام نباید بیشتر از ۱۰۰۰ کاراکتر باشد",
       },
     },
     en: {
@@ -107,6 +109,8 @@ export default function SupportForm({ language }: SupportFormProps) {
         subjectRequired: "Subject is required",
         messageRequired: "Message is required",
         messageMinLength: "Message must be at least 10 characters",
+        maxLength: "This field cannot exceed 100 characters",
+        messageMaxLength: "Message cannot exceed 1000 characters",
       },
     },
   };
@@ -118,22 +122,30 @@ export default function SupportForm({ language }: SupportFormProps) {
 
     if (!formData.name.trim()) {
       newErrors.name = currentContent.validation.nameRequired;
+    } else if (formData.name.trim().length > 100) {
+      newErrors.name = currentContent.validation.maxLength;
     }
 
     if (!formData.email.trim()) {
       newErrors.email = currentContent.validation.emailRequired;
+    } else if (formData.email.trim().length > 100) {
+      newErrors.email = currentContent.validation.maxLength;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = currentContent.validation.emailInvalid;
     }
 
     if (!formData.subject.trim()) {
       newErrors.subject = currentContent.validation.subjectRequired;
+    } else if (formData.subject.trim().length > 100) {
+      newErrors.subject = currentContent.validation.maxLength;
     }
 
     if (!formData.message.trim()) {
       newErrors.message = currentContent.validation.messageRequired;
     } else if (formData.message.trim().length < 10) {
       newErrors.message = currentContent.validation.messageMinLength;
+    } else if (formData.message.trim().length > 1000) {
+      newErrors.message = currentContent.validation.messageMaxLength;
     }
 
     setErrors(newErrors);

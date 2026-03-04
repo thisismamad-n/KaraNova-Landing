@@ -25,6 +25,7 @@ export interface ApplicationFormContent {
     invalidEmail: string;
     invalidPhone: string;
     minLength: string;
+    maxLength: string;
     fileRequired: string;
   };
 }
@@ -56,6 +57,7 @@ export const formContent: Record<Language, ApplicationFormContent> = {
       invalidEmail: "Please enter a valid email address",
       invalidPhone: "Please enter a valid phone number",
       minLength: "Must be at least {min} characters",
+      maxLength: "Cannot exceed {max} characters",
       fileRequired: "Please upload your resume",
     },
   },
@@ -85,6 +87,7 @@ export const formContent: Record<Language, ApplicationFormContent> = {
       invalidEmail: "لطفا یک آدرس ایمیل معتبر وارد کنید",
       invalidPhone: "لطفا یک شماره تلفن معتبر وارد کنید",
       minLength: "حداقل {min} کاراکتر باید باشد",
+      maxLength: "نباید بیشتر از {max} کاراکتر باشد",
       fileRequired: "لطفا رزومه خود را بارگذاری کنید",
     },
   },
