@@ -49,6 +49,8 @@ export default function CodeExample({
               {examples.map((example) => (
                 <button
                   key={example.language}
+                  type="button"
+                  aria-label={`انتخاب زبان ${example.label}`}
                   onClick={() => setSelectedLanguage(example.language)}
                   className={cn(
                     "px-3 py-1 rounded-md text-xs font-medium transition-all duration-200",
@@ -63,6 +65,8 @@ export default function CodeExample({
             </div>
           </div>
           <button
+            type="button"
+            aria-label="کپی کد"
             onClick={handleCopy}
             className={cn(
               "p-2 rounded-md transition-all duration-200",

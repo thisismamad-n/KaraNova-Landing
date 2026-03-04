@@ -17,3 +17,7 @@
 ## 2025-02-23 - Semantic Lists for Visual Grids
 **Learning:** Common UI patterns like "Feature Showcases" or "Card Grids" often use `div` soup for layout flexibility. This misses a huge accessibility win: screen readers can announce "List of X items" if semantic `ul`/`li` structure is used.
 **Action:** Always refactor grid layouts of similar items (features, products, testimonials) to use `ul` and `li` tags, ensuring `role="list"` is preserved if CSS resets interfere. Consider adding `tabIndex={0}` if the cards have hover effects that keyboard users should also experience.
+
+## 2024-03-04 - CodeExample Accessibility Enhancements
+**Learning:** Icon-only copy buttons and dynamically generated tabs in code blocks often lack screen-reader labels and explicitly defined `type="button"`, causing potential fallback to form submission behavior and poor accessibility.
+**Action:** Always ensure that every custom `<button>` element explicitly declares `type="button"` and includes a descriptive, localized `aria-label` (especially if it only contains an icon like a copy button).
