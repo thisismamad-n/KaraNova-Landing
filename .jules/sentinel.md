@@ -7,3 +7,8 @@
 **Vulnerability:** The form validation logic only checked top-level string properties for XSS patterns, allowing nested objects (e.g., `{ user: { bio: "<script>..." } }`) to bypass security checks.
 **Learning:** Shallow validation of complex data structures leaves gaping holes for attackers to exploit by simply wrapping their payloads in objects or arrays.
 **Prevention:** Always implement recursive validation for data structures that can contain nested user input, ensuring every leaf node is inspected regardless of depth.
+
+## 2025-03-05 - DoS Vulnerability via Missing Input Length Limits
+**Vulnerability:** The Zod validation schema in `ContactForm.tsx` used `z.string()` constraints without `max()` length limits for fields like `name`, `email`, `message`, etc.
+**Learning:** Forms lacking maximum length validations are vulnerable to Denial of Service (DoS) attacks, as attackers can send excessively large payloads (e.g., megabytes of text) which exhaust server memory during parsing or regex validation (like email/phone regex).
+**Prevention:** Always enforce explicit `.max()` limits on all text inputs in validation schemas (e.g., Zod, Yup). The lengths should reflect realistic upper bounds (e.g., 100 for names, 2000 for messages) to reject oversized payloads early in the request lifecycle.
