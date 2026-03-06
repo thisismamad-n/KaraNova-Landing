@@ -13,6 +13,15 @@ interface SpiderChartProps {
   className?: string
 }
 
+const DEFAULT_METRICS: Metric[] = [
+  { label: "رشد", value: 80 },
+  { label: "بازده", value: 65 },
+  { label: "چابکی", value: 75 },
+  { label: "تعامل", value: 60 },
+  { label: "پایداری", value: 85 },
+  { label: "نوآوری", value: 90 },
+]
+
 /**
  * PERFORMANCE OPTIMIZED VERSION
  * Reduced from 40+ motion elements to minimal set:
@@ -22,14 +31,7 @@ interface SpiderChartProps {
  * 4. CSS transitions for hover instead of Framer Motion
  */
 const SpiderChart = memo(function SpiderChart({
-  metrics = [
-    { label: "رشد", value: 80 },
-    { label: "بازده", value: 65 },
-    { label: "چابکی", value: 75 },
-    { label: "تعامل", value: 60 },
-    { label: "پایداری", value: 85 },
-    { label: "نوآوری", value: 90 },
-  ],
+  metrics = DEFAULT_METRICS,
   max = 100,
   levels = 5,
   className,
