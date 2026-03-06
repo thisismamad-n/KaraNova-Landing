@@ -7,3 +7,8 @@
 **Vulnerability:** The form validation logic only checked top-level string properties for XSS patterns, allowing nested objects (e.g., `{ user: { bio: "<script>..." } }`) to bypass security checks.
 **Learning:** Shallow validation of complex data structures leaves gaping holes for attackers to exploit by simply wrapping their payloads in objects or arrays.
 **Prevention:** Always implement recursive validation for data structures that can contain nested user input, ensuring every leaf node is inspected regardless of depth.
+
+## 2025-02-18 - [DoS Prevention] Zod Schema Max Length Constraints
+**Vulnerability:** Text fields in `ContactForm` lacked length bounds (`z.string()`), which can expose the application to memory exhaustion and DoS attacks via unusually large input payloads.
+**Learning:** Zod input validation schemas must define upper bounds (`.max()`) on all string inputs for robust data integrity and resilience. The `.max()` error messages need localized handling matching the custom setup.
+**Prevention:** Always append `.max(limit)` to all user-facing `z.string()` endpoints and handle their error outputs carefully when doing custom mapping.
