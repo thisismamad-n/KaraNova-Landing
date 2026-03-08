@@ -30,6 +30,7 @@ const Squares: React.FC<SquaresProps> = ({
   const hoveredSquareRef = useRef<{ x: number; y: number } | null>(null);
   // Cache the vignette gradient to avoid creating it every frame
   const vignetteGradientRef = useRef<CanvasGradient | null>(null);
+  const inViewRef = useRef<boolean>(true);
 
   const getDirection = useMemo(() => {
     const directions: Record<string, { x: number; y: number }> = {
@@ -115,7 +116,13 @@ const Squares: React.FC<SquaresProps> = ({
       }
     };
 
+    // ⚡ Bolt: Animation loop that updates grid positions
     const updateAnimation = () => {
+      // ⚡ Bolt: Skip rendering when canvas is out of viewport to save CPU/GPU
+      if (!inViewRef.current) {
+        return;
+      }
+
       const effectiveSpeed = speed * 0.5;
       gridOffset.current.x += getDirection.x * effectiveSpeed;
       gridOffset.current.y += getDirection.y * effectiveSpeed;
@@ -130,6 +137,13 @@ const Squares: React.FC<SquaresProps> = ({
 
       drawGrid();
       requestRef.current = requestAnimationFrame(updateAnimation);
+    };
+
+    // ⚡ Bolt: Helper to safely start/resume the animation loop
+    const startLoop = () => {
+      if (inViewRef.current && !requestRef.current) {
+        requestRef.current = requestAnimationFrame(updateAnimation);
+      }
     };
 
     const handleMouseMove = (event: MouseEvent) => {
@@ -153,14 +167,29 @@ const Squares: React.FC<SquaresProps> = ({
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseleave", handleMouseLeave);
 
-    requestRef.current = requestAnimationFrame(updateAnimation);
+    // ⚡ Bolt: Use IntersectionObserver to pause animation when off-screen
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        inViewRef.current = entry.isIntersecting;
+        if (inViewRef.current) {
+          startLoop();
+        } else if (requestRef.current) {
+          cancelAnimationFrame(requestRef.current); // Pause when out of view
+          requestRef.current = null;
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
+      observer.disconnect();
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current);
+        requestRef.current = null;
       }
     };
   }, [
