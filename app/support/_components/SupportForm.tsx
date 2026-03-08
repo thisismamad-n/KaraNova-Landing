@@ -248,6 +248,8 @@ export default function SupportForm({ language }: SupportFormProps) {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder={currentContent.placeholders.name}
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? "name-error" : undefined}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
                     "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -260,6 +262,8 @@ export default function SupportForm({ language }: SupportFormProps) {
                 />
                 {errors.name && (
                   <motion.p
+                    id="name-error"
+                    role="alert"
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
@@ -285,6 +289,8 @@ export default function SupportForm({ language }: SupportFormProps) {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder={currentContent.placeholders.email}
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? "email-error" : undefined}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
                     "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -297,6 +303,8 @@ export default function SupportForm({ language }: SupportFormProps) {
                 />
                 {errors.email && (
                   <motion.p
+                    id="email-error"
+                    role="alert"
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
@@ -325,6 +333,8 @@ export default function SupportForm({ language }: SupportFormProps) {
                   value={formData.subject}
                   onChange={handleChange}
                   placeholder={currentContent.placeholders.subject}
+                  aria-invalid={!!errors.subject}
+                  aria-describedby={errors.subject ? "subject-error" : undefined}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
                     "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -337,6 +347,8 @@ export default function SupportForm({ language }: SupportFormProps) {
                 />
                 {errors.subject && (
                   <motion.p
+                    id="subject-error"
+                    role="alert"
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
@@ -391,6 +403,8 @@ export default function SupportForm({ language }: SupportFormProps) {
                 value={formData.message}
                 onChange={handleChange}
                 placeholder={currentContent.placeholders.message}
+                aria-invalid={!!errors.message}
+                aria-describedby={errors.message ? "message-error" : undefined}
                 rows={5}
                 className={cn(
                   "w-full px-4 py-3 rounded-lg",
@@ -405,6 +419,8 @@ export default function SupportForm({ language }: SupportFormProps) {
               />
               {errors.message && (
                 <motion.p
+                  id="message-error"
+                  role="alert"
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
