@@ -26,6 +26,8 @@ interface FormErrors {
   fullName?: string;
   email?: string;
   phone?: string;
+  linkedIn?: string;
+  portfolio?: string;
   coverLetter?: string;
   resume?: string;
 }
@@ -261,13 +263,19 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
             className={cn(
               "w-full px-4 py-2.5 rounded-lg",
               "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
-              "bg-slate-900/60 border border-slate-700/50",
+              "bg-slate-900/60 border",
+              errors.linkedIn
+                ? "border-red-500/50 focus:ring-red-500/50"
+                : "border-slate-700/50 focus:ring-teal-500/50",
               "text-slate-200 placeholder-slate-500",
-              "focus:outline-none focus:ring-2 focus:ring-teal-500/50",
+              "focus:outline-none focus:ring-2",
               "transition-all duration-200"
             )}
             placeholder="https://linkedin.com/in/..."
           />
+          {errors.linkedIn && (
+            <p className="mt-1.5 text-sm text-red-400 font-medium">{errors.linkedIn}</p>
+          )}
         </div>
 
         {/* Portfolio (Optional) */}
@@ -282,13 +290,19 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
             className={cn(
               "w-full px-4 py-2.5 rounded-lg",
               "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
-              "bg-slate-900/60 border border-slate-700/50",
+              "bg-slate-900/60 border",
+              errors.portfolio
+                ? "border-red-500/50 focus:ring-red-500/50"
+                : "border-slate-700/50 focus:ring-teal-500/50",
               "text-slate-200 placeholder-slate-500",
-              "focus:outline-none focus:ring-2 focus:ring-teal-500/50",
+              "focus:outline-none focus:ring-2",
               "transition-all duration-200"
             )}
             placeholder="https://..."
           />
+          {errors.portfolio && (
+            <p className="mt-1.5 text-sm text-red-400 font-medium">{errors.portfolio}</p>
+          )}
         </div>
 
         {/* Cover Letter */}
