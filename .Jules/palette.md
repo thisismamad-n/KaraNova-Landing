@@ -17,3 +17,7 @@
 ## 2025-02-23 - Semantic Lists for Visual Grids
 **Learning:** Common UI patterns like "Feature Showcases" or "Card Grids" often use `div` soup for layout flexibility. This misses a huge accessibility win: screen readers can announce "List of X items" if semantic `ul`/`li` structure is used.
 **Action:** Always refactor grid layouts of similar items (features, products, testimonials) to use `ul` and `li` tags, ensuring `role="list"` is preserved if CSS resets interfere. Consider adding `tabIndex={0}` if the cards have hover effects that keyboard users should also experience.
+
+## 2026-03-10 - Accessible Tab and Icon Buttons
+**Learning:** In interactive UI components that function as tabs (like language selection in `CodeExample`) or as icon-only actions (like copy buttons), standard `button` elements are often missing essential semantic roles (`type="button"` to prevent form submission, `aria-pressed` for toggle states) and accessible visual indicators (`focus-visible` classes). Additionally, icons inside icon-only buttons need `aria-hidden="true"` accompanied by a clear `aria-label` on the button itself so screen readers announce the action rather than interpreting the raw icon elements.
+**Action:** Always verify that interactive tab buttons implement `aria-pressed` for their active states, and ensure icon-only action buttons use `aria-label` with `aria-hidden="true"` on the enclosed SVG/icon element. Apply comprehensive `focus-visible` utility classes universally to support keyboard navigation.
