@@ -7,3 +7,8 @@
 **Vulnerability:** The form validation logic only checked top-level string properties for XSS patterns, allowing nested objects (e.g., `{ user: { bio: "<script>..." } }`) to bypass security checks.
 **Learning:** Shallow validation of complex data structures leaves gaping holes for attackers to exploit by simply wrapping their payloads in objects or arrays.
 **Prevention:** Always implement recursive validation for data structures that can contain nested user input, ensuring every leaf node is inspected regardless of depth.
+
+## 2024-05-24 - Add Input Length Limits to Forms
+**Vulnerability:** Forms (`ContactForm`, `SupportForm`, `ApplicationForm`) lacked maximum length constraints (`maxLength` in HTML, `.max()` in Zod schemas, and manual length checks).
+**Learning:** Missing input length limits leave the application susceptible to Denial of Service (DoS) attacks, where malicious actors can submit massive payloads leading to excessive parsing time, memory exhaustion, or database buffer overflows. Relying only on minimum lengths (`min()`) is insufficient for secure form processing.
+**Prevention:** Always pair minimum length constraints with reasonable maximum length constraints on both the client (HTML attributes) and server/schema (Zod/manual validation) for all text inputs to ensure safe boundaries.

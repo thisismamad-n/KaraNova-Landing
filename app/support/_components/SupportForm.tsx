@@ -66,11 +66,15 @@ export default function SupportForm({ language }: SupportFormProps) {
       errorMessage: "لطفاً دوباره تلاش کنید یا با ما تماس بگیرید.",
       validation: {
         nameRequired: "نام الزامی است",
+        nameMaxLength: "نام باید حداکثر ۱۰۰ کاراکتر باشد",
         emailRequired: "ایمیل الزامی است",
         emailInvalid: "ایمیل معتبر نیست",
+        emailMaxLength: "ایمیل باید حداکثر ۱۰۰ کاراکتر باشد",
         subjectRequired: "موضوع الزامی است",
+        subjectMaxLength: "موضوع باید حداکثر ۱۰۰ کاراکتر باشد",
         messageRequired: "پیام الزامی است",
         messageMinLength: "پیام باید حداقل ۱۰ کاراکتر باشد",
+        messageMaxLength: "پیام باید حداکثر ۱۰۰۰ کاراکتر باشد",
       },
     },
     en: {
@@ -102,11 +106,15 @@ export default function SupportForm({ language }: SupportFormProps) {
       errorMessage: "Please try again or contact us directly.",
       validation: {
         nameRequired: "Name is required",
+        nameMaxLength: "Name must be at most 100 characters",
         emailRequired: "Email is required",
         emailInvalid: "Invalid email address",
+        emailMaxLength: "Email must be at most 100 characters",
         subjectRequired: "Subject is required",
+        subjectMaxLength: "Subject must be at most 100 characters",
         messageRequired: "Message is required",
         messageMinLength: "Message must be at least 10 characters",
+        messageMaxLength: "Message must be at most 1000 characters",
       },
     },
   };
@@ -118,22 +126,30 @@ export default function SupportForm({ language }: SupportFormProps) {
 
     if (!formData.name.trim()) {
       newErrors.name = currentContent.validation.nameRequired;
+    } else if (formData.name.trim().length > 100) {
+      newErrors.name = currentContent.validation.nameMaxLength;
     }
 
     if (!formData.email.trim()) {
       newErrors.email = currentContent.validation.emailRequired;
+    } else if (formData.email.trim().length > 100) {
+      newErrors.email = currentContent.validation.emailMaxLength;
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = currentContent.validation.emailInvalid;
     }
 
     if (!formData.subject.trim()) {
       newErrors.subject = currentContent.validation.subjectRequired;
+    } else if (formData.subject.trim().length > 100) {
+      newErrors.subject = currentContent.validation.subjectMaxLength;
     }
 
     if (!formData.message.trim()) {
       newErrors.message = currentContent.validation.messageRequired;
     } else if (formData.message.trim().length < 10) {
       newErrors.message = currentContent.validation.messageMinLength;
+    } else if (formData.message.trim().length > 1000) {
+      newErrors.message = currentContent.validation.messageMaxLength;
     }
 
     setErrors(newErrors);
@@ -245,6 +261,7 @@ export default function SupportForm({ language }: SupportFormProps) {
                   type="text"
                   id="name"
                   name="name"
+                  maxLength={100}
                   value={formData.name}
                   onChange={handleChange}
                   placeholder={currentContent.placeholders.name}
@@ -282,6 +299,7 @@ export default function SupportForm({ language }: SupportFormProps) {
                   type="email"
                   id="email"
                   name="email"
+                  maxLength={100}
                   value={formData.email}
                   onChange={handleChange}
                   placeholder={currentContent.placeholders.email}
@@ -322,6 +340,7 @@ export default function SupportForm({ language }: SupportFormProps) {
                   type="text"
                   id="subject"
                   name="subject"
+                  maxLength={100}
                   value={formData.subject}
                   onChange={handleChange}
                   placeholder={currentContent.placeholders.subject}
@@ -388,6 +407,7 @@ export default function SupportForm({ language }: SupportFormProps) {
               <textarea
                 id="message"
                 name="message"
+                maxLength={1000}
                 value={formData.message}
                 onChange={handleChange}
                 placeholder={currentContent.placeholders.message}
