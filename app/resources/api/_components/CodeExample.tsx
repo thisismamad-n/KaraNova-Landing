@@ -49,9 +49,12 @@ export default function CodeExample({
               {examples.map((example) => (
                 <button
                   key={example.language}
+                  type="button"
+                  aria-pressed={selectedLanguage === example.language}
                   onClick={() => setSelectedLanguage(example.language)}
                   className={cn(
                     "px-3 py-1 rounded-md text-xs font-medium transition-all duration-200",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950",
                     selectedLanguage === example.language
                       ? "bg-teal-500/20 text-teal-400 border border-teal-500/30"
                       : "text-slate-400 hover:text-slate-300 hover:bg-slate-800/50"
@@ -63,17 +66,20 @@ export default function CodeExample({
             </div>
           </div>
           <button
+            type="button"
             onClick={handleCopy}
             className={cn(
               "p-2 rounded-md transition-all duration-200",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950",
               "hover:bg-slate-800/50 text-slate-400 hover:text-slate-300"
             )}
+            aria-label={copied ? "کپی شد" : "کپی کد"}
             title="کپی کد"
           >
             {copied ? (
-              <Check className="w-4 h-4 text-green-400" />
+              <Check className="w-4 h-4 text-green-400" aria-hidden="true" />
             ) : (
-              <Copy className="w-4 h-4" />
+              <Copy className="w-4 h-4" aria-hidden="true" />
             )}
           </button>
         </div>
