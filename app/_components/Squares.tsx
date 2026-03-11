@@ -42,6 +42,8 @@ const Squares: React.FC<SquaresProps> = ({
     return directions[direction] || { x: 1, y: 0 };
   }, [direction]);
 
+  const inViewRef = useRef<boolean>(true);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -129,7 +131,9 @@ const Squares: React.FC<SquaresProps> = ({
       }
 
       drawGrid();
-      requestRef.current = requestAnimationFrame(updateAnimation);
+      if (inViewRef.current) {
+        requestRef.current = requestAnimationFrame(updateAnimation);
+      }
     };
 
     const handleMouseMove = (event: MouseEvent) => {
@@ -153,12 +157,36 @@ const Squares: React.FC<SquaresProps> = ({
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseleave", handleMouseLeave);
 
-    requestRef.current = requestAnimationFrame(updateAnimation);
+    // ⚡ Bolt: Use IntersectionObserver to pause the requestAnimationFrame loop
+    // when the canvas is off-screen. This significantly reduces CPU and GPU
+    // overhead by stopping unnecessary rendering cycles for hidden elements.
+    const observer = new IntersectionObserver((entries) => {
+      const isIntersecting = entries[0]?.isIntersecting ?? true;
+      inViewRef.current = isIntersecting;
+
+      if (isIntersecting) {
+        if (!requestRef.current) {
+          requestRef.current = requestAnimationFrame(updateAnimation);
+        }
+      } else {
+        if (requestRef.current) {
+          cancelAnimationFrame(requestRef.current);
+          requestRef.current = null;
+        }
+      }
+    }, { threshold: 0 });
+
+    observer.observe(canvas);
+
+    if (inViewRef.current) {
+      requestRef.current = requestAnimationFrame(updateAnimation);
+    }
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
+      observer.disconnect();
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current);
       }
