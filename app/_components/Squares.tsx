@@ -31,6 +31,8 @@ const Squares: React.FC<SquaresProps> = ({
   // Cache the vignette gradient to avoid creating it every frame
   const vignetteGradientRef = useRef<CanvasGradient | null>(null);
 
+  const isVisibleRef = useRef<boolean>(true); // Assume true initially
+
   const getDirection = useMemo(() => {
     const directions: Record<string, { x: number; y: number }> = {
       right: { x: 1, y: 0 },
@@ -116,6 +118,9 @@ const Squares: React.FC<SquaresProps> = ({
     };
 
     const updateAnimation = () => {
+      // ⚡ Bolt: Pause animation when canvas is not visible to save CPU/GPU
+      if (!isVisibleRef.current) return;
+
       const effectiveSpeed = speed * 0.5;
       gridOffset.current.x += getDirection.x * effectiveSpeed;
       gridOffset.current.y += getDirection.y * effectiveSpeed;
@@ -153,9 +158,30 @@ const Squares: React.FC<SquaresProps> = ({
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseleave", handleMouseLeave);
 
-    requestRef.current = requestAnimationFrame(updateAnimation);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisibleRef.current = entry.isIntersecting;
+          if (entry.isIntersecting) {
+            // Restart loop if it stopped
+            if (requestRef.current) {
+              cancelAnimationFrame(requestRef.current);
+            }
+            requestRef.current = requestAnimationFrame(updateAnimation);
+          }
+        });
+      },
+      { threshold: 0 } // Trigger as soon as 1 pixel is visible/hidden
+    );
+
+    observer.observe(canvas);
+
+    // Initial start handled by observer since initial isVisible is true
+    // but just in case, we do an initial draw
+    drawGrid();
 
     return () => {
+      observer.disconnect();
       window.removeEventListener("resize", resizeCanvas);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
