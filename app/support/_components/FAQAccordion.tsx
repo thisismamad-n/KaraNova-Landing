@@ -45,7 +45,8 @@ export default function FAQAccordion({ items, language }: FAQAccordionProps) {
             onClick={() => toggleItem(item.id)}
             className={cn(
               "w-full flex items-center justify-between gap-4",
-              "p-4 sm:p-6 text-right",
+              "p-4 sm:p-6 text-right rounded-xl",
+              "focus-visible:outline-none focus-visible:bg-slate-900/60 focus-visible:ring-2 focus-visible:ring-teal-500",
               "hover:bg-slate-900/60 transition-colors"
             )}
             aria-expanded={openId === item.id}
