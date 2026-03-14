@@ -7,3 +7,8 @@
 **Vulnerability:** The form validation logic only checked top-level string properties for XSS patterns, allowing nested objects (e.g., `{ user: { bio: "<script>..." } }`) to bypass security checks.
 **Learning:** Shallow validation of complex data structures leaves gaping holes for attackers to exploit by simply wrapping their payloads in objects or arrays.
 **Prevention:** Always implement recursive validation for data structures that can contain nested user input, ensuring every leaf node is inspected regardless of depth.
+
+## 2025-02-23 - Form Input DoS Vulnerability
+**Vulnerability:** Unbounded user input fields in forms allow for resource exhaustion (DoS).
+**Learning:** Missing input length validation poses significant security risks.
+**Prevention:** Always add explicit maximum length constraints to user inputs.

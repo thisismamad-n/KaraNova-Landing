@@ -55,11 +55,15 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
       newErrors.fullName = t.errors.required;
     } else if (formData.fullName.trim().length < 2) {
       newErrors.fullName = t.errors.minLength.replace("{min}", "2");
+    } else if (formData.fullName.length > 100) {
+      newErrors.fullName = t.errors.maxLength.replace("{max}", "100");
     }
 
     // Email validation
     if (!formData.email.trim()) {
       newErrors.email = t.errors.required;
+    } else if (formData.email.length > 150) {
+      newErrors.email = t.errors.maxLength.replace("{max}", "150");
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = t.errors.invalidEmail;
     }
@@ -67,6 +71,8 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
     // Phone validation
     if (!formData.phone.trim()) {
       newErrors.phone = t.errors.required;
+    } else if (formData.phone.length > 20) {
+      newErrors.phone = t.errors.maxLength.replace("{max}", "20");
     } else if (!/^[0-9+\-\s()]+$/.test(formData.phone)) {
       newErrors.phone = t.errors.invalidPhone;
     }
@@ -76,6 +82,8 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
       newErrors.coverLetter = t.errors.required;
     } else if (formData.coverLetter.trim().length < 50) {
       newErrors.coverLetter = t.errors.minLength.replace("{min}", "50");
+    } else if (formData.coverLetter.length > 3000) {
+      newErrors.coverLetter = t.errors.maxLength.replace("{max}", "3000");
     }
 
     // Resume validation

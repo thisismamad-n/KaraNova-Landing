@@ -12,16 +12,17 @@ interface ContactFormProps {
 
 // Zod validation schema
 const contactFormSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
+  name: z.string().min(2, "Name must be at least 2 characters").max(100, "Name must be at most 100 characters"),
+  email: z.string().email("Please enter a valid email address").max(150, "Email must be at most 150 characters"),
   phone: z
     .string()
+    .max(20, "Phone number must be at most 20 characters")
     .regex(/^[0-9+\-\s()]+$/, "Invalid phone number")
     .optional()
     .or(z.literal("")),
-  company: z.string().optional(),
-  subject: z.string().min(3, "Subject must be at least 3 characters"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  company: z.string().max(100, "Company name must be at most 100 characters").optional(),
+  subject: z.string().min(3, "Subject must be at least 3 characters").max(200, "Subject must be at most 200 characters"),
+  message: z.string().min(10, "Message must be at least 10 characters").max(2000, "Message must be at most 2000 characters"),
   preferredContact: z.enum(["email", "phone"]),
   consent: z.boolean().refine((val) => val === true, {
     message: "You must accept the privacy policy",
@@ -105,6 +106,12 @@ export default function ContactForm({ language }: ContactFormProps) {
         subjectMin: "موضوع باید حداقل ۳ کاراکتر باشد",
         messageMin: "پیام باید حداقل ۱۰ کاراکتر باشد",
         consentRequired: "باید سیاست حفظ حریم خصوصی را بپذیرید",
+        nameMax: "نام نمی‌تواند بیشتر از ۱۰۰ کاراکتر باشد",
+        emailMax: "ایمیل نمی‌تواند بیشتر از ۱۵۰ کاراکتر باشد",
+        phoneMax: "شماره تماس نمی‌تواند بیشتر از ۲۰ کاراکتر باشد",
+        companyMax: "نام شرکت نمی‌تواند بیشتر از ۱۰۰ کاراکتر باشد",
+        subjectMax: "موضوع نمی‌تواند بیشتر از ۲۰۰ کاراکتر باشد",
+        messageMax: "پیام نمی‌تواند بیشتر از ۲۰۰۰ کاراکتر باشد",
       },
     },
     en: {
@@ -146,6 +153,12 @@ export default function ContactForm({ language }: ContactFormProps) {
         subjectMin: "Subject must be at least 3 characters",
         messageMin: "Message must be at least 10 characters",
         consentRequired: "You must accept the privacy policy",
+        nameMax: "Name must be at most 100 characters",
+        emailMax: "Email must be at most 150 characters",
+        phoneMax: "Phone number must be at most 20 characters",
+        companyMax: "Company name must be at most 100 characters",
+        subjectMax: "Subject must be at most 200 characters",
+        messageMax: "Message must be at most 2000 characters",
       },
     },
   };
@@ -165,14 +178,26 @@ export default function ContactForm({ language }: ContactFormProps) {
           // Map Zod error messages to localized messages
           if (field === "name" && err.message.includes("at least 2")) {
             newErrors[field] = currentContent.validation.nameMin;
+          } else if (field === "name" && err.message.includes("at most 100")) {
+            newErrors[field] = currentContent.validation.nameMax;
+          } else if (field === "email" && err.message.includes("at most 150")) {
+            newErrors[field] = currentContent.validation.emailMax;
           } else if (field === "email" && err.message.includes("email")) {
             newErrors[field] = currentContent.validation.emailInvalid;
+          } else if (field === "phone" && err.message.includes("at most 20")) {
+            newErrors[field] = currentContent.validation.phoneMax;
           } else if (field === "phone" && err.message.includes("Invalid")) {
             newErrors[field] = currentContent.validation.phoneInvalid;
+          } else if (field === "company" && err.message.includes("at most 100")) {
+            newErrors[field] = currentContent.validation.companyMax;
           } else if (field === "subject" && err.message.includes("at least 3")) {
             newErrors[field] = currentContent.validation.subjectMin;
+          } else if (field === "subject" && err.message.includes("at most 200")) {
+            newErrors[field] = currentContent.validation.subjectMax;
           } else if (field === "message" && err.message.includes("at least 10")) {
             newErrors[field] = currentContent.validation.messageMin;
+          } else if (field === "message" && err.message.includes("at most 2000")) {
+            newErrors[field] = currentContent.validation.messageMax;
           } else if (field === "consent") {
             newErrors[field] = currentContent.validation.consentRequired;
           } else {
