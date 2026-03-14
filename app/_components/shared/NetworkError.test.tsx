@@ -1,17 +1,21 @@
+/**
+ * @jest-environment jsdom
+ */
+import { mock } from "bun:test";
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import React from "react";
 import NetworkError from "./NetworkError";
 
 // Mock framer-motion
-vi.mock("framer-motion", () => ({
+mock("framer-motion", () => ({
   motion: {
     div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   },
 }));
 
 // Mock lucide-react
-vi.mock("lucide-react", () => ({
+mock("lucide-react", () => ({
   WifiOff: () => <div data-testid="wifi-off-icon" />,
   RefreshCw: () => <div data-testid="refresh-icon" />,
 }));
