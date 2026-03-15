@@ -42,11 +42,13 @@ export default function FAQAccordion({ items, language }: FAQAccordionProps) {
         >
           {/* Question Button */}
           <button
+            type="button"
             onClick={() => toggleItem(item.id)}
             className={cn(
               "w-full flex items-center justify-between gap-4",
               "p-4 sm:p-6 text-right",
-              "hover:bg-slate-900/60 transition-colors"
+              "hover:bg-slate-900/60 transition-colors",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
             )}
             aria-expanded={openId === item.id}
             aria-controls={`faq-answer-${item.id}`}

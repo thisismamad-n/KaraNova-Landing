@@ -124,8 +124,12 @@ export default function PricingFAQ({ language }: PricingFAQProps) {
               className="backdrop-blur-xl bg-slate-900/40 border border-slate-800/50 rounded-2xl overflow-hidden hover:border-teal-500/30 transition-colors duration-300"
             >
               <button
+                type="button"
+                id={`pricing-faq-question-${index}`}
+                aria-expanded={openIndex === index}
+                aria-controls={`pricing-faq-answer-${index}`}
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full px-6 py-5 flex items-center justify-between gap-4 text-right"
+                className="w-full px-6 py-5 flex items-center justify-between gap-4 text-right focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
               >
                 <span className="text-slate-100 font-semibold text-lg flex-1 text-right">
                   {faq.question}
@@ -135,12 +139,16 @@ export default function PricingFAQ({ language }: PricingFAQProps) {
                     "w-5 h-5 text-teal-400 flex-shrink-0 transition-transform duration-300",
                     openIndex === index && "rotate-180"
                   )}
+                  aria-hidden="true"
                 />
               </button>
 
               <AnimatePresence>
                 {openIndex === index && (
                   <motion.div
+                    id={`pricing-faq-answer-${index}`}
+                    role="region"
+                    aria-labelledby={`pricing-faq-question-${index}`}
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
