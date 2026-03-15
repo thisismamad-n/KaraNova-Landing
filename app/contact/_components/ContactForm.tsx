@@ -12,16 +12,17 @@ interface ContactFormProps {
 
 // Zod validation schema
 const contactFormSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
+  name: z.string().min(2, "Name must be at least 2 characters").max(100, "Name must be at most 100 characters"),
+  email: z.string().email("Please enter a valid email address").max(100, "Email must be at most 100 characters"),
   phone: z
     .string()
     .regex(/^[0-9+\-\s()]+$/, "Invalid phone number")
+    .max(20, "Phone number must be at most 20 characters")
     .optional()
     .or(z.literal("")),
-  company: z.string().optional(),
-  subject: z.string().min(3, "Subject must be at least 3 characters"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  company: z.string().max(100, "Company name must be at most 100 characters").optional(),
+  subject: z.string().min(3, "Subject must be at least 3 characters").max(100, "Subject must be at most 100 characters"),
+  message: z.string().min(10, "Message must be at least 10 characters").max(1000, "Message must be at most 1000 characters"),
   preferredContact: z.enum(["email", "phone"]),
   consent: z.boolean().refine((val) => val === true, {
     message: "You must accept the privacy policy",
@@ -99,11 +100,17 @@ export default function ContactForm({ language }: ContactFormProps) {
       errorMessage: "لطفاً دوباره تلاش کنید یا با ما تماس بگیرید.",
       validation: {
         nameMin: "نام باید حداقل ۲ کاراکتر باشد",
+        nameMax: "نام می‌تواند حداکثر ۱۰۰ کاراکتر باشد",
         emailRequired: "ایمیل الزامی است",
         emailInvalid: "ایمیل معتبر نیست",
+        emailMax: "ایمیل می‌تواند حداکثر ۱۰۰ کاراکتر باشد",
         phoneInvalid: "شماره تلفن معتبر نیست",
+        phoneMax: "شماره تلفن می‌تواند حداکثر ۲۰ کاراکتر باشد",
+        companyMax: "نام شرکت می‌تواند حداکثر ۱۰۰ کاراکتر باشد",
         subjectMin: "موضوع باید حداقل ۳ کاراکتر باشد",
+        subjectMax: "موضوع می‌تواند حداکثر ۱۰۰ کاراکتر باشد",
         messageMin: "پیام باید حداقل ۱۰ کاراکتر باشد",
+        messageMax: "پیام می‌تواند حداکثر ۱۰۰۰ کاراکتر باشد",
         consentRequired: "باید سیاست حفظ حریم خصوصی را بپذیرید",
       },
     },
@@ -140,11 +147,17 @@ export default function ContactForm({ language }: ContactFormProps) {
       errorMessage: "Please try again or contact us directly.",
       validation: {
         nameMin: "Name must be at least 2 characters",
+        nameMax: "Name must be at most 100 characters",
         emailRequired: "Email is required",
         emailInvalid: "Invalid email address",
+        emailMax: "Email must be at most 100 characters",
         phoneInvalid: "Invalid phone number",
+        phoneMax: "Phone number must be at most 20 characters",
+        companyMax: "Company name must be at most 100 characters",
         subjectMin: "Subject must be at least 3 characters",
+        subjectMax: "Subject must be at most 100 characters",
         messageMin: "Message must be at least 10 characters",
+        messageMax: "Message must be at most 1000 characters",
         consentRequired: "You must accept the privacy policy",
       },
     },
@@ -165,14 +178,26 @@ export default function ContactForm({ language }: ContactFormProps) {
           // Map Zod error messages to localized messages
           if (field === "name" && err.message.includes("at least 2")) {
             newErrors[field] = currentContent.validation.nameMin;
+          } else if (field === "name" && err.message.includes("at most")) {
+            newErrors[field] = currentContent.validation.nameMax;
           } else if (field === "email" && err.message.includes("email")) {
             newErrors[field] = currentContent.validation.emailInvalid;
+          } else if (field === "email" && err.message.includes("at most")) {
+            newErrors[field] = currentContent.validation.emailMax;
           } else if (field === "phone" && err.message.includes("Invalid")) {
             newErrors[field] = currentContent.validation.phoneInvalid;
+          } else if (field === "phone" && err.message.includes("at most")) {
+            newErrors[field] = currentContent.validation.phoneMax;
+          } else if (field === "company" && err.message.includes("at most")) {
+            newErrors[field] = currentContent.validation.companyMax;
           } else if (field === "subject" && err.message.includes("at least 3")) {
             newErrors[field] = currentContent.validation.subjectMin;
+          } else if (field === "subject" && err.message.includes("at most")) {
+            newErrors[field] = currentContent.validation.subjectMax;
           } else if (field === "message" && err.message.includes("at least 10")) {
             newErrors[field] = currentContent.validation.messageMin;
+          } else if (field === "message" && err.message.includes("at most")) {
+            newErrors[field] = currentContent.validation.messageMax;
           } else if (field === "consent") {
             newErrors[field] = currentContent.validation.consentRequired;
           } else {
