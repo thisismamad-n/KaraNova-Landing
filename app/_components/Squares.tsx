@@ -30,6 +30,7 @@ const Squares: React.FC<SquaresProps> = ({
   const hoveredSquareRef = useRef<{ x: number; y: number } | null>(null);
   // Cache the vignette gradient to avoid creating it every frame
   const vignetteGradientRef = useRef<CanvasGradient | null>(null);
+  const inViewRef = useRef<boolean>(true);
 
   const getDirection = useMemo(() => {
     const directions: Record<string, { x: number; y: number }> = {
@@ -116,6 +117,11 @@ const Squares: React.FC<SquaresProps> = ({
     };
 
     const updateAnimation = () => {
+      if (!inViewRef.current) {
+        requestRef.current = null;
+        return;
+      }
+
       const effectiveSpeed = speed * 0.5;
       gridOffset.current.x += getDirection.x * effectiveSpeed;
       gridOffset.current.y += getDirection.y * effectiveSpeed;
@@ -153,9 +159,21 @@ const Squares: React.FC<SquaresProps> = ({
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseleave", handleMouseLeave);
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        inViewRef.current = entry.isIntersecting;
+        if (entry.isIntersecting && !requestRef.current) {
+          requestRef.current = requestAnimationFrame(updateAnimation);
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
+
     requestRef.current = requestAnimationFrame(updateAnimation);
 
     return () => {
+      observer.disconnect();
       window.removeEventListener("resize", resizeCanvas);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
