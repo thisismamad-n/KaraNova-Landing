@@ -7,3 +7,13 @@
 **Vulnerability:** The form validation logic only checked top-level string properties for XSS patterns, allowing nested objects (e.g., `{ user: { bio: "<script>..." } }`) to bypass security checks.
 **Learning:** Shallow validation of complex data structures leaves gaping holes for attackers to exploit by simply wrapping their payloads in objects or arrays.
 **Prevention:** Always implement recursive validation for data structures that can contain nested user input, ensuring every leaf node is inspected regardless of depth.
+
+## 2025-02-18 - Missing Input Length Limits in Form Validation
+**Vulnerability:** The Zod validation schema for forms lacked maximum length constraints on text inputs (e.g., `name`, `company`, `subject`, `message`), leaving the application vulnerable to Denial of Service (DoS) attacks via oversized payloads.
+**Learning:** Only defining `min` constraints allows attackers to submit arbitrarily large strings, which can consume significant server resources during parsing, logging, and storage, leading to resource exhaustion.
+**Prevention:** Always define explicit maximum length constraints (e.g., `.max(100)`) on all text inputs during schema definition to ensure predictable memory usage and prevent DoS vectors.
+
+## 2025-02-18 - Missing Input Length Limits in Form Validation
+**Vulnerability:** The Zod validation schema for forms lacked maximum length constraints on text inputs (e.g., `name`, `company`, `subject`, `message`), leaving the application vulnerable to Denial of Service (DoS) attacks via oversized payloads.
+**Learning:** Only defining `min` constraints allows attackers to submit arbitrarily large strings, which can consume significant server resources during parsing, logging, and storage, leading to resource exhaustion.
+**Prevention:** Always define explicit maximum length constraints (e.g., `.max(100)`) on all text inputs during schema definition to ensure predictable memory usage and prevent DoS vectors.
