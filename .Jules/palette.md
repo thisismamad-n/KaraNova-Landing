@@ -17,3 +17,7 @@
 ## 2025-02-23 - Semantic Lists for Visual Grids
 **Learning:** Common UI patterns like "Feature Showcases" or "Card Grids" often use `div` soup for layout flexibility. This misses a huge accessibility win: screen readers can announce "List of X items" if semantic `ul`/`li` structure is used.
 **Action:** Always refactor grid layouts of similar items (features, products, testimonials) to use `ul` and `li` tags, ensuring `role="list"` is preserved if CSS resets interfere. Consider adding `tabIndex={0}` if the cards have hover effects that keyboard users should also experience.
+
+## 2025-02-25 - Focus-Visible Clipping in Overflow-Hidden Accordions
+**Learning:** Applying standard outer focus rings (e.g., `focus-visible:ring-2`) on accordion trigger buttons inside `overflow-hidden` containers results in the focus indicator being completely or partially clipped, making the element inaccessible to keyboard users.
+**Action:** When styling interactive elements within `overflow-hidden` constraints, use background focus states (e.g., `focus-visible:bg-slate-800/60` with a matching `border-radius`) or inner rings instead of outer offsets to ensure the focus state remains fully visible.
