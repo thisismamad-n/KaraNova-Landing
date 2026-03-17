@@ -5,3 +5,7 @@
 ## 2024-05-19 - [Canvas Grid Optimization]
 **Learning:** The `Squares` background component was using `strokeRect` in a nested loop for every frame, resulting in thousands of draw calls. Canvas API has significant overhead per call.
 **Action:** Batch drawing operations into a single path (`moveTo`/`lineTo` then `stroke`) whenever possible, especially for grid-like structures. This reduced draw calls from ~1300 to < 10 per frame.
+
+## 2026-03-17 - [SVG Filter Performance]
+**Learning:** Complex multi-layered SVG `<filter>` tags are generally slower than chaining native CSS `drop-shadow` functions, despite what one might assume. Additionally, using `willChange: 'stroke-dashoffset'` on SVGs with gradients breaks rendering in Blink-based browsers.
+**Action:** Always prefer native CSS `drop-shadow` for glows and avoid `willChange` on SVGs with document-level paint servers.
