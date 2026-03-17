@@ -161,6 +161,7 @@ export async function validateFormServerSide(
   // Helper function to recursively check for XSS
   const containsXSS = (value: unknown): boolean => {
     if (typeof value === "string") {
+      if (value.length > 5000) return true; // Treat oversized payloads as invalid/malicious
       return xssPatterns.some((pattern) => pattern.test(value));
     }
     if (Array.isArray(value)) {

@@ -7,3 +7,8 @@
 **Vulnerability:** The form validation logic only checked top-level string properties for XSS patterns, allowing nested objects (e.g., `{ user: { bio: "<script>..." } }`) to bypass security checks.
 **Learning:** Shallow validation of complex data structures leaves gaping holes for attackers to exploit by simply wrapping their payloads in objects or arrays.
 **Prevention:** Always implement recursive validation for data structures that can contain nested user input, ensuring every leaf node is inspected regardless of depth.
+
+## 2025-02-18 - Missing Payload Size Constraints (DoS Risk)
+**Vulnerability:** The server-side form validation lacked maximum length constraints on string inputs, exposing the application to potential DoS attacks via excessively large payloads.
+**Learning:** Even with robust XSS and structure validation, omitting size limits allows resource exhaustion.
+**Prevention:** Always enforce strict, explicit maximum length constraints on all user inputs at the server level.

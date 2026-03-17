@@ -237,6 +237,17 @@ describe("validateFormServerSide", () => {
     const result = await validateFormServerSide("contact", data);
     expect(result.success).toBe(false);
   });
+
+  test("should reject oversized payloads to prevent DoS", async () => {
+    const oversizedString = "A".repeat(5001);
+    const data = {
+      message: oversizedString
+    };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(false);
+    expect(result.error?.message).toBe("Server validation failed");
+    expect(result.error?.field).toBe("message");
+  });
 });
 
 describe("isOnline", () => {
