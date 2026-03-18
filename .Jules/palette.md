@@ -17,3 +17,7 @@
 ## 2025-02-23 - Semantic Lists for Visual Grids
 **Learning:** Common UI patterns like "Feature Showcases" or "Card Grids" often use `div` soup for layout flexibility. This misses a huge accessibility win: screen readers can announce "List of X items" if semantic `ul`/`li` structure is used.
 **Action:** Always refactor grid layouts of similar items (features, products, testimonials) to use `ul` and `li` tags, ensuring `role="list"` is preserved if CSS resets interfere. Consider adding `tabIndex={0}` if the cards have hover effects that keyboard users should also experience.
+
+## 2025-02-24 - Accordion Accessibility and Focus Visibility
+**Learning:** Custom accordions often miss critical ARIA roles linking triggers to their panels (`aria-controls`, `aria-expanded`). Additionally, when using `overflow-hidden` on the accordion container, standard focus rings with `ring-offset` get clipped.
+**Action:** Always add `aria-expanded`, `aria-controls`, and `role="region"` to custom accordions. Use inner focus rings (`focus-visible:ring-2` without offset) or background focus states paired with matching `rounded` utilities to ensure focus visibility inside `overflow-hidden` containers.
