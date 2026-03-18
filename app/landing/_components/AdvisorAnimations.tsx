@@ -3,7 +3,7 @@
 import React, { useRef, useEffect } from 'react';
 
 // --- TYPE DEFINITIONS & CONSTANTS ---
-type AnimationSetupFunction = (ctx: CanvasRenderingContext2D) => () => void;
+type AnimationSetupFunction = (ctx: CanvasRenderingContext2D) => { play: () => void, pause: () => void, cleanup: () => void };
 
 const CANVAS_WIDTH = 280;
 const CANVAS_HEIGHT = 280;
@@ -62,8 +62,29 @@ export const CanvasAnimation: React.FC<CanvasAnimationProps> = ({
     const setupFunction = animationMap[animationId];
     if (!setupFunction) return;
 
-    const cleanup = setupFunction(ctx);
-    return cleanup;
+    const { play, pause, cleanup } = setupFunction(ctx);
+
+    // ⚡ Bolt Performance Optimization:
+    // Only run the canvas animation when it is visible in the viewport.
+    // This saves significant CPU/GPU resources and battery life by
+    // pausing requestAnimationFrame loops for off-screen elements.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          play();
+        } else {
+          pause();
+        }
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(canvas);
+
+    return () => {
+      observer.disconnect();
+      cleanup();
+    };
   }, [animationId]);
 
   return (
@@ -92,7 +113,7 @@ export const CanvasAnimation: React.FC<CanvasAnimationProps> = ({
 // --- ANIMATION LOGIC IMPLEMENTATIONS ---
 
 const setupSonarSweep: AnimationSetupFunction = (ctx) => {
-  let frameId: number;
+  let frameId: number | null = null;
   const centerX = CANVAS_WIDTH / 2;
   const centerY = CANVAS_HEIGHT / 2;
   const fadeTime = 2500;
@@ -145,12 +166,28 @@ const setupSonarSweep: AnimationSetupFunction = (ctx) => {
     frameId = requestAnimationFrame(animate);
   };
 
-  frameId = requestAnimationFrame(animate);
-  return () => cancelAnimationFrame(frameId);
+  const play = () => {
+    if (frameId === null) {
+      frameId = requestAnimationFrame(animate);
+    }
+  };
+
+  const pause = () => {
+    if (frameId !== null) {
+      cancelAnimationFrame(frameId);
+      frameId = null;
+    }
+  };
+
+  const cleanup = () => {
+    pause();
+  };
+
+  return { play, pause, cleanup };
 };
 
 const setupInterconnectingWaves: AnimationSetupFunction = (ctx) => {
-  let frameId: number;
+  let frameId: number | null = null;
   let time = 0;
   let lastTime = 0;
   const centerX = CANVAS_WIDTH / 2;
@@ -217,12 +254,29 @@ const setupInterconnectingWaves: AnimationSetupFunction = (ctx) => {
     frameId = requestAnimationFrame(animate);
   };
 
-  frameId = requestAnimationFrame(animate);
-  return () => cancelAnimationFrame(frameId);
+  const play = () => {
+    if (frameId === null) {
+      lastTime = 0; // Reset lastTime on resume to prevent large delta jumps
+      frameId = requestAnimationFrame(animate);
+    }
+  };
+
+  const pause = () => {
+    if (frameId !== null) {
+      cancelAnimationFrame(frameId);
+      frameId = null;
+    }
+  };
+
+  const cleanup = () => {
+    pause();
+  };
+
+  return { play, pause, cleanup };
 };
 
 const setupHelixScanner: AnimationSetupFunction = (ctx) => {
-  let frameId: number;
+  let frameId: number | null = null;
   let time = 0;
   let lastTime = 0;
   const centerX = CANVAS_WIDTH / 2;
@@ -297,12 +351,29 @@ const setupHelixScanner: AnimationSetupFunction = (ctx) => {
     frameId = requestAnimationFrame(animate);
   };
 
-  frameId = requestAnimationFrame(animate);
-  return () => cancelAnimationFrame(frameId);
+  const play = () => {
+    if (frameId === null) {
+      lastTime = 0; // Reset lastTime on resume to prevent large delta jumps
+      frameId = requestAnimationFrame(animate);
+    }
+  };
+
+  const pause = () => {
+    if (frameId !== null) {
+      cancelAnimationFrame(frameId);
+      frameId = null;
+    }
+  };
+
+  const cleanup = () => {
+    pause();
+  };
+
+  return { play, pause, cleanup };
 };
 
 const setupCrystallineCubeRefraction: AnimationSetupFunction = (ctx) => {
-  let frameId: number;
+  let frameId: number | null = null;
   let time = 0;
   let lastTime = 0;
   const centerX = CANVAS_WIDTH / 2;
@@ -406,8 +477,25 @@ const setupCrystallineCubeRefraction: AnimationSetupFunction = (ctx) => {
     frameId = requestAnimationFrame(animate);
   };
 
-  frameId = requestAnimationFrame(animate);
-  return () => cancelAnimationFrame(frameId);
+  const play = () => {
+    if (frameId === null) {
+      lastTime = 0; // Reset lastTime on resume to prevent large delta jumps
+      frameId = requestAnimationFrame(animate);
+    }
+  };
+
+  const pause = () => {
+    if (frameId !== null) {
+      cancelAnimationFrame(frameId);
+      frameId = null;
+    }
+  };
+
+  const cleanup = () => {
+    pause();
+  };
+
+  return { play, pause, cleanup };
 };
 
 // --- ANIMATION MAP ---

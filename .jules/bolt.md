@@ -5,3 +5,7 @@
 ## 2024-05-19 - [Canvas Grid Optimization]
 **Learning:** The `Squares` background component was using `strokeRect` in a nested loop for every frame, resulting in thousands of draw calls. Canvas API has significant overhead per call.
 **Action:** Batch drawing operations into a single path (`moveTo`/`lineTo` then `stroke`) whenever possible, especially for grid-like structures. This reduced draw calls from ~1300 to < 10 per frame.
+
+## 2026-03-18 - [Canvas Animation Optimization]
+**Learning:** requestAnimationFrame loops continuously run and consume CPU/GPU even when the canvas is not in the viewport.
+**Action:** Use IntersectionObserver with cancelAnimationFrame to pause and resume animation loops when the component scrolls out of the screen.
