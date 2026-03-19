@@ -17,3 +17,7 @@
 ## 2025-02-23 - Semantic Lists for Visual Grids
 **Learning:** Common UI patterns like "Feature Showcases" or "Card Grids" often use `div` soup for layout flexibility. This misses a huge accessibility win: screen readers can announce "List of X items" if semantic `ul`/`li` structure is used.
 **Action:** Always refactor grid layouts of similar items (features, products, testimonials) to use `ul` and `li` tags, ensuring `role="list"` is preserved if CSS resets interfere. Consider adding `tabIndex={0}` if the cards have hover effects that keyboard users should also experience.
+
+## 2026-03-19 - Added keyboard focus states to Error action buttons
+**Learning:** Custom error boundaries and network error action buttons are frequently overlooked for accessibility states like focus rings.
+**Action:** Add explicit `focus-visible` utility classes to action buttons to ensure keyboard users can effectively navigate and retry requests.
