@@ -30,6 +30,7 @@ const Squares: React.FC<SquaresProps> = ({
   const hoveredSquareRef = useRef<{ x: number; y: number } | null>(null);
   // Cache the vignette gradient to avoid creating it every frame
   const vignetteGradientRef = useRef<CanvasGradient | null>(null);
+  const inViewRef = useRef<boolean>(true);
 
   const getDirection = useMemo(() => {
     const directions: Record<string, { x: number; y: number }> = {
@@ -116,6 +117,13 @@ const Squares: React.FC<SquaresProps> = ({
     };
 
     const updateAnimation = () => {
+      // ⚡ Bolt: Pause expensive canvas drawing when the element is scrolled out of the viewport.
+      // This optimization reduces CPU/GPU overhead by skipping thousands of stroke operations per frame.
+      if (!inViewRef.current) {
+        requestRef.current = requestAnimationFrame(updateAnimation);
+        return;
+      }
+
       const effectiveSpeed = speed * 0.5;
       gridOffset.current.x += getDirection.x * effectiveSpeed;
       gridOffset.current.y += getDirection.y * effectiveSpeed;
@@ -153,12 +161,20 @@ const Squares: React.FC<SquaresProps> = ({
     canvas.addEventListener("mousemove", handleMouseMove);
     canvas.addEventListener("mouseleave", handleMouseLeave);
 
+    // ⚡ Bolt: Monitor canvas visibility to intelligently pause the rendering loop,
+    // reducing frame draw calls from ~60fps to 0 when the hero section is scrolled away.
+    const io = new IntersectionObserver((entries) => {
+      inViewRef.current = entries[0]?.isIntersecting ?? true;
+    }, { root: null, threshold: 0 });
+    io.observe(canvas);
+
     requestRef.current = requestAnimationFrame(updateAnimation);
 
     return () => {
       window.removeEventListener("resize", resizeCanvas);
       canvas.removeEventListener("mousemove", handleMouseMove);
       canvas.removeEventListener("mouseleave", handleMouseLeave);
+      io.disconnect();
       if (requestRef.current) {
         cancelAnimationFrame(requestRef.current);
       }
