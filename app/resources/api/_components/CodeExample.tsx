@@ -48,6 +48,7 @@ export default function CodeExample({
             <div className="flex gap-1">
               {examples.map((example) => (
                 <button
+                  type="button"
                   key={example.language}
                   onClick={() => setSelectedLanguage(example.language)}
                   className={cn(
@@ -63,17 +64,19 @@ export default function CodeExample({
             </div>
           </div>
           <button
+            type="button"
             onClick={handleCopy}
             className={cn(
               "p-2 rounded-md transition-all duration-200",
               "hover:bg-slate-800/50 text-slate-400 hover:text-slate-300"
             )}
             title="کپی کد"
+            aria-label="کپی کد"
           >
             {copied ? (
-              <Check className="w-4 h-4 text-green-400" />
+              <Check className="w-4 h-4 text-green-400" aria-hidden="true" />
             ) : (
-              <Copy className="w-4 h-4" />
+              <Copy className="w-4 h-4" aria-hidden="true" />
             )}
           </button>
         </div>
