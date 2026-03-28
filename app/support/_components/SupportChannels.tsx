@@ -141,7 +141,7 @@ export default function SupportChannels({
             >
               <Component
                 {...(channel.href ? { href: channel.href } : {})}
-                className="block w-full text-right"
+                className="block w-full text-right rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
               >
                 {/* Icon */}
                 <div
