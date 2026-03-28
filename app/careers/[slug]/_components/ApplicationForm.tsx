@@ -165,6 +165,8 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
               setFormData({ ...formData, fullName: e.target.value });
               setErrors({ ...errors, fullName: undefined });
             }}
+            aria-invalid={!!errors.fullName}
+            aria-describedby={errors.fullName ? "fullName-error" : undefined}
             className={cn(
               "w-full px-4 py-2.5 rounded-lg",
               "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -178,7 +180,7 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
             placeholder={t.placeholders.fullName}
           />
           {errors.fullName && (
-            <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+            <p id="fullName-error" role="alert" className="mt-1 text-sm text-red-400 flex items-center gap-1">
               <AlertCircle className="w-4 h-4" />
               {errors.fullName}
             </p>
@@ -197,6 +199,8 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
               setFormData({ ...formData, email: e.target.value });
               setErrors({ ...errors, email: undefined });
             }}
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? "email-error" : undefined}
             className={cn(
               "w-full px-4 py-2.5 rounded-lg",
               "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -210,7 +214,7 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
             placeholder={t.placeholders.email}
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+            <p id="email-error" role="alert" className="mt-1 text-sm text-red-400 flex items-center gap-1">
               <AlertCircle className="w-4 h-4" />
               {errors.email}
             </p>
@@ -229,6 +233,8 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
               setFormData({ ...formData, phone: e.target.value });
               setErrors({ ...errors, phone: undefined });
             }}
+            aria-invalid={!!errors.phone}
+            aria-describedby={errors.phone ? "phone-error" : undefined}
             className={cn(
               "w-full px-4 py-2.5 rounded-lg",
               "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -242,7 +248,7 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
             placeholder={t.placeholders.phone}
           />
           {errors.phone && (
-            <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+            <p id="phone-error" role="alert" className="mt-1 text-sm text-red-400 flex items-center gap-1">
               <AlertCircle className="w-4 h-4" />
               {errors.phone}
             </p>
@@ -303,6 +309,8 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
               setErrors({ ...errors, coverLetter: undefined });
             }}
             rows={6}
+            aria-invalid={!!errors.coverLetter}
+            aria-describedby={errors.coverLetter ? "coverLetter-error" : undefined}
             className={cn(
               "w-full px-4 py-2.5 rounded-lg",
               "text-base", // Prevent zoom on iOS
@@ -317,7 +325,7 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
             placeholder={t.placeholders.coverLetter}
           />
           {errors.coverLetter && (
-            <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+            <p id="coverLetter-error" role="alert" className="mt-1 text-sm text-red-400 flex items-center gap-1">
               <AlertCircle className="w-4 h-4" />
               {errors.coverLetter}
             </p>
@@ -341,6 +349,8 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
               type="file"
               accept=".pdf,.doc,.docx"
               onChange={handleFileChange}
+              aria-invalid={!!errors.resume}
+              aria-describedby={errors.resume ? "resume-error" : undefined}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
             <div className="text-center">
@@ -351,7 +361,7 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
             </div>
           </div>
           {errors.resume && (
-            <p className="mt-1 text-sm text-red-400 flex items-center gap-1">
+            <p id="resume-error" role="alert" className="mt-1 text-sm text-red-400 flex items-center gap-1">
               <AlertCircle className="w-4 h-4" />
               {errors.resume}
             </p>
