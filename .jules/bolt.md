@@ -6,6 +6,9 @@
 **Learning:** The `Squares` background component was using `strokeRect` in a nested loop for every frame, resulting in thousands of draw calls. Canvas API has significant overhead per call.
 **Action:** Batch drawing operations into a single path (`moveTo`/`lineTo` then `stroke`) whenever possible, especially for grid-like structures. This reduced draw calls from ~1300 to < 10 per frame.
 
+## 2024-05-20 - [Static Array Re-allocation Optimization]
+**Learning:** In `app/landing/_components/WhyChooseUs.tsx`, a large array of objects (containing static strings and JSX elements) was being recreated on every render of the component. This causes unnecessary garbage collection and can trigger re-renders in child components if passed as props.
+**Action:** Move static data structures (like lists of features or strings that do not depend on props or state) completely outside the React component function, or wrap them in `useMemo` if they depend on local scope variables.
 ## 2025-02-14 - [WebGL Render Loop Array Allocation]
 **Learning:** The `LaserFlow` component was pushing individual FPS numbers to an array (`fpsSamplesRef.current.push(instFps)`) on every frame, allocating a new array every 750ms and mapping over it to calculate the average FPS. In high-frequency render loops (`requestAnimationFrame`), allocating objects or arrays creates unnecessary GC overhead, which can cause micro-stutters.
 **Action:** Always use simple numeric accumulators (e.g., `sum` and `count`) instead of storing individual history samples in arrays when only an average or basic aggregation is needed in a hot path.
