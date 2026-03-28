@@ -324,7 +324,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     htmlFor="name"
                     className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
                   >
-                    {currentContent.fields.name}
+                    {currentContent.fields.name} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
                   </label>
                   <input
                     type="text"
@@ -334,6 +334,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     onChange={handleChange}
                     placeholder={currentContent.placeholders.name}
                     aria-invalid={!!errors.name}
+                    aria-required="true"
                     aria-describedby={errors.name ? "name-error" : undefined}
                     className={cn(
                       "w-full px-4 py-3 rounded-lg",
@@ -367,7 +368,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     htmlFor="email"
                     className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
                   >
-                    {currentContent.fields.email}
+                    {currentContent.fields.email} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
                   </label>
                   <input
                     type="email"
@@ -377,6 +378,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     onChange={handleChange}
                     placeholder={currentContent.placeholders.email}
                     aria-invalid={errors.email ? "true" : "false"}
+                    aria-required="true"
                     aria-describedby={errors.email ? "email-error" : undefined}
                     className={cn(
                       "w-full px-4 py-3 rounded-lg",
@@ -483,7 +485,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   htmlFor="subject"
                   className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
                 >
-                  {currentContent.fields.subject}
+                  {currentContent.fields.subject} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
                 </label>
                 <input
                   type="text"
@@ -493,6 +495,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   onChange={handleChange}
                   placeholder={currentContent.placeholders.subject}
                   aria-invalid={!!errors.subject}
+                  aria-required="true"
                   aria-describedby={errors.subject ? "subject-error" : undefined}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
@@ -526,7 +529,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   htmlFor="message"
                   className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
                 >
-                  {currentContent.fields.message}
+                  {currentContent.fields.message} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
                 </label>
                 <textarea
                   id="message"
@@ -535,6 +538,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   onChange={handleChange}
                   placeholder={currentContent.placeholders.message}
                   aria-invalid={!!errors.message}
+                  aria-required="true"
                   aria-describedby={errors.message ? "message-error" : undefined}
                   rows={5}
                   className={cn(
@@ -606,6 +610,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     checked={formData.consent}
                     onChange={handleChange}
                     aria-invalid={!!errors.consent}
+                    aria-required="true"
                     aria-describedby={errors.consent ? "consent-error" : undefined}
                     className={cn(
                       "mt-1 w-5 h-5 rounded",
@@ -622,7 +627,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     )}
                   />
                   <span className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
-                    {currentContent.fields.consent}
+                    {currentContent.fields.consent} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
                   </span>
                 </label>
                 {errors.consent && (

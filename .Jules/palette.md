@@ -18,6 +18,9 @@
 **Learning:** Common UI patterns like "Feature Showcases" or "Card Grids" often use `div` soup for layout flexibility. This misses a huge accessibility win: screen readers can announce "List of X items" if semantic `ul`/`li` structure is used.
 **Action:** Always refactor grid layouts of similar items (features, products, testimonials) to use `ul` and `li` tags, ensuring `role="list"` is preserved if CSS resets interfere. Consider adding `tabIndex={0}` if the cards have hover effects that keyboard users should also experience.
 
+## 2024-05-15 - Required Field Indication and A11y in Forms
+**Learning:** Found forms where required fields lacked both visual indicators (asterisks) and semantic indicators (`aria-required`), which hurts accessibility and user confidence.
+**Action:** When adding or updating forms, ensure all required fields have a visual indicator (like an asterisk with `aria-hidden="true"`) in the label and the `aria-required="true"` attribute on the corresponding input element.
 ## 2025-03-08 - Extending Accessible Form Validation
 **Learning:** While `ContactForm` implemented `aria-invalid` and `aria-describedby` correctly, other key forms like `SupportForm` and `ApplicationForm` were lacking these attributes. Screen readers rely on these attributes paired with `role="alert"` and matching `id`s to announce validation errors inline as users interact with forms.
 **Action:** Always ensure *every* form input across the application includes `aria-invalid` and `aria-describedby` linked to its error message `id`, and ensure the error message container has `role="alert"`.
