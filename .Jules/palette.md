@@ -18,6 +18,9 @@
 **Learning:** Common UI patterns like "Feature Showcases" or "Card Grids" often use `div` soup for layout flexibility. This misses a huge accessibility win: screen readers can announce "List of X items" if semantic `ul`/`li` structure is used.
 **Action:** Always refactor grid layouts of similar items (features, products, testimonials) to use `ul` and `li` tags, ensuring `role="list"` is preserved if CSS resets interfere. Consider adding `tabIndex={0}` if the cards have hover effects that keyboard users should also experience.
 
+## 2025-03-11 - Icon Button Accessibility
+**Learning:** Icon-only action buttons (like copy buttons) that rely solely on `title` attributes may not provide robust accessibility across all screen readers. Additionally, state-toggling buttons must use `aria-pressed`, and icons within these buttons must be explicitly hidden with `aria-hidden="true"` to prevent raw SVG announcements. Missing keyboard focus classes on these buttons also breaks navigation.
+**Action:** When implementing icon-only or toggle buttons, always add `type="button"`, use dynamic `aria-label`s and `aria-pressed` for state changes, add explicit `focus-visible` styling, and apply `aria-hidden="true"` to the internal SVG icons.
 ## 2024-03-12 - Keyboard Focus in Overflow Hidden Containers
 **Learning:** When adding keyboard focus rings to interactive elements inside containers with `overflow-hidden` (like accordions), outer rings with `ring-offset` get cut off. Using inner `focus-visible:ring-2` on the button itself or focusing the background (`focus-visible:bg-slate-900/60`) works better, combined with `rounded` utilities to match the container.
 **Action:** Always verify keyboard focus states inside cards or accordions with `overflow-hidden` by using internal rings or checking if the ring is clipped.
