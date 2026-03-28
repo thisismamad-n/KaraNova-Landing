@@ -30,3 +30,5 @@ export function debounce<T extends (...args: any[]) => void>(
 
   return debounced as T & { cancel: () => void };
 }
+
+export { secureRandom } from "./secureRandom";

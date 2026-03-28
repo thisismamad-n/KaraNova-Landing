@@ -7,6 +7,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useInView } from "react-intersection-observer";
 import { SlidePathDesigner } from "@/components/ui/slide-path-designer";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { secureRandom } from "@/lib/utils";
 
 const SnapScrollSection = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -457,7 +458,7 @@ export const AnimatedNumber_003 = ({ isMobile }: { isMobile?: boolean }) => {
       if (currentStep <= steps) {
         const min = 1000000 + currentStep * (1000000 / steps);
         const max = 2200000;
-        const randomNum = Math.floor(min + Math.random() * (max - min));
+        const randomNum = Math.floor(min + secureRandom() * (max - min));
         setDisplayNumber(randomNum);
       } else {
         setDisplayNumber(2146000);
