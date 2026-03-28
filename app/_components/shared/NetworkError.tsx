@@ -40,7 +40,8 @@ export default function NetworkError({
               "inline-flex items-center gap-1.5",
               "text-xs font-medium text-orange-400",
               "hover:text-orange-300",
-              "transition-colors"
+              "transition-colors",
+              "rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
             )}
           >
             <RefreshCw className="w-3.5 h-3.5" />

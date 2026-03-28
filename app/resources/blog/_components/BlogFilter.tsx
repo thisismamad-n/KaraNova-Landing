@@ -52,6 +52,7 @@ export default function BlogFilter({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => onCategoryChange("all")}
+            aria-pressed={selectedCategory === "all"}
             className={cn(
               "px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300",
               selectedCategory === "all"
@@ -69,6 +70,7 @@ export default function BlogFilter({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => onCategoryChange(category)}
+              aria-pressed={selectedCategory === category}
               className={cn(
                 "px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300",
                 selectedCategory === category

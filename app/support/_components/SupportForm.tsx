@@ -248,6 +248,8 @@ export default function SupportForm({ language }: SupportFormProps) {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? "name-error" : undefined}
                   placeholder={currentContent.placeholders.name}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
@@ -261,11 +263,13 @@ export default function SupportForm({ language }: SupportFormProps) {
                 />
                 {errors.name && (
                   <motion.p
+                    id="name-error"
+                    role="alert"
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
                   >
-                    <AlertCircle className="w-3 h-3" />
+                    <AlertCircle className="w-3 h-3" aria-hidden="true" />
                     {errors.name}
                   </motion.p>
                 )}
@@ -285,6 +289,8 @@ export default function SupportForm({ language }: SupportFormProps) {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? "email-error" : undefined}
                   placeholder={currentContent.placeholders.email}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
@@ -298,11 +304,13 @@ export default function SupportForm({ language }: SupportFormProps) {
                 />
                 {errors.email && (
                   <motion.p
+                    id="email-error"
+                    role="alert"
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
                   >
-                    <AlertCircle className="w-3 h-3" />
+                    <AlertCircle className="w-3 h-3" aria-hidden="true" />
                     {errors.email}
                   </motion.p>
                 )}
@@ -325,6 +333,8 @@ export default function SupportForm({ language }: SupportFormProps) {
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
+                  aria-invalid={!!errors.subject}
+                  aria-describedby={errors.subject ? "subject-error" : undefined}
                   placeholder={currentContent.placeholders.subject}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
@@ -338,11 +348,13 @@ export default function SupportForm({ language }: SupportFormProps) {
                 />
                 {errors.subject && (
                   <motion.p
+                    id="subject-error"
+                    role="alert"
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
                   >
-                    <AlertCircle className="w-3 h-3" />
+                    <AlertCircle className="w-3 h-3" aria-hidden="true" />
                     {errors.subject}
                   </motion.p>
                 )}
@@ -391,6 +403,8 @@ export default function SupportForm({ language }: SupportFormProps) {
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
+                aria-invalid={!!errors.message}
+                aria-describedby={errors.message ? "message-error" : undefined}
                 placeholder={currentContent.placeholders.message}
                 rows={5}
                 className={cn(
@@ -406,11 +420,13 @@ export default function SupportForm({ language }: SupportFormProps) {
               />
               {errors.message && (
                 <motion.p
+                  id="message-error"
+                  role="alert"
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
                 >
-                  <AlertCircle className="w-3 h-3" />
+                  <AlertCircle className="w-3 h-3" aria-hidden="true" />
                   {errors.message}
                 </motion.p>
               )}
