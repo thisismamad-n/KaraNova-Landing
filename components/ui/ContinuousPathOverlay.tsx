@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useSpring, useTransform } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useId } from "react";
 import { debounce } from "@/lib/utils";
 
 interface ContinuousPathOverlayProps {
@@ -37,6 +37,8 @@ export function ContinuousPathOverlay({
 
   const pathLength = useTransform(easedProgress, [0, 1], [0, 1]);
   const strokeDashoffset = useTransform(pathLength, (value) => 1 - value);
+  const filterId = useId();
+  const glowFilterId = `continuous-glow-${filterId}`;
 
   useEffect(() => {
     const scalePathCoordinates = (path: string, scaleX: number): string => {
@@ -105,6 +107,17 @@ export function ContinuousPathOverlay({
             <stop offset="50%" stopColor="hsl(185, 85%, 70%)" />
             <stop offset="100%" stopColor="var(--landing-accent)" />
           </linearGradient>
+          <filter id={glowFilterId} x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur1" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="21" result="blur2" />
+            <feGaussianBlur in="SourceGraphic" stdDeviation="32" result="blur3" />
+            <feMerge>
+              <feMergeNode in="blur3" />
+              <feMergeNode in="blur2" />
+              <feMergeNode in="blur1" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
         </defs>
         <motion.path
           d={scaledPathData}
@@ -117,8 +130,7 @@ export function ContinuousPathOverlay({
           style={{
             pathLength,
             strokeDashoffset,
-            filter:
-              "drop-shadow(0 0 18px rgba(20, 184, 166, 0.55)) drop-shadow(0 0 42px rgba(20, 184, 166, 0.45)) drop-shadow(0 0 64px rgba(14, 165, 233, 0.35))",
+            filter: `url(#${glowFilterId})`,
             strokeOpacity: 0.82,
           }}
         />
