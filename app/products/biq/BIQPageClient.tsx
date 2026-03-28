@@ -16,8 +16,6 @@ import {
   Activity,
   LineChart,
   Gauge,
-  Filter,
-  Download,
 } from "lucide-react";
 
 export default function BIQPageClient() {
