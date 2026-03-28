@@ -77,7 +77,8 @@ export default function Error({
               "transition-all duration-300",
               "shadow-[0_0_20px_rgba(20,184,166,0.4)]",
               "hover:shadow-[0_0_30px_rgba(20,184,166,0.6)]",
-              "hover:scale-105"
+              "hover:scale-105",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
             )}
           >
             <RefreshCw className="w-5 h-5" />
@@ -94,7 +95,8 @@ export default function Error({
               "text-slate-300 font-semibold",
               "hover:border-teal-500/50 hover:bg-slate-800/70",
               "hover:text-teal-300",
-              "transition-all duration-300"
+              "transition-all duration-300",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
             )}
           >
             <Home className="w-5 h-5" />
