@@ -17,3 +17,7 @@
 **Vulnerability:** The Zod validation schema for forms lacked maximum length constraints on text inputs (e.g., `name`, `company`, `subject`, `message`), leaving the application vulnerable to Denial of Service (DoS) attacks via oversized payloads.
 **Learning:** Only defining `min` constraints allows attackers to submit arbitrarily large strings, which can consume significant server resources during parsing, logging, and storage, leading to resource exhaustion.
 **Prevention:** Always define explicit maximum length constraints (e.g., `.max(100)`) on all text inputs during schema definition to ensure predictable memory usage and prevent DoS vectors.
+## 2025-02-18 - Missing Input Length Limits (ReDoS risk)
+**Vulnerability:** The server-side form validation utility `containsXSS` used regex patterns to detect malicious input but lacked a prior length limit check on string properties.
+**Learning:** Processing unbounded input with regular expressions introduces significant ReDoS (Regular Expression Denial of Service) and general DoS risks, allowing attackers to tie up the server thread by sending overly long strings.
+**Prevention:** Always enforce a maximum length limit on user input *before* evaluating it with regular expressions, keeping string size within reasonable bounds for the application.
