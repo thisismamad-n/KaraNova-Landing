@@ -12,16 +12,17 @@ interface ContactFormProps {
 
 // Zod validation schema
 const contactFormSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
+  name: z.string().min(2, "Name must be at least 2 characters").max(100, "Name must be at most 100 characters"),
+  email: z.string().email("Please enter a valid email address").max(254, "Email must be at most 254 characters"),
   phone: z
     .string()
     .regex(/^[0-9+\-\s()]+$/, "Invalid phone number")
+    .max(50, "Phone number must be at most 50 characters")
     .optional()
     .or(z.literal("")),
-  company: z.string().optional(),
-  subject: z.string().min(3, "Subject must be at least 3 characters"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  company: z.string().max(100, "Company name must be at most 100 characters").optional(),
+  subject: z.string().min(3, "Subject must be at least 3 characters").max(200, "Subject must be at most 200 characters"),
+  message: z.string().min(10, "Message must be at least 10 characters").max(2000, "Message must be at most 2000 characters"),
   preferredContact: z.enum(["email", "phone"]),
   consent: z.boolean().refine((val) => val === true, {
     message: "You must accept the privacy policy",
@@ -99,11 +100,17 @@ export default function ContactForm({ language }: ContactFormProps) {
       errorMessage: "لطفاً دوباره تلاش کنید یا با ما تماس بگیرید.",
       validation: {
         nameMin: "نام باید حداقل ۲ کاراکتر باشد",
+        nameMax: "نام نباید بیشتر از ۱۰۰ کاراکتر باشد",
         emailRequired: "ایمیل الزامی است",
         emailInvalid: "ایمیل معتبر نیست",
+        emailMax: "ایمیل نباید بیشتر از ۲۵۴ کاراکتر باشد",
         phoneInvalid: "شماره تلفن معتبر نیست",
+        phoneMax: "شماره تلفن نباید بیشتر از ۵۰ کاراکتر باشد",
+        companyMax: "نام شرکت نباید بیشتر از ۱۰۰ کاراکتر باشد",
         subjectMin: "موضوع باید حداقل ۳ کاراکتر باشد",
+        subjectMax: "موضوع نباید بیشتر از ۲۰۰ کاراکتر باشد",
         messageMin: "پیام باید حداقل ۱۰ کاراکتر باشد",
+        messageMax: "پیام نباید بیشتر از ۲۰۰۰ کاراکتر باشد",
         consentRequired: "باید سیاست حفظ حریم خصوصی را بپذیرید",
       },
     },
@@ -140,11 +147,17 @@ export default function ContactForm({ language }: ContactFormProps) {
       errorMessage: "Please try again or contact us directly.",
       validation: {
         nameMin: "Name must be at least 2 characters",
+        nameMax: "Name must be at most 100 characters",
         emailRequired: "Email is required",
         emailInvalid: "Invalid email address",
+        emailMax: "Email must be at most 254 characters",
         phoneInvalid: "Invalid phone number",
+        phoneMax: "Phone number must be at most 50 characters",
+        companyMax: "Company name must be at most 100 characters",
         subjectMin: "Subject must be at least 3 characters",
+        subjectMax: "Subject must be at most 200 characters",
         messageMin: "Message must be at least 10 characters",
+        messageMax: "Message must be at most 2000 characters",
         consentRequired: "You must accept the privacy policy",
       },
     },
@@ -165,14 +178,26 @@ export default function ContactForm({ language }: ContactFormProps) {
           // Map Zod error messages to localized messages
           if (field === "name" && err.message.includes("at least 2")) {
             newErrors[field] = currentContent.validation.nameMin;
+          } else if (field === "name" && err.message.includes("at most")) {
+            newErrors[field] = currentContent.validation.nameMax;
           } else if (field === "email" && err.message.includes("email")) {
             newErrors[field] = currentContent.validation.emailInvalid;
+          } else if (field === "email" && err.message.includes("at most")) {
+            newErrors[field] = currentContent.validation.emailMax;
           } else if (field === "phone" && err.message.includes("Invalid")) {
             newErrors[field] = currentContent.validation.phoneInvalid;
+          } else if (field === "phone" && err.message.includes("at most")) {
+            newErrors[field] = currentContent.validation.phoneMax;
+          } else if (field === "company" && err.message.includes("at most")) {
+            newErrors[field] = currentContent.validation.companyMax;
           } else if (field === "subject" && err.message.includes("at least 3")) {
             newErrors[field] = currentContent.validation.subjectMin;
+          } else if (field === "subject" && err.message.includes("at most")) {
+            newErrors[field] = currentContent.validation.subjectMax;
           } else if (field === "message" && err.message.includes("at least 10")) {
             newErrors[field] = currentContent.validation.messageMin;
+          } else if (field === "message" && err.message.includes("at most")) {
+            newErrors[field] = currentContent.validation.messageMax;
           } else if (field === "consent") {
             newErrors[field] = currentContent.validation.consentRequired;
           } else {
@@ -299,7 +324,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     htmlFor="name"
                     className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
                   >
-                    {currentContent.fields.name}
+                    {currentContent.fields.name} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
                   </label>
                   <input
                     type="text"
@@ -309,6 +334,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     onChange={handleChange}
                     placeholder={currentContent.placeholders.name}
                     aria-invalid={!!errors.name}
+                    aria-required="true"
                     aria-describedby={errors.name ? "name-error" : undefined}
                     className={cn(
                       "w-full px-4 py-3 rounded-lg",
@@ -342,7 +368,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     htmlFor="email"
                     className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
                   >
-                    {currentContent.fields.email}
+                    {currentContent.fields.email} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
                   </label>
                   <input
                     type="email"
@@ -352,6 +378,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     onChange={handleChange}
                     placeholder={currentContent.placeholders.email}
                     aria-invalid={errors.email ? "true" : "false"}
+                    aria-required="true"
                     aria-describedby={errors.email ? "email-error" : undefined}
                     className={cn(
                       "w-full px-4 py-3 rounded-lg",
@@ -458,7 +485,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   htmlFor="subject"
                   className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
                 >
-                  {currentContent.fields.subject}
+                  {currentContent.fields.subject} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
                 </label>
                 <input
                   type="text"
@@ -468,6 +495,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   onChange={handleChange}
                   placeholder={currentContent.placeholders.subject}
                   aria-invalid={!!errors.subject}
+                  aria-required="true"
                   aria-describedby={errors.subject ? "subject-error" : undefined}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
@@ -501,7 +529,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   htmlFor="message"
                   className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
                 >
-                  {currentContent.fields.message}
+                  {currentContent.fields.message} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
                 </label>
                 <textarea
                   id="message"
@@ -510,6 +538,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   onChange={handleChange}
                   placeholder={currentContent.placeholders.message}
                   aria-invalid={!!errors.message}
+                  aria-required="true"
                   aria-describedby={errors.message ? "message-error" : undefined}
                   rows={5}
                   className={cn(
@@ -581,6 +610,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     checked={formData.consent}
                     onChange={handleChange}
                     aria-invalid={!!errors.consent}
+                    aria-required="true"
                     aria-describedby={errors.consent ? "consent-error" : undefined}
                     className={cn(
                       "mt-1 w-5 h-5 rounded",
@@ -597,7 +627,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     )}
                   />
                   <span className="text-sm text-slate-400 group-hover:text-slate-300 transition-colors">
-                    {currentContent.fields.consent}
+                    {currentContent.fields.consent} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
                   </span>
                 </label>
                 {errors.consent && (

@@ -44,7 +44,7 @@ export default function SearchFAQ({ onSearch, language }: SearchFAQProps) {
           "backdrop-blur-md bg-slate-900/40",
           "border border-slate-800/50",
           "rounded-xl overflow-hidden",
-          "focus-within:border-teal-500/50 transition-all duration-300",
+          "focus-within:border-teal-500/50 focus-within:ring-2 focus-within:ring-teal-500/20 transition-all duration-300",
           "shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
         )}
       >
@@ -73,8 +73,9 @@ export default function SearchFAQ({ onSearch, language }: SearchFAQProps) {
           <button
             onClick={handleClear}
             className={cn(
-              "absolute left-4 p-1",
+              "absolute left-4 p-1 rounded-md",
               "text-slate-400 hover:text-slate-300",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500",
               "transition-colors"
             )}
             aria-label={currentContent.clear}

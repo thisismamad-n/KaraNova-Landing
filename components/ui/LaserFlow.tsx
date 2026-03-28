@@ -64,7 +64,8 @@ export const LaserFlow: React.FC<Props> = ({
   const baseDprRef = useRef<number>(1);
   const currentDprRef = useRef<number>(1);
   const lastSizeRef = useRef({ width: 0, height: 0, dpr: 0 });
-  const fpsSamplesRef = useRef<number[]>([]);
+  const fpsSumRef = useRef<number>(0);
+  const fpsCountRef = useRef<number>(0);
   const lastFpsCheckRef = useRef<number>(performance.now());
   const emaDtRef = useRef<number>(16.7); // ms
   const pausedRef = useRef<boolean>(false);
@@ -207,25 +208,31 @@ export const LaserFlow: React.FC<Props> = ({
     const adjustDprIfNeeded = (now: number) => {
       const elapsed = now - lastFpsCheckRef.current;
       if (elapsed < 750) return;
-      const samples = fpsSamplesRef.current;
-      if (samples.length === 0) {
+
+      if (fpsCountRef.current === 0) {
         lastFpsCheckRef.current = now;
         return;
       }
-      const avgFps = samples.reduce((a, b) => a + b, 0) / samples.length;
+
+      const avgFps = fpsSumRef.current / fpsCountRef.current;
       let next = currentDprRef.current;
       const base = baseDprRef.current;
+
       if (avgFps < lowerThresh) {
         next = clamp(currentDprRef.current * 0.85, dprFloor, base);
       } else if (avgFps > upperThresh && currentDprRef.current < base) {
         next = clamp(currentDprRef.current * 1.1, dprFloor, base);
       }
+
       if (Math.abs(next - currentDprRef.current) > 0.01 && now - lastDprChangeRef > dprChangeCooldown) {
         currentDprRef.current = next;
         lastDprChangeRef = now;
         setSizeNow();
       }
-      fpsSamplesRef.current = [];
+
+      // Reset accumulators
+      fpsSumRef.current = 0;
+      fpsCountRef.current = 0;
       lastFpsCheckRef.current = now;
     };
 
@@ -242,7 +249,10 @@ export const LaserFlow: React.FC<Props> = ({
       const dtMs = dt * 1000;
       emaDtRef.current = emaDtRef.current * 0.9 + dtMs * 0.1;
       const instFps = 1000 / Math.max(1, emaDtRef.current);
-      fpsSamplesRef.current.push(instFps);
+
+      // Accumulate FPS stats without allocating new array elements
+      fpsSumRef.current += instFps;
+      fpsCountRef.current += 1;
       uniforms.iTime.value = t;
       const cdt = Math.min(0.033, Math.max(0.001, dt));
       (uniforms.uFlowTime.value as number) += cdt;
