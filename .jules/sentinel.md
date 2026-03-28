@@ -7,3 +7,8 @@
 **Vulnerability:** The form validation logic only checked top-level string properties for XSS patterns, allowing nested objects (e.g., `{ user: { bio: "<script>..." } }`) to bypass security checks.
 **Learning:** Shallow validation of complex data structures leaves gaping holes for attackers to exploit by simply wrapping their payloads in objects or arrays.
 **Prevention:** Always implement recursive validation for data structures that can contain nested user input, ensuring every leaf node is inspected regardless of depth.
+
+## 2025-02-18 - Missing Input Length Limits (ReDoS risk)
+**Vulnerability:** The server-side form validation utility `containsXSS` used regex patterns to detect malicious input but lacked a prior length limit check on string properties.
+**Learning:** Processing unbounded input with regular expressions introduces significant ReDoS (Regular Expression Denial of Service) and general DoS risks, allowing attackers to tie up the server thread by sending overly long strings.
+**Prevention:** Always enforce a maximum length limit on user input *before* evaluating it with regular expressions, keeping string size within reasonable bounds for the application.

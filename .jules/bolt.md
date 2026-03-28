@@ -9,3 +9,12 @@
 ## 2026-03-16 - [Job Lookup Optimization]
 **Learning:** Using a Map for lookups instead of Array.find provides O(1) complexity, and React's 'cache' avoids redundant lookups across the Server Component lifecycle.
 **Action:** Use Map-based indices and 'cache' for frequently accessed data in Next.js Server Components.
+## 2026-03-17 - [SVG Filter Performance]
+**Learning:** Complex multi-layered SVG `<filter>` tags are generally slower than chaining native CSS `drop-shadow` functions, despite what one might assume. Additionally, using `willChange: 'stroke-dashoffset'` on SVGs with gradients breaks rendering in Blink-based browsers.
+**Action:** Always prefer native CSS `drop-shadow` for glows and avoid `willChange` on SVGs with document-level paint servers.
+## 2026-03-22 - [Canvas Animation Optimization]
+**Learning:** requestAnimationFrame loops continuously consume CPU/GPU even when the canvas is off-screen. Using IntersectionObserver to pause the loop when the canvas is not in the viewport prevents unnecessary rendering.
+**Action:** Always wrap continuous requestAnimationFrame canvas animations with an IntersectionObserver and use a mutable `useRef` to control the animation state.
+## 2026-03-21 - [Pause Canvas Animations]
+**Learning:** requestAnimationFrame loops in Canvas animations continuously consume CPU/GPU even when off-screen if not explicitly paused.
+**Action:** Always use an IntersectionObserver combined with a mutable useRef to conditionally pause canvas rendering logic when elements are outside the viewport, reducing idle resource consumption.
