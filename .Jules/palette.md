@@ -17,3 +17,7 @@
 ## 2025-02-23 - Semantic Lists for Visual Grids
 **Learning:** Common UI patterns like "Feature Showcases" or "Card Grids" often use `div` soup for layout flexibility. This misses a huge accessibility win: screen readers can announce "List of X items" if semantic `ul`/`li` structure is used.
 **Action:** Always refactor grid layouts of similar items (features, products, testimonials) to use `ul` and `li` tags, ensuring `role="list"` is preserved if CSS resets interfere. Consider adding `tabIndex={0}` if the cards have hover effects that keyboard users should also experience.
+
+## 2025-03-22 - Accordion Accessibility Standard
+**Learning:** Custom implementations of accordions (like Pricing FAQ) often miss critical ARIA linkages compared to standardized UI library components. A simple `onClick` toggle isn't enough; screen readers need to know the semantic relationship between the trigger and content.
+**Action:** When creating custom accordions or toggleable sections, strictly apply the pattern: `type="button"`, `aria-expanded`, `aria-controls`, and `id` on the trigger, paired with `role="region"`, matching `id`, and `aria-labelledby` on the content container. Also, always ensure decorative icons within the trigger use `aria-hidden="true"`.
