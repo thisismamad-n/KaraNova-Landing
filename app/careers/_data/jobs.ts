@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 export type JobType = "full-time" | "part-time" | "contract" | "remote";
 export type JobDepartment = "Engineering" | "Design" | "Marketing" | "Sales" | "Operations" | "Product";
 export type JobLocation = "Mashhad" | "Remote" | "Hybrid";
@@ -224,6 +226,17 @@ export const mockJobs: JobPosting[] = [
     postedDate: new Date("2024-01-22"),
   },
 ];
+
+// Optimized lookup map
+const jobsBySlug = new Map(mockJobs.map((job) => [job.slug, job]));
+
+/**
+ * Get a job by its slug.
+ * Uses a Map for O(1) lookup and React cache for request-level memoization.
+ */
+export const getJobBySlug = cache((slug: string) => {
+  return jobsBySlug.get(slug);
+});
 
 // Bilingual job content
 export const jobTranslations = {

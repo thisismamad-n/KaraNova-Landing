@@ -3,7 +3,7 @@
 import React, { useRef, useEffect } from 'react';
 
 // --- TYPE DEFINITIONS & CONSTANTS ---
-type AnimationSetupFunction = (ctx: CanvasRenderingContext2D) => () => void;
+type AnimationSetupFunction = (ctx: CanvasRenderingContext2D, inViewRef: React.MutableRefObject<boolean>) => () => void;
 
 const CANVAS_WIDTH = 280;
 const CANVAS_HEIGHT = 280;
@@ -51,6 +51,23 @@ export const CanvasAnimation: React.FC<CanvasAnimationProps> = ({
   animationId 
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const inViewRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        inViewRef.current = entry.isIntersecting;
+      },
+      { threshold: 0 }
+    );
+
+    if (wrapperRef.current) {
+      observer.observe(wrapperRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -62,12 +79,12 @@ export const CanvasAnimation: React.FC<CanvasAnimationProps> = ({
     const setupFunction = animationMap[animationId];
     if (!setupFunction) return;
 
-    const cleanup = setupFunction(ctx);
+    const cleanup = setupFunction(ctx, inViewRef);
     return cleanup;
   }, [animationId]);
 
   return (
-    <div className="group relative flex h-[320px] w-[320px] flex-col items-center overflow-visible border border-teal-500/10 p-3 transition-all duration-300 rounded-xl">
+    <div ref={wrapperRef} className="group relative flex h-[320px] w-[320px] flex-col items-center overflow-visible border border-teal-500/10 p-3 transition-all duration-300 rounded-xl">
       <Corner position="top-[-8px] left-[-8px]" rotation="rotate(0deg)" delay="0s" />
       <Corner position="top-[-8px] right-[-8px]" rotation="rotate(90deg)" delay="0.1s" />
       <Corner position="bottom-[-8px] left-[-8px]" rotation="rotate(-90deg)" delay="0.2s" />
@@ -91,7 +108,7 @@ export const CanvasAnimation: React.FC<CanvasAnimationProps> = ({
 
 // --- ANIMATION LOGIC IMPLEMENTATIONS ---
 
-const setupSonarSweep: AnimationSetupFunction = (ctx) => {
+const setupSonarSweep: AnimationSetupFunction = (ctx, inViewRef) => {
   let frameId: number;
   const centerX = CANVAS_WIDTH / 2;
   const centerY = CANVAS_HEIGHT / 2;
@@ -109,6 +126,11 @@ const setupSonarSweep: AnimationSetupFunction = (ctx) => {
   }
 
   const animate = (timestamp: number) => {
+    if (!inViewRef.current) {
+      frameId = requestAnimationFrame(animate);
+      return;
+    }
+
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     const scanAngle = (timestamp * 0.001 * (Math.PI / 2) * GLOBAL_SPEED) % (Math.PI * 2);
@@ -149,7 +171,7 @@ const setupSonarSweep: AnimationSetupFunction = (ctx) => {
   return () => cancelAnimationFrame(frameId);
 };
 
-const setupInterconnectingWaves: AnimationSetupFunction = (ctx) => {
+const setupInterconnectingWaves: AnimationSetupFunction = (ctx, inViewRef) => {
   let frameId: number;
   let time = 0;
   let lastTime = 0;
@@ -164,6 +186,13 @@ const setupInterconnectingWaves: AnimationSetupFunction = (ctx) => {
 
   const animate = (timestamp: number) => {
     if (!lastTime) lastTime = timestamp;
+
+    if (!inViewRef.current) {
+      lastTime = timestamp;
+      frameId = requestAnimationFrame(animate);
+      return;
+    }
+
     time += (timestamp - lastTime) * 0.001 * GLOBAL_SPEED;
     lastTime = timestamp;
 
@@ -221,7 +250,7 @@ const setupInterconnectingWaves: AnimationSetupFunction = (ctx) => {
   return () => cancelAnimationFrame(frameId);
 };
 
-const setupHelixScanner: AnimationSetupFunction = (ctx) => {
+const setupHelixScanner: AnimationSetupFunction = (ctx, inViewRef) => {
   let frameId: number;
   let time = 0;
   let lastTime = 0;
@@ -238,6 +267,13 @@ const setupHelixScanner: AnimationSetupFunction = (ctx) => {
 
   const animate = (timestamp: number) => {
     if (!lastTime) lastTime = timestamp;
+
+    if (!inViewRef.current) {
+      lastTime = timestamp;
+      frameId = requestAnimationFrame(animate);
+      return;
+    }
+
     time += (timestamp - lastTime) * 0.001 * GLOBAL_SPEED;
     lastTime = timestamp;
 
@@ -301,7 +337,7 @@ const setupHelixScanner: AnimationSetupFunction = (ctx) => {
   return () => cancelAnimationFrame(frameId);
 };
 
-const setupCrystallineCubeRefraction: AnimationSetupFunction = (ctx) => {
+const setupCrystallineCubeRefraction: AnimationSetupFunction = (ctx, inViewRef) => {
   let frameId: number;
   let time = 0;
   let lastTime = 0;
@@ -329,6 +365,13 @@ const setupCrystallineCubeRefraction: AnimationSetupFunction = (ctx) => {
 
   const animate = (timestamp: number) => {
     if (!lastTime) lastTime = timestamp;
+
+    if (!inViewRef.current) {
+      lastTime = timestamp;
+      frameId = requestAnimationFrame(animate);
+      return;
+    }
+
     time += (timestamp - lastTime) * 0.0003 * GLOBAL_SPEED;
     lastTime = timestamp;
 
