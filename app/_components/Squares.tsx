@@ -28,6 +28,7 @@ const Squares: React.FC<SquaresProps> = ({
   const numSquaresY = useRef<number>(0);
   const gridOffset = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const hoveredSquareRef = useRef<{ x: number; y: number } | null>(null);
+  const inViewRef = useRef<boolean>(true);
   // Cache the vignette gradient to avoid creating it every frame
   const vignetteGradientRef = useRef<CanvasGradient | null>(null);
   const inViewRef = useRef<boolean>(true);
@@ -132,7 +133,9 @@ const Squares: React.FC<SquaresProps> = ({
       }
 
       drawGrid();
-      requestRef.current = requestAnimationFrame(updateAnimation);
+      if (inViewRef.current) {
+        requestRef.current = requestAnimationFrame(updateAnimation);
+      }
     };
 
     const handleMouseMove = (event: MouseEvent) => {

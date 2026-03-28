@@ -6,6 +6,9 @@
 **Learning:** The `Squares` background component was using `strokeRect` in a nested loop for every frame, resulting in thousands of draw calls. Canvas API has significant overhead per call.
 **Action:** Batch drawing operations into a single path (`moveTo`/`lineTo` then `stroke`) whenever possible, especially for grid-like structures. This reduced draw calls from ~1300 to < 10 per frame.
 
+## 2026-03-13 - [Canvas IntersectionObserver]
+**Learning:** The `Squares` component was running its `requestAnimationFrame` continuous canvas loop constantly, even when the element was completely scrolled out of view. This consumes CPU/GPU resources unnecessarily.
+**Action:** Add an `IntersectionObserver` to track the canvas visibility and pause the `requestAnimationFrame` when `isIntersecting` is false. Restart it only when it re-enters the viewport.
 ## 2026-03-16 - [Job Lookup Optimization]
 **Learning:** Using a Map for lookups instead of Array.find provides O(1) complexity, and React's 'cache' avoids redundant lookups across the Server Component lifecycle.
 **Action:** Use Map-based indices and 'cache' for frequently accessed data in Next.js Server Components.
