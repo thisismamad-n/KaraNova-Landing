@@ -69,7 +69,8 @@ export class ErrorBoundary extends Component<Props, State> {
                 "hover:border-teal-400/50",
                 "transition-all duration-300",
                 "shadow-[0_0_20px_rgba(20,184,166,0.4)]",
-                "hover:shadow-[0_0_30px_rgba(20,184,166,0.6)]"
+              "hover:shadow-[0_0_30px_rgba(20,184,166,0.6)]",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               )}
             >
               <RefreshCw className="w-4 h-4" />

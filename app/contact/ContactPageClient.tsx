@@ -11,7 +11,6 @@ import ContactInfo from "./_components/ContactInfo";
 import OfficeMap from "./_components/OfficeMap";
 import SocialLinks from "./_components/SocialLinks";
 
-// Dynamically import heavy form component
 const ContactForm = dynamic(() => import("./_components/ContactForm"), {
   loading: () => <LoadingSkeleton variant="form" />,
 });
