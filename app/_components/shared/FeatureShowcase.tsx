@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -48,11 +47,11 @@ export default function FeatureShowcase({
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         {(title || description) && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12 lg:mb-16"
+          <div
+            className={cn(
+              "text-center mb-12 lg:mb-16 transition-all duration-700 ease-out",
+              inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
+            )}
           >
             {title && (
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
@@ -71,7 +70,7 @@ export default function FeatureShowcase({
                 {description}
               </p>
             )}
-          </motion.div>
+          </div>
         )}
 
         {/* Features */}
@@ -84,30 +83,31 @@ export default function FeatureShowcase({
           role="list"
         >
           {features.map((feature, index) => (
-            <motion.li
+            <li
               key={index}
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.1,
-                ease: [0.16, 1, 0.3, 1],
-              }}
               className={cn(
                 "relative group",
                 "backdrop-blur-md bg-slate-900/30",
                 "border border-slate-800/50",
                 "rounded-2xl p-6 lg:p-8",
                 "hover:border-slate-700/70",
-                "transition-all duration-300",
                 "hover:shadow-lg",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-teal-500"
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 focus-visible:ring-teal-500",
+                // specific transition properties so that hover effects aren't delayed
+                "transition-[opacity,transform,box-shadow,border-color] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               )}
               style={{
+                // only delay opacity and transform on entrance, not box-shadow
+                transitionDelay: `${index * 100}ms, ${index * 100}ms, 0s, 0s`,
+                transitionProperty: "opacity, transform, box-shadow, border-color",
                 boxShadow: `0 0 0 0 ${accentColor}00`,
               }}
-              whileHover={{
-                boxShadow: `0 0 30px 0 ${accentColor}20`,
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 30px 0 ${feature.color || accentColor}20`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = `0 0 0 0 ${accentColor}00`;
               }}
               tabIndex={0}
             >
@@ -142,7 +142,7 @@ export default function FeatureShowcase({
                   background: `radial-gradient(circle at center, ${feature.color || accentColor}15, transparent 70%)`,
                 }}
               />
-            </motion.li>
+            </li>
           ))}
         </ul>
       </div>
