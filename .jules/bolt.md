@@ -5,3 +5,7 @@
 ## 2024-05-19 - [Canvas Grid Optimization]
 **Learning:** The `Squares` background component was using `strokeRect` in a nested loop for every frame, resulting in thousands of draw calls. Canvas API has significant overhead per call.
 **Action:** Batch drawing operations into a single path (`moveTo`/`lineTo` then `stroke`) whenever possible, especially for grid-like structures. This reduced draw calls from ~1300 to < 10 per frame.
+
+## 2026-03-16 - [Job Lookup Optimization]
+**Learning:** Using a Map for lookups instead of Array.find provides O(1) complexity, and React's 'cache' avoids redundant lookups across the Server Component lifecycle.
+**Action:** Use Map-based indices and 'cache' for frequently accessed data in Next.js Server Components.
