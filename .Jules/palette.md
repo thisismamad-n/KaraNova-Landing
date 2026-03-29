@@ -37,7 +37,7 @@
 **Learning:** Icon-only action buttons (like the copy code button) that use SVG icons (`Copy`, `Check`) without an explicit `aria-label` and `aria-hidden="true"` on their child icons are entirely invisible or poorly described to screen reader users, confusing the button's action and intent. Also, buttons placed in form-like or dynamic contexts should always have `type="button"` to avoid unintended form submissions.
 **Action:** When creating or modifying icon-only action buttons, always ensure an `aria-label` is applied to the button element itself, and decorate child decorative/informative icons with `aria-hidden="true"`. Explicitly declare `type="button"` on non-submit buttons.
 ## 2025-03-22 - Accordion Accessibility Standard
-**Learning:** Custom implementations of accordions (like Pricing FAQ) often miss critical ARIA linkages compared to standardized UI library components. A simple `onClick` toggle isn't enough; screen readers need to know the semantic relationship between the trigger and content.
+**Learning:** Custom implementations of accordions (like Pricing FAQ), often miss critical ARIA linkages compared to standardized UI library components. A simple `onClick` toggle isn't enough; screen readers need to know the semantic relationship between the trigger and content.
 **Action:** When creating custom accordions or toggleable sections, strictly apply the pattern: `type="button"`, `aria-expanded`, `aria-controls`, and `id` on the trigger, paired with `role="region"`, matching `id`, and `aria-labelledby` on the content container. Also, always ensure decorative icons within the trigger use `aria-hidden="true"`.
 
 ## 2026-03-29 - Explicit Required Indicators in Forms
