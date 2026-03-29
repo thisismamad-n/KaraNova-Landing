@@ -3,7 +3,7 @@
 import React, { useRef, useEffect } from 'react';
 
 // --- TYPE DEFINITIONS & CONSTANTS ---
-type AnimationSetupFunction = (ctx: CanvasRenderingContext2D, inViewRef: React.MutableRefObject<boolean>) => () => void;
+type AnimationSetupFunction = (ctx: CanvasRenderingContext2D) => { start: () => void; stop: () => void };
 
 const CANVAS_WIDTH = 280;
 const CANVAS_HEIGHT = 280;
@@ -52,22 +52,6 @@ export const CanvasAnimation: React.FC<CanvasAnimationProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const inViewRef = useRef<boolean>(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        inViewRef.current = entry.isIntersecting;
-      },
-      { threshold: 0 }
-    );
-
-    if (wrapperRef.current) {
-      observer.observe(wrapperRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -79,8 +63,27 @@ export const CanvasAnimation: React.FC<CanvasAnimationProps> = ({
     const setupFunction = animationMap[animationId];
     if (!setupFunction) return;
 
-    const cleanup = setupFunction(ctx, inViewRef);
-    return cleanup;
+    const controls = setupFunction(ctx);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          controls.start();
+        } else {
+          controls.stop();
+        }
+      },
+      { threshold: 0 }
+    );
+
+    if (wrapperRef.current) {
+      observer.observe(wrapperRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+      controls.stop();
+    };
   }, [animationId]);
 
   return (
@@ -108,8 +111,8 @@ export const CanvasAnimation: React.FC<CanvasAnimationProps> = ({
 
 // --- ANIMATION LOGIC IMPLEMENTATIONS ---
 
-const setupSonarSweep: AnimationSetupFunction = (ctx, inViewRef) => {
-  let frameId: number;
+const setupSonarSweep: AnimationSetupFunction = (ctx) => {
+  let frameId: number | null = null;
   const centerX = CANVAS_WIDTH / 2;
   const centerY = CANVAS_HEIGHT / 2;
   const fadeTime = 2500;
@@ -126,11 +129,6 @@ const setupSonarSweep: AnimationSetupFunction = (ctx, inViewRef) => {
   }
 
   const animate = (timestamp: number) => {
-    if (!inViewRef.current) {
-      frameId = requestAnimationFrame(animate);
-      return;
-    }
-
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     const scanAngle = (timestamp * 0.001 * (Math.PI / 2) * GLOBAL_SPEED) % (Math.PI * 2);
@@ -167,12 +165,24 @@ const setupSonarSweep: AnimationSetupFunction = (ctx, inViewRef) => {
     frameId = requestAnimationFrame(animate);
   };
 
-  frameId = requestAnimationFrame(animate);
-  return () => cancelAnimationFrame(frameId);
+  const start = () => {
+    if (!frameId) {
+      frameId = requestAnimationFrame(animate);
+    }
+  };
+
+  const stop = () => {
+    if (frameId) {
+      cancelAnimationFrame(frameId);
+      frameId = null;
+    }
+  };
+
+  return { start, stop };
 };
 
-const setupInterconnectingWaves: AnimationSetupFunction = (ctx, inViewRef) => {
-  let frameId: number;
+const setupInterconnectingWaves: AnimationSetupFunction = (ctx) => {
+  let frameId: number | null = null;
   let time = 0;
   let lastTime = 0;
   const centerX = CANVAS_WIDTH / 2;
@@ -186,12 +196,6 @@ const setupInterconnectingWaves: AnimationSetupFunction = (ctx, inViewRef) => {
 
   const animate = (timestamp: number) => {
     if (!lastTime) lastTime = timestamp;
-
-    if (!inViewRef.current) {
-      lastTime = timestamp;
-      frameId = requestAnimationFrame(animate);
-      return;
-    }
 
     time += (timestamp - lastTime) * 0.001 * GLOBAL_SPEED;
     lastTime = timestamp;
@@ -246,12 +250,25 @@ const setupInterconnectingWaves: AnimationSetupFunction = (ctx, inViewRef) => {
     frameId = requestAnimationFrame(animate);
   };
 
-  frameId = requestAnimationFrame(animate);
-  return () => cancelAnimationFrame(frameId);
+  const start = () => {
+    if (!frameId) {
+      frameId = requestAnimationFrame(animate);
+    }
+  };
+
+  const stop = () => {
+    if (frameId) {
+      cancelAnimationFrame(frameId);
+      frameId = null;
+    }
+    lastTime = 0;
+  };
+
+  return { start, stop };
 };
 
-const setupHelixScanner: AnimationSetupFunction = (ctx, inViewRef) => {
-  let frameId: number;
+const setupHelixScanner: AnimationSetupFunction = (ctx) => {
+  let frameId: number | null = null;
   let time = 0;
   let lastTime = 0;
   const centerX = CANVAS_WIDTH / 2;
@@ -267,12 +284,6 @@ const setupHelixScanner: AnimationSetupFunction = (ctx, inViewRef) => {
 
   const animate = (timestamp: number) => {
     if (!lastTime) lastTime = timestamp;
-
-    if (!inViewRef.current) {
-      lastTime = timestamp;
-      frameId = requestAnimationFrame(animate);
-      return;
-    }
 
     time += (timestamp - lastTime) * 0.001 * GLOBAL_SPEED;
     lastTime = timestamp;
@@ -333,12 +344,25 @@ const setupHelixScanner: AnimationSetupFunction = (ctx, inViewRef) => {
     frameId = requestAnimationFrame(animate);
   };
 
-  frameId = requestAnimationFrame(animate);
-  return () => cancelAnimationFrame(frameId);
+  const start = () => {
+    if (!frameId) {
+      frameId = requestAnimationFrame(animate);
+    }
+  };
+
+  const stop = () => {
+    if (frameId) {
+      cancelAnimationFrame(frameId);
+      frameId = null;
+    }
+    lastTime = 0;
+  };
+
+  return { start, stop };
 };
 
-const setupCrystallineCubeRefraction: AnimationSetupFunction = (ctx, inViewRef) => {
-  let frameId: number;
+const setupCrystallineCubeRefraction: AnimationSetupFunction = (ctx) => {
+  let frameId: number | null = null;
   let time = 0;
   let lastTime = 0;
   const centerX = CANVAS_WIDTH / 2;
@@ -365,12 +389,6 @@ const setupCrystallineCubeRefraction: AnimationSetupFunction = (ctx, inViewRef) 
 
   const animate = (timestamp: number) => {
     if (!lastTime) lastTime = timestamp;
-
-    if (!inViewRef.current) {
-      lastTime = timestamp;
-      frameId = requestAnimationFrame(animate);
-      return;
-    }
 
     time += (timestamp - lastTime) * 0.0003 * GLOBAL_SPEED;
     lastTime = timestamp;
@@ -449,8 +467,21 @@ const setupCrystallineCubeRefraction: AnimationSetupFunction = (ctx, inViewRef) 
     frameId = requestAnimationFrame(animate);
   };
 
-  frameId = requestAnimationFrame(animate);
-  return () => cancelAnimationFrame(frameId);
+  const start = () => {
+    if (!frameId) {
+      frameId = requestAnimationFrame(animate);
+    }
+  };
+
+  const stop = () => {
+    if (frameId) {
+      cancelAnimationFrame(frameId);
+      frameId = null;
+    }
+    lastTime = 0;
+  };
+
+  return { start, stop };
 };
 
 // --- ANIMATION MAP ---

@@ -251,8 +251,6 @@ export default function SupportForm({ language }: SupportFormProps) {
                   aria-invalid={!!errors.name}
                   aria-describedby={errors.name ? "name-error" : undefined}
                   placeholder={currentContent.placeholders.name}
-                  aria-invalid={!!errors.name}
-                  aria-describedby={errors.name ? "name-error" : undefined}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
                     "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -294,8 +292,6 @@ export default function SupportForm({ language }: SupportFormProps) {
                   aria-invalid={!!errors.email}
                   aria-describedby={errors.email ? "email-error" : undefined}
                   placeholder={currentContent.placeholders.email}
-                  aria-invalid={!!errors.email}
-                  aria-describedby={errors.email ? "email-error" : undefined}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
                     "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -340,8 +336,6 @@ export default function SupportForm({ language }: SupportFormProps) {
                   aria-invalid={!!errors.subject}
                   aria-describedby={errors.subject ? "subject-error" : undefined}
                   placeholder={currentContent.placeholders.subject}
-                  aria-invalid={!!errors.subject}
-                  aria-describedby={errors.subject ? "subject-error" : undefined}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
                     "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -412,8 +406,6 @@ export default function SupportForm({ language }: SupportFormProps) {
                 aria-invalid={!!errors.message}
                 aria-describedby={errors.message ? "message-error" : undefined}
                 placeholder={currentContent.placeholders.message}
-                aria-invalid={!!errors.message}
-                aria-describedby={errors.message ? "message-error" : undefined}
                 rows={5}
                 className={cn(
                   "w-full px-4 py-3 rounded-lg",
