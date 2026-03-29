@@ -33,16 +33,8 @@ export const BIQFeatureCard = ({
     >
       {/* Radial gradient glow */}
       <motion.div
-        className="absolute -inset-10 rounded-full bg-gradient-to-br from-indigo-600/25 via-indigo-500/20 to-violet-600/25 blur-3xl opacity-40"
-        animate={isMobile ? undefined : {
-          scale: [1, 1.12, 1],
-          opacity: [0.35, 0.55, 0.35]
-        }}
-        transition={{
-          duration: 3.5,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
+        className="absolute -inset-10 rounded-full bg-gradient-to-br from-indigo-600/25 via-indigo-500/20 to-violet-600/25 blur-3xl opacity-50 scale-105"
+
       />
 
       <div className="relative space-y-3.5">
@@ -57,14 +49,7 @@ export const BIQFeatureCard = ({
           {/* Animated rotating border */}
           <motion.div
             className="absolute -inset-2 rounded-2xl bg-gradient-to-r from-indigo-500/45 via-indigo-600/45 to-violet-500/45 blur-sm"
-            animate={isMobile ? undefined : {
-              rotate: [0, 360]
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "linear"
-            }}
+
           />
 
           <div className="relative flex items-center gap-3 px-4 py-2 rounded-xl bg-slate-950/80 backdrop-blur-sm border border-indigo-400/35">
@@ -78,17 +63,7 @@ export const BIQFeatureCard = ({
             {/* Animated pulse rings */}
             <div className="relative">
               <motion.div
-                className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center"
-                animate={isMobile ? undefined : {
-                  boxShadow: [
-                    "0 0 0 0 rgba(99, 102, 241, 0.5)",
-                    "0 0 0 15px rgba(99, 102, 241, 0)",
-                  ]
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                }}
+                className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-[0_0_12px_rgba(99,102,241,0.5)]"
               >
                 <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -143,15 +118,7 @@ export const BIQFeatureCard = ({
               >
                 <motion.div
                   className="absolute inset-0 rounded-t-sm bg-gradient-to-t from-indigo-500 via-indigo-400 to-violet-400"
-                  animate={isMobile ? undefined : {
-                    opacity: [0.4, 0.8, 0.4]
-                  }}
-                  transition={{
-                    duration: 2.5,
-                    repeat: Infinity,
-                    delay: i * 0.15,
-                    ease: "easeInOut"
-                  }}
+
                 />
               </motion.div>
             ))}
