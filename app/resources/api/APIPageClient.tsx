@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { PageHero, ContentSection } from "@/app/_components/shared";
 import Squares from "@/app/_components/Squares";
 import { Lock, Key, Code, BookOpen, ExternalLink, ChevronDown, ChevronUp } from "lucide-react";
@@ -11,58 +11,59 @@ import { apiEndpoints } from "./_data/apiEndpoints";
 // Get unique categories
 const categories = Array.from(new Set(apiEndpoints.map((e) => e.category)));
 
+const content = {
+  hero: {
+    title: "مستندات API",
+    subtitle: "مرجع کامل REST API برای یکپارچه‌سازی پلتفرم کارانوا در برنامه‌های شما",
+  },
+  auth: {
+    title: "احراز هویت",
+    description: "API کارانوا از احراز هویت توکن Bearer استفاده می‌کند. توکن دسترسی خود را در هدر Authorization هر درخواست قرار دهید.",
+    tokenTitle: "دریافت توکن API",
+    tokenSteps: [
+      "به حساب کارانوا خود وارد شوید",
+      "به تنظیمات > کلیدهای API بروید",
+      "یک کلید API جدید ایجاد کنید",
+      "توکن خود را کپی کرده و به صورت ایمن ذخیره کنید",
+    ],
+    headerExample: "مثال هدر Authorization",
+  },
+  endpoints: {
+    title: "API Endpoints",
+    description: "مرور تمام نقاط پایانی API موجود سازماندهی شده بر اساس دسته‌بندی",
+    filterAll: "همه نقاط پایانی",
+    method: "متد",
+    endpoint: "نقطه پایانی",
+    descriptionLabel: "توضیحات",
+    authRequired: "نیاز به احراز هویت",
+  },
+  playground: {
+    title: "امتحان کنید",
+    description: "نقاط پایانی API را به صورت تعاملی با playground API ما تست کنید",
+    button: "باز کردن API Playground",
+    comingSoon: "به زودی",
+  },
+};
+
+const methodColors: Record<string, string> = {
+  GET: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+  POST: "bg-green-500/20 text-green-400 border-green-500/30",
+  PUT: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+  PATCH: "bg-orange-500/20 text-orange-400 border-orange-500/30",
+  DELETE: "bg-red-500/20 text-red-400 border-red-500/30",
+};
+
 export default function APIPageClient() {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [expandedEndpoint, setExpandedEndpoint] = useState<string | null>(null);
 
-  const content = {
-    hero: {
-      title: "مستندات API",
-      subtitle: "مرجع کامل REST API برای یکپارچه‌سازی پلتفرم کارانوا در برنامه‌های شما",
-    },
-    auth: {
-      title: "احراز هویت",
-      description: "API کارانوا از احراز هویت توکن Bearer استفاده می‌کند. توکن دسترسی خود را در هدر Authorization هر درخواست قرار دهید.",
-      tokenTitle: "دریافت توکن API",
-      tokenSteps: [
-        "به حساب کارانوا خود وارد شوید",
-        "به تنظیمات > کلیدهای API بروید",
-        "یک کلید API جدید ایجاد کنید",
-        "توکن خود را کپی کرده و به صورت ایمن ذخیره کنید",
-      ],
-      headerExample: "مثال هدر Authorization",
-    },
-    endpoints: {
-      title: "API Endpoints",
-      description: "مرور تمام نقاط پایانی API موجود سازماندهی شده بر اساس دسته‌بندی",
-      filterAll: "همه نقاط پایانی",
-      method: "متد",
-      endpoint: "نقطه پایانی",
-      descriptionLabel: "توضیحات",
-      authRequired: "نیاز به احراز هویت",
-    },
-    playground: {
-      title: "امتحان کنید",
-      description: "نقاط پایانی API را به صورت تعاملی با playground API ما تست کنید",
-      button: "باز کردن API Playground",
-      comingSoon: "به زودی",
-    },
-  };
-
   const t = content;
 
-  const filteredEndpoints =
-    selectedCategory === "all"
+  const filteredEndpoints = useMemo(() => {
+    return selectedCategory === "all"
       ? apiEndpoints
       : apiEndpoints.filter((e) => e.category === selectedCategory);
-
-  const methodColors = {
-    GET: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-    POST: "bg-green-500/20 text-green-400 border-green-500/30",
-    PUT: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-    PATCH: "bg-orange-500/20 text-orange-400 border-orange-500/30",
-    DELETE: "bg-red-500/20 text-red-400 border-red-500/30",
-  };
+  }, [selectedCategory]);
 
   return (
     <div className="relative min-h-screen bg-slate-950 text-slate-100">

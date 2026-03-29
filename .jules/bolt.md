@@ -30,3 +30,7 @@
 ## 2026-03-21 - [Pause Canvas Animations]
 **Learning:** requestAnimationFrame loops in Canvas animations continuously consume CPU/GPU even when off-screen if not explicitly paused.
 **Action:** Always use an IntersectionObserver combined with a mutable useRef to conditionally pause canvas rendering logic when elements are outside the viewport, reducing idle resource consumption.
+
+## 2025-02-19 - Optimize API endpoints filtering with useMemo
+**Learning:** Wrapping potentially heavy rendering array `.filter()` operations inside React's `useMemo` reduces layout computation times dramatically across renders, and extracting static arrays or objects from functional components prevents unnecessary memory re-allocation overhead.
+**Action:** Next time you review a React component rendering a filtered list based on state, evaluate whether the filtering operation and static configuration objects can be hoisted to module-level scope or wrapped in a `useMemo` hook to ensure smooth and fast render iterations.
