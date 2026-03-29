@@ -50,7 +50,6 @@ export default function CodeExample({
                 <button
                   type="button"
                   key={example.language}
-                  type="button"
                   aria-pressed={selectedLanguage === example.language}
                   onClick={() => setSelectedLanguage(example.language)}
                   className={cn(
@@ -75,9 +74,7 @@ export default function CodeExample({
               "hover:bg-slate-800/50 text-slate-400 hover:text-slate-300"
             )}
             aria-label={copied ? "کپی شد" : "کپی کد"}
-            title="کپی کد"
-            aria-label="کپی کد"
-          >
+            title="کپی کد">
             {copied ? (
               <Check className="w-4 h-4 text-green-400" aria-hidden="true" />
             ) : (
