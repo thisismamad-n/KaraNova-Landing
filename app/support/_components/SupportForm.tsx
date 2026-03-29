@@ -240,7 +240,7 @@ export default function SupportForm({ language }: SupportFormProps) {
                   htmlFor="name"
                   className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
                 >
-                  {currentContent.fields.name}
+                  {currentContent.fields.name} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
                 </label>
                 <input
                   type="text"
@@ -248,11 +248,10 @@ export default function SupportForm({ language }: SupportFormProps) {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
+                  aria-required="true"
                   aria-invalid={!!errors.name}
                   aria-describedby={errors.name ? "name-error" : undefined}
                   placeholder={currentContent.placeholders.name}
-                  aria-invalid={!!errors.name}
-                  aria-describedby={errors.name ? "name-error" : undefined}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
                     "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -283,7 +282,7 @@ export default function SupportForm({ language }: SupportFormProps) {
                   htmlFor="email"
                   className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
                 >
-                  {currentContent.fields.email}
+                  {currentContent.fields.email} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
                 </label>
                 <input
                   type="email"
@@ -291,11 +290,10 @@ export default function SupportForm({ language }: SupportFormProps) {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
+                  aria-required="true"
                   aria-invalid={!!errors.email}
                   aria-describedby={errors.email ? "email-error" : undefined}
                   placeholder={currentContent.placeholders.email}
-                  aria-invalid={!!errors.email}
-                  aria-describedby={errors.email ? "email-error" : undefined}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
                     "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -329,7 +327,7 @@ export default function SupportForm({ language }: SupportFormProps) {
                   htmlFor="subject"
                   className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
                 >
-                  {currentContent.fields.subject}
+                  {currentContent.fields.subject} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
                 </label>
                 <input
                   type="text"
@@ -337,11 +335,10 @@ export default function SupportForm({ language }: SupportFormProps) {
                   name="subject"
                   value={formData.subject}
                   onChange={handleChange}
+                  aria-required="true"
                   aria-invalid={!!errors.subject}
                   aria-describedby={errors.subject ? "subject-error" : undefined}
                   placeholder={currentContent.placeholders.subject}
-                  aria-invalid={!!errors.subject}
-                  aria-describedby={errors.subject ? "subject-error" : undefined}
                   className={cn(
                     "w-full px-4 py-3 rounded-lg",
                     "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
@@ -402,18 +399,17 @@ export default function SupportForm({ language }: SupportFormProps) {
                 htmlFor="message"
                 className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
               >
-                {currentContent.fields.message}
+                {currentContent.fields.message} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
               </label>
               <textarea
                 id="message"
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
+                aria-required="true"
                 aria-invalid={!!errors.message}
                 aria-describedby={errors.message ? "message-error" : undefined}
                 placeholder={currentContent.placeholders.message}
-                aria-invalid={!!errors.message}
-                aria-describedby={errors.message ? "message-error" : undefined}
                 rows={5}
                 className={cn(
                   "w-full px-4 py-3 rounded-lg",

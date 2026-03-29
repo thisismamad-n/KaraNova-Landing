@@ -31,7 +31,6 @@ const Squares: React.FC<SquaresProps> = ({
   const inViewRef = useRef<boolean>(true);
   // Cache the vignette gradient to avoid creating it every frame
   const vignetteGradientRef = useRef<CanvasGradient | null>(null);
-  const inViewRef = useRef<boolean>(true);
 
   const getDirection = useMemo(() => {
     const directions: Record<string, { x: number; y: number }> = {
