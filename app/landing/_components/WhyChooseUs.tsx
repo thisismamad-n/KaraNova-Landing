@@ -72,9 +72,9 @@ export default function WhyChooseUs({ language = "en" }: WhyChooseUsProps) {
     <section id="why-choose-section" ref={sectionRef} className="relative w-full min-h-screen py-20 overflow-hidden" dir="rtl">
       <SlidePathDesigner slideKey="landing-why-choose" />
       {/* Ambient glow effects - same as HeroStroke */}
-      <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl" />
-      <div className="absolute top-1/3 right-1/4 w-[30rem] h-[30rem] bg-cyan-400/14 rounded-full blur-3xl" />
-      <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-1/4 w-72 h-72 bg-teal-500/8 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/3 right-1/4 w-[30rem] h-[30rem] bg-cyan-400/14 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         <div className="w-[22rem] h-[22rem] rounded-full bg-teal-500/12 blur-[120px]" />
         <div className="absolute w-[28rem] h-[28rem] rounded-full border border-teal-500/15 blur-[60px]" />
@@ -150,7 +150,7 @@ const Feature = ({
         delay: index * 0.1,
         ease: [0.21, 0.47, 0.32, 0.98]
       }}
-      className="relative group/feature bg-slate-900/40 backdrop-blur-md p-8 hover:bg-slate-900/60 transition-all duration-500"
+      className="relative group/feature bg-slate-900/40 p-8 hover:bg-slate-900/60 transition-colors duration-500"
     >
       {/* Hover gradient overlay */}
       <div className="absolute inset-0 opacity-0 group-hover/feature:opacity-100 transition-opacity duration-500">
@@ -169,8 +169,12 @@ const Feature = ({
       {/* Icon with CSS transitions instead of Framer Motion */}
       <div className="mb-6 relative z-10 transition-transform duration-200 hover:scale-110 hover:rotate-[5deg]">
         <div className="relative inline-block">
-          <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-cyan-500/20 rounded-xl blur-xl group-hover/feature:blur-2xl transition-all duration-500" />
-          <div className="relative bg-gradient-to-br from-teal-500/10 to-cyan-500/10 p-4 rounded-xl border border-teal-500/20 group-hover/feature:border-teal-400/40 transition-all duration-500 backdrop-blur-sm">
+          {/* Static base blur */}
+          <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-cyan-500/20 rounded-xl blur-xl" />
+          {/* Static hover blur animated via opacity for performance */}
+          <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-cyan-500/20 rounded-xl blur-2xl opacity-0 group-hover/feature:opacity-100 transition-opacity duration-500" />
+
+          <div className="relative bg-gradient-to-br from-teal-500/10 to-cyan-500/10 p-4 rounded-xl border border-teal-500/20 group-hover/feature:border-teal-400/40 transition-colors duration-500 backdrop-blur-sm">
             <div className="text-teal-400 group-hover/feature:text-teal-300 transition-colors duration-500 group-hover/feature:drop-shadow-[0_0_8px_rgba(20,184,166,0.6)]">
               {icon}
             </div>
@@ -180,7 +184,7 @@ const Feature = ({
 
       {/* Title with accent bar */}
       <div className="relative z-10 mb-3">
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 h-1 w-0 group-hover/feature:w-12 bg-gradient-to-l from-teal-500 to-cyan-500 rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(20,184,166,0.5)]" />
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 h-1 w-12 scale-x-0 group-hover/feature:scale-x-100 origin-right bg-gradient-to-l from-teal-500 to-cyan-500 rounded-full transition-transform duration-500 shadow-[0_0_10px_rgba(20,184,166,0.5)]" />
         <h3 className="text-xl font-bold text-slate-100 group-hover/feature:text-white transition-colors duration-300 pr-16">
           {title}
         </h3>
