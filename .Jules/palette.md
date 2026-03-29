@@ -39,3 +39,7 @@
 ## 2025-03-22 - Accordion Accessibility Standard
 **Learning:** Custom implementations of accordions (like Pricing FAQ) often miss critical ARIA linkages compared to standardized UI library components. A simple `onClick` toggle isn't enough; screen readers need to know the semantic relationship between the trigger and content.
 **Action:** When creating custom accordions or toggleable sections, strictly apply the pattern: `type="button"`, `aria-expanded`, `aria-controls`, and `id` on the trigger, paired with `role="region"`, matching `id`, and `aria-labelledby` on the content container. Also, always ensure decorative icons within the trigger use `aria-hidden="true"`.
+
+## 2026-03-29 - Explicit Required Indicators in Forms
+**Learning:** Form validation must be paired with both explicit visual indicators (like an asterisk) and semantic attributes (like `aria-required="true"`) to ensure screen readers and all users understand requirements before submission.
+**Action:** When adding or updating form inputs, ensure required fields include a visual indicator marked with `aria-hidden="true"` in the label, and the `aria-required="true"` attribute on the corresponding input element.

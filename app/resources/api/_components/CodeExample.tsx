@@ -48,7 +48,6 @@ export default function CodeExample({
             <div className="flex gap-1">
               {examples.map((example) => (
                 <button
-                  type="button"
                   key={example.language}
                   aria-pressed={selectedLanguage === example.language}
                   onClick={() => setSelectedLanguage(example.language)}
