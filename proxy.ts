@@ -16,11 +16,7 @@ import type { NextRequest } from 'next/server';
  * - Strict-Transport-Security (HSTS)
  */
 export function proxy(request: NextRequest) {
-    const response = NextResponse.next();
-
-    // Content Security Policy
-    // Balanced policy that works with Next.js while maintaining security
-        const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+    const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
     const isDevelopment = process.env.NODE_ENV === 'development';
     
     // Strict Content Security Policy to prevent defacement and XSS
@@ -41,9 +37,9 @@ export function proxy(request: NextRequest) {
         isDevelopment
             ? "connect-src 'self' https://api.karanova.io https://app.karanovaa.com ws: wss:"
             : "connect-src 'self' https://api.karanova.io https://app.karanovaa.com",
-        // Frame sources - STRICTLY 'none' to prevent clickjacking and malicious iframe embedding
+        // Frame sources - ALLOW Google Maps for OfficeMap component
         "frame-ancestors 'none'",
-        "frame-src 'none'",
+        "frame-src 'self' https://www.google.com https://www.google.com/maps/embed",
         // Base URI restriction - prevent base tag injection
         "base-uri 'self'",
         // Form action restriction - prevent malicious form submissions
@@ -63,11 +59,20 @@ export function proxy(request: NextRequest) {
         cspDirectives.push("upgrade-insecure-requests");
     }
 
+    // Clone request headers to pass nonce down (NextRequest headers are immutable)
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-nonce', nonce);
+
+    const response = NextResponse.next({
+        request: {
+            headers: requestHeaders,
+        },
+    });
+
     // Set security headers
     response.headers.set('Content-Security-Policy', cspDirectives.join('; '));
     // Pass nonce to Next.js via x-nonce header so it can attach it to inline scripts
     response.headers.set('x-nonce', nonce);
-    request.headers.set('x-nonce', nonce);
     response.headers.set('X-Content-Type-Options', 'nosniff');
     response.headers.set('X-Frame-Options', 'DENY');
     response.headers.set('X-XSS-Protection', '1; mode=block');

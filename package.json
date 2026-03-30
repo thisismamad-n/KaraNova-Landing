@@ -9,7 +9,8 @@
     "lint": "bun eslint .",
     "security:audit": "bunx snyk test",
     "security:auth": "bunx snyk auth",
-    "security:monitor": "bunx snyk monitor"
+    "security:monitor": "bunx snyk monitor",
+    "test": "bun test"
   },
   "dependencies": {
     "@number-flow/react": "^0.2.6",
@@ -55,7 +56,6 @@
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-security": "^3.0.1",
     "happy-dom": "^20.8.9",
-    "jsdom": "^29.0.1",
     "postcss": "^8.4.49",
     "snyk": "^1.1302.1",
     "tailwindcss": "^3.4.14",

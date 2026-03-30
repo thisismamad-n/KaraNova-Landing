@@ -6,7 +6,10 @@ const nextConfig = {
   // Security headers configuration (fallback for proxy.ts)
     async headers() {
     // Content Security Policy
-    // Balanced policy that works with Next.js while maintaining security
+    // Layered CSP Strategy:
+    // proxy.ts injects a stricter nonce-based CSP dynamically for routes it matches.
+    // This static script-src string (with 'unsafe-inline' in production) is only a fallback for static/non-matched routes.
+    // When both are present, the proxy-injected header overrides the static header.
     const isDevelopment = process.env.NODE_ENV === 'development';
 
     const cspDirectives = [
@@ -27,7 +30,7 @@ const nextConfig = {
             : "connect-src 'self' https://api.karanova.io https://app.karanovaa.com",
         // Frame sources - STRICTLY 'none' to prevent clickjacking and malicious iframe embedding
         "frame-ancestors 'none'",
-        "frame-src 'none'",
+        "frame-src 'self' https://www.google.com https://www.google.com/maps/embed",
         // Base URI restriction
         "base-uri 'self'",
         // Form action restriction
