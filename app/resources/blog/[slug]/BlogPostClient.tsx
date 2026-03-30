@@ -21,8 +21,13 @@ interface BlogPostClientProps {
 export default function BlogPostClient({ slug }: BlogPostClientProps) {
   const { language } = useLanguage();
 
-  // Find the blog post
-  const post = mockBlogs.find((blog) => blog.slug === slug);
+  // Find the blog post and its index
+  const currentIndex = React.useMemo(
+    () => mockBlogs.findIndex((blog) => blog.slug === slug),
+    [slug]
+  );
+
+  const post = currentIndex !== -1 ? mockBlogs[currentIndex] : undefined;
 
   if (!post) {
     return (
@@ -82,10 +87,9 @@ export default function BlogPostClient({ slug }: BlogPostClientProps) {
   ).format(post.publishedDate);
 
   // Get previous and next posts
-  const currentIndex = mockBlogs.findIndex((blog) => blog.slug === slug);
   const previousPost = currentIndex > 0 ? mockBlogs[currentIndex - 1] : null;
   const nextPost =
-    currentIndex < mockBlogs.length - 1 ? mockBlogs[currentIndex + 1] : null;
+    currentIndex !== -1 && currentIndex < mockBlogs.length - 1 ? mockBlogs[currentIndex + 1] : null;
 
   const previousPostTitle =
     language === "fa" ? previousPost?.title : previousPost?.titleEn;
