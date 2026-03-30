@@ -1,10 +1,15 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  reactCompiler: false, // Enable React Compiler for Next.js 16
+const fs = require('fs');
 
-  // Security headers configuration (fallback for proxy.ts)
-    async headers() {
+const file = 'next.config.js';
+let content = fs.readFileSync(file, 'utf8');
+
+// The CSP headers in next.config.js are essentially doing the same thing but with the older, less strict policy.
+// Next.js handles proxy.ts dynamically, while next.config.js handles headers statically.
+// We should update next.config.js to have the SAME strictly locked down policy for static routes, except without the nonce (since nonces require dynamic server generation).
+
+// Let's replace the whole `headers()` function to reflect the hardened policy but without a nonce (fallback for static assets).
+
+const newHeaders = `  async headers() {
     // Content Security Policy
     // Balanced policy that works with Next.js while maintaining security
     const isDevelopment = process.env.NODE_ENV === 'development';
@@ -86,22 +91,9 @@ const nextConfig = {
         ],
       },
     ];
-  },
+  },`;
 
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'pro-section.ui-layouts.com',
-        pathname: '/**',
-      },
-    ],
-  },
-}
+const regex = /async headers\(\) \{[\s\S]*?\},(?=\n\n  images: \{)/;
+content = content.replace(regex, newHeaders);
 
-module.exports = nextConfig
+fs.writeFileSync(file, content);

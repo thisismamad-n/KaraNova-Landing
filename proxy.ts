@@ -20,32 +20,35 @@ export function proxy(request: NextRequest) {
 
     // Content Security Policy
     // Balanced policy that works with Next.js while maintaining security
+        const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
     const isDevelopment = process.env.NODE_ENV === 'development';
     
+    // Strict Content Security Policy to prevent defacement and XSS
+    // This locks down what scripts can load and where they can send data
     const cspDirectives = [
         "default-src 'self'",
-        // Script sources - allow Next.js chunks and inline scripts in dev
+        // Script sources - allow Next.js chunks. Use nonce for inline scripts.
         isDevelopment
-            ? `script-src 'self' 'unsafe-eval' 'unsafe-inline'`
-            : `script-src 'self' 'unsafe-inline'`,
-        // Style sources - allow inline styles for styled-jsx and Tailwind
+            ? "script-src 'self' 'unsafe-eval' 'unsafe-inline'"
+            : `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
+        // Style sources - Framer Motion and styled-jsx require inline styles
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
         // Font sources
         "font-src 'self' https://fonts.gstatic.com data:",
-        // Image sources - allow external images
-        "img-src 'self' data: blob: https:",
-        // Connect sources - API endpoints and external services
+        // Image sources - allow only self, data URIs, and specific CDNs used in project
+        "img-src 'self' data: blob: https://images.unsplash.com https://pro-section.ui-layouts.com",
+        // Connect sources - STRICTLY limit where data can be sent (prevents data exfiltration)
         isDevelopment
             ? "connect-src 'self' https://api.karanova.io https://app.karanovaa.com ws: wss:"
             : "connect-src 'self' https://api.karanova.io https://app.karanovaa.com",
-        // Frame sources - allow Google Maps embedding
+        // Frame sources - STRICTLY 'none' to prevent clickjacking and malicious iframe embedding
         "frame-ancestors 'none'",
-        "frame-src 'self' https://www.google.com",
-        // Base URI restriction
+        "frame-src 'none'",
+        // Base URI restriction - prevent base tag injection
         "base-uri 'self'",
-        // Form action restriction
+        // Form action restriction - prevent malicious form submissions
         "form-action 'self'",
-        // Object/embed restriction
+        // Object/embed restriction - prevent Flash/Java applet injection
         "object-src 'none'",
         // Media sources
         "media-src 'self' data: blob:",
@@ -62,6 +65,9 @@ export function proxy(request: NextRequest) {
 
     // Set security headers
     response.headers.set('Content-Security-Policy', cspDirectives.join('; '));
+    // Pass nonce to Next.js via x-nonce header so it can attach it to inline scripts
+    response.headers.set('x-nonce', nonce);
+    request.headers.set('x-nonce', nonce);
     response.headers.set('X-Content-Type-Options', 'nosniff');
     response.headers.set('X-Frame-Options', 'DENY');
     response.headers.set('X-XSS-Protection', '1; mode=block');
