@@ -65,7 +65,7 @@ export default function LandingPage() {
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full"
               style={{
                 background: 'radial-gradient(circle, rgba(94, 234, 212, 1) 0%, rgba(94, 234, 212, 0.9) 20%, rgba(20, 184, 166, 0.6) 50%, transparent 100%)',
-                filter: 'none',
+                filter: 'blur(8px)',
               }}
             />
             {/* Inner glow layer */}
@@ -73,7 +73,7 @@ export default function LandingPage() {
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full"
               style={{
                 background: 'radial-gradient(circle, rgba(94, 234, 212, 0.8) 0%, rgba(20, 184, 166, 0.5) 40%, transparent 100%)',
-                filter: 'none',
+                filter: 'blur(20px)',
               }}
             />
             {/* Outer atmospheric glow - smaller */}
@@ -81,7 +81,7 @@ export default function LandingPage() {
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full"
               style={{
                 background: 'radial-gradient(circle, rgba(94, 234, 212, 0.4) 0%, rgba(20, 184, 166, 0.2) 50%, transparent 100%)',
-                filter: 'none',
+                filter: 'blur(40px)',
               }}
             />
           </div>
