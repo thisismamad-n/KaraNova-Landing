@@ -324,10 +324,15 @@ const MultiSectionOverlay = memo(function MultiSectionOverlay({
   onSectionLeave: () => void;
   cursor: { x: number; y: number; sectionId: string } | null;
 }) {
-  const sectionPoints = useMemo(
-    () => allPoints.filter((p) => p.sectionId === sectionId),
-    [allPoints, sectionId],
-  );
+  const sectionPoints = useMemo(() => {
+    const result: { point: Point; globalIndex: number }[] = [];
+    for (let i = 0; i < allPoints.length; i++) {
+      if (allPoints[i].sectionId === sectionId) {
+        result.push({ point: allPoints[i], globalIndex: i });
+      }
+    }
+    return result;
+  }, [allPoints, sectionId]);
 
   const localOffsets = useMemo(() => {
     const offsets = new Map<string, number>();
@@ -382,8 +387,7 @@ const MultiSectionOverlay = memo(function MultiSectionOverlay({
         )}
 
         {/* Draw points in this section */}
-        {sectionPoints.map((point, idx) => {
-          const globalIndex = allPoints.findIndex((p) => p === point);
+        {sectionPoints.map(({ point, globalIndex }, idx) => {
           return (
             <g key={`${point.x}-${point.y}-${idx}`}>
               <circle cx={point.x} cy={point.y} r={6} fill="rgba(16, 185, 129, 0.9)" />

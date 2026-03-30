@@ -34,3 +34,7 @@
 ## 2025-02-19 - Optimize API endpoints filtering with useMemo
 **Learning:** Wrapping potentially heavy rendering array `.filter()` operations inside React's `useMemo` reduces layout computation times dramatically across renders, and extracting static arrays or objects from functional components prevents unnecessary memory re-allocation overhead.
 **Action:** Next time you review a React component rendering a filtered list based on state, evaluate whether the filtering operation and static configuration objects can be hoisted to module-level scope or wrapped in a `useMemo` hook to ensure smooth and fast render iterations.
+
+## 2025-02-19 - Optimize MultiSectionOverlay inside components/ui/multi-section-path-designer.tsx
+**Learning:** O(N*M) algorithmic overhead happens easily within React render mapping functions when looking up indices dynamically (e.g., `allPoints.findIndex`).
+**Action:** Pre-compute array indices alongside the elements they refer to using single O(N) pass inside `useMemo` hooks, instead of resolving them dynamically inside `.map()` iterations.
