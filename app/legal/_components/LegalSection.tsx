@@ -44,7 +44,7 @@ export default function LegalSection({
         aria-expanded={isOpen}
         aria-controls={`${id}-content`}
       >
-        <ChevronDown
+        <ChevronDown aria-hidden="true"
           className={cn(
             "w-5 h-5 text-teal-400 transition-transform duration-300",
             isOpen && "rotate-180"
