@@ -63,9 +63,9 @@ export default function DocSidebar({ className }: DocSidebarProps) {
                     <span>{category.name}</span>
                   </span>
                   {isExpanded ? (
-                    <ChevronDown className="w-4 h-4" />
+                    <ChevronDown className="w-4 h-4" aria-hidden="true" />
                   ) : (
-                    <ChevronRight className="w-4 h-4" />
+                    <ChevronRight className="w-4 h-4" aria-hidden="true" />
                   )}
                 </button>
 

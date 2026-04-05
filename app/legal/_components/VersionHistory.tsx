@@ -39,7 +39,7 @@ export default function VersionHistory({
     >
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-slate-200 flex items-center gap-2">
-          <Clock className="w-5 h-5 text-teal-400" />
+          <Clock className="w-5 h-5 text-teal-400" aria-hidden="true" />
           تاریخچه نسخه‌ها
         </h3>
         {previousVersions.length > 0 && (
@@ -51,7 +51,7 @@ export default function VersionHistory({
             )}
           >
             {isExpanded ? "بستن" : `نمایش ${previousVersions.length} نسخه قبلی`}
-            <ChevronDown
+            <ChevronDown aria-hidden="true"
               className={cn(
                 "w-4 h-4 transition-transform duration-300",
                 isExpanded && "rotate-180"
@@ -105,7 +105,7 @@ export default function VersionHistory({
               "transition-colors"
             )}
           >
-            <FileText className="w-4 h-4" />
+            <FileText className="w-4 h-4" aria-hidden="true" />
             دانلود نسخه PDF
           </a>
         )}
@@ -139,7 +139,7 @@ export default function VersionHistory({
                   }
                   className="w-full flex items-center justify-between text-right"
                 >
-                  <ChevronDown
+                  <ChevronDown aria-hidden="true"
                     className={cn(
                       "w-4 h-4 text-slate-400 transition-transform duration-300",
                       selectedVersion === version.version && "rotate-180"
@@ -188,7 +188,7 @@ export default function VersionHistory({
                             "transition-colors"
                           )}
                         >
-                          <FileText className="w-4 h-4" />
+                          <FileText className="w-4 h-4" aria-hidden="true" />
                           دانلود نسخه PDF
                         </a>
                       )}

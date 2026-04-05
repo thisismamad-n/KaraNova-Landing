@@ -55,7 +55,7 @@ export default function DocSearch({ className }: DocSearchProps) {
     <div ref={searchRef} className={cn("relative w-full", className)}>
       {/* Search Input */}
       <div className="relative">
-        <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+        <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" aria-hidden="true" />
         <input
           type="text"
           value={query}
@@ -78,7 +78,7 @@ export default function DocSearch({ className }: DocSearchProps) {
             className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"
             aria-label="پاک کردن جستجو"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5" aria-hidden="true" />
           </button>
         )}
       </div>
@@ -112,7 +112,7 @@ export default function DocSearch({ className }: DocSearchProps) {
                   )}
                   dir="rtl"
                 >
-                  <FileText className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
+                  <FileText className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
                   <div className="flex-1 min-w-0 text-right">
                     <h4 className="text-sm font-medium text-slate-200 group-hover:text-teal-400 transition-colors">
                       {doc.title}

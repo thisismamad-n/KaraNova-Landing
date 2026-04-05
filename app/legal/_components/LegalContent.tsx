@@ -117,7 +117,7 @@ export default function LegalContent({
                           : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
                       )}
                     >
-                      <ChevronRight
+                      <ChevronRight aria-hidden="true"
                         className={cn(
                           "w-4 h-4 transition-transform",
                           activeSection === item.id && "text-teal-400"
