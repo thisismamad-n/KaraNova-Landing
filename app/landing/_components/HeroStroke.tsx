@@ -186,27 +186,17 @@ const LinePath = ({
           <stop offset="55%" stopColor="hsl(185, 85%, 70%)" />
           <stop offset="100%" stopColor="var(--landing-accent)" />
         </linearGradient>
-        {/* Optimized SVG glow filter - replaces expensive CSS drop-shadow */}
-        <filter id="heroPathGlow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="6" result="glow" />
-          <feMerge>
-            <feMergeNode in="glow" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
-        </filter>
       </defs>
-      {/* Main path with SVG filter glow - much more performant */}
       <motion.path
         d={PATH_DATA}
         stroke="url(#tealStroke)"
         strokeWidth="14"
         vectorEffect="non-scaling-stroke"
-        filter="url(#heroPathGlow)"
         style={{
           pathLength,
           strokeDashoffset: useTransform(pathLength, (value) => 1 - value),
           strokeOpacity: 0.85,
-          willChange: "auto",
+          filter: "drop-shadow(0 0 8px rgba(20, 184, 166, 0.8)) drop-shadow(0 0 16px rgba(20, 184, 166, 0.6))",
         }}
         strokeLinecap="round"
       />
