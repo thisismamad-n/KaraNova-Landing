@@ -38,3 +38,7 @@
 ## 2025-02-19 - Optimize MultiSectionOverlay inside components/ui/multi-section-path-designer.tsx
 **Learning:** O(N*M) algorithmic overhead happens easily within React render mapping functions when looking up indices dynamically (e.g., `allPoints.findIndex`).
 **Action:** Pre-compute array indices alongside the elements they refer to using single O(N) pass inside `useMemo` hooks, instead of resolving them dynamically inside `.map()` iterations.
+
+## 2026-04-05 - [SVG Filter Performance]
+**Learning:** Complex multi-layered SVG `<filter>` tags and `<feGaussianBlur>` are generally slower than native CSS `drop-shadow` functions, and `willChange` properties on SVGs with document-level gradients can break rendering.
+**Action:** Prefer CSS `drop-shadow` for path glows and avoid `willChange` on SVGs with gradients.
