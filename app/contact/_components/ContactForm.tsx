@@ -352,6 +352,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                   "border border-slate-700/50",
                   "text-teal-400 font-semibold",
                   "hover:bg-slate-800/60 hover:border-teal-500/50",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900",
                   "transition-all duration-300"
                 )}
               >
@@ -732,6 +733,7 @@ export default function ContactForm({ language }: ContactFormProps) {
                     "text-white font-semibold",
                     "hover:from-teal-600 hover:to-cyan-600",
                     "disabled:opacity-50 disabled:cursor-not-allowed",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900",
                     "transition-all duration-300",
                     "shadow-[0_0_20px_rgba(20,184,166,0.3)]",
                     "hover:shadow-[0_0_30px_rgba(20,184,166,0.5)]",
