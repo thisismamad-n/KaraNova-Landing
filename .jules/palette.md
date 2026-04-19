@@ -5,3 +5,6 @@
 ## $(date +%Y-%m-%d) - Add keyboard focus indicators to primary form buttons
 **Learning:** Custom form buttons missing `focus-visible` styles lead to poor keyboard navigation accessibility, making it hard for keyboard users to track their focus state.
 **Action:** Always include explicitly defined `focus-visible` ring styles (e.g., `focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900`) on custom buttons and interactive elements to ensure accessibility for keyboard navigation.
+## $(date +%Y-%m-%d) - Fix OSV-Scanner Action version
+**Learning:** Hardcoded SHAs for older versions of GitHub Actions (`google/osv-scanner-action` v1.7.1) may rely on deprecated Node.js or `actions/upload-artifact` dependencies, causing CI to fail entirely.
+**Action:** Use updated, supported action versions (e.g., `v1.9.2`) to ensure compatibility with GitHub's current runner environments and avoid deprecated action failures in CI.
