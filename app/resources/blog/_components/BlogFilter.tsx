@@ -24,8 +24,6 @@ export default function BlogFilter({
   const categoryLabel = translations[language].labels.category;
   const allCategoriesLabel = translations[language].labels.allCategories;
 
-  const uniqueCategories = Array.from(new Set(categories));
-
   return (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
@@ -64,7 +62,7 @@ export default function BlogFilter({
           </motion.button>
 
           {/* Category Buttons */}
-          {uniqueCategories.map((category) => (
+          {categories.map((category) => (
             <motion.button
               key={category}
               whileHover={{ scale: 1.05 }}

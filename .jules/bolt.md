@@ -38,3 +38,7 @@
 ## 2025-02-19 - Optimize MultiSectionOverlay inside components/ui/multi-section-path-designer.tsx
 **Learning:** O(N*M) algorithmic overhead happens easily within React render mapping functions when looking up indices dynamically (e.g., `allPoints.findIndex`).
 **Action:** Pre-compute array indices alongside the elements they refer to using single O(N) pass inside `useMemo` hooks, instead of resolving them dynamically inside `.map()` iterations.
+
+## 2026-04-26 - [Static Object & Derived State Hoisting]
+**Learning:** Recomputing unique categories via Set inside a component and passing them to child components that recompute the Set again causes redundant O(N) overhead and allocations.
+**Action:** Hoist static structures and expensive computations outside the React component, and reuse the pre-computed structures in child components.
