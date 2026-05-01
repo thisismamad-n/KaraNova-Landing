@@ -158,6 +158,30 @@ describe("validateFormServerSide", () => {
     expect(result.success).toBe(false);
   });
 
+  test("should reject standalone math tag", async () => {
+    const data = { message: "<math><mtext>x</mtext></math>" };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(false);
+  });
+
+  test("should reject standalone template tag", async () => {
+    const data = { message: "<template><div>x</div></template>" };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(false);
+  });
+
+  test("should reject ontouchstart event", async () => {
+    const data = { message: "<div ontouchstart='alert(1)'>x</div>" };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(false);
+  });
+
+  test("should reject onpageshow event", async () => {
+    const data = { message: "<body onpageshow='alert(1)'>x</body>" };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(false);
+  });
+
   test("should reject svg tag without event handler", async () => {
     const data = { message: "<svg><desc>test</desc></svg>" };
     const result = await validateFormServerSide("contact", data);
@@ -199,6 +223,29 @@ describe("validateFormServerSide", () => {
       const result = await validateFormServerSide("contact", data);
       expect(result.success).toBe(false);
     }
+  });
+
+  test("should reject nested XSS patterns", async () => {
+    const data = {
+      user: {
+        name: "John",
+        profile: {
+          bio: "<script>alert('xss')</script>"
+        }
+      }
+    };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(false);
+  });
+
+  test("should reject excessively long strings to prevent ReDoS", async () => {
+    // Generate a string longer than the 5000 character limit
+    const longString = "A".repeat(5001);
+    const data = { message: longString };
+    const result = await validateFormServerSide("contact", data);
+    expect(result.success).toBe(false);
+    expect(result.error?.field).toBe("message");
+    expect(result.error?.message).toBe("Server validation failed");
   });
 });
 

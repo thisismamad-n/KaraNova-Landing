@@ -64,8 +64,10 @@ export function AnimatedPath({
           style={{
             pathLength,
             strokeDashoffset: useTransform(pathLength, (value) => 1 - value),
-            filter:
-              "drop-shadow(0 0 18px rgba(20, 184, 166, 0.6)) drop-shadow(0 0 42px rgba(20, 184, 166, 0.45)) drop-shadow(0 0 64px rgba(14, 165, 233, 0.35))",
+            // Optimized: Replaced complex SVG <filter> with chained native CSS drop-shadows.
+            // CSS drop-shadows are generally better hardware-accelerated than multi-layered SVG filters.
+            // Removed `willChange: "stroke-dashoffset"` as it breaks rendering with document-level paint servers (gradients) in Blink browsers.
+            filter: "drop-shadow(0 0 18px rgba(20, 184, 166, 0.6)) drop-shadow(0 0 42px rgba(20, 184, 166, 0.45)) drop-shadow(0 0 64px rgba(14, 165, 233, 0.35))",
             strokeOpacity: 0.78,
           }}
           strokeLinecap="round"

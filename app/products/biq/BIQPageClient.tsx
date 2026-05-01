@@ -16,8 +16,6 @@ import {
   Activity,
   LineChart,
   Gauge,
-  Filter,
-  Download,
 } from "lucide-react";
 
 export default function BIQPageClient() {
@@ -284,7 +282,7 @@ export default function BIQPageClient() {
         gradientFrom="rgb(99, 102, 241)"
         gradientTo="rgb(139, 92, 246)"
         ctaText={t.hero.ctaText}
-        onCtaClick={() => console.log("Explore dashboard clicked")}
+        onCtaClick={() => window.location.href = "https://app.karanovaa.com"}
       />
 
       {/* Features Section */}

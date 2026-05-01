@@ -36,12 +36,9 @@ export function ContinuousPath({
   const isInView = useInView(containerRef, { amount: 0.05, once: false });
 
   useEffect(() => {
-    // Use requestAnimationFrame to defer state update
+    // Use IntersectionObserver trigger rather than continuous raf checks
     if (isInView && !hasRendered) {
-      const rafId = requestAnimationFrame(() => {
-        setHasRendered(true);
-      });
-      return () => cancelAnimationFrame(rafId);
+      setTimeout(() => setHasRendered(true), 0);
     }
   }, [isInView, hasRendered]);
 
@@ -163,9 +160,6 @@ export function ContinuousPath({
   });
 
   const strokeDashoffset = useTransform(pathLength, (value) => 1 - value);
-  const glowOpacity = useTransform(pathLength, [0, 0.3, 1], [0, 0.7, 1]);
-  // Pre-calculate outer glow opacity to avoid hook in JSX
-  const outerGlowOpacity = useTransform(glowOpacity, (v) => (typeof v === 'number' ? v * 0.7 : 0));
 
   if (!enabled || !pathData || isMobile) return null;
 
@@ -192,17 +186,7 @@ export function ContinuousPath({
               <stop offset="100%" stopColor="var(--landing-accent)" />
             </linearGradient>
           </defs>
-          {/* SVG filter for glow - more performant than CSS blur */}
-          <defs>
-            <filter id="pathGlow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="4" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-          {/* Main path with optimized glow - using SVG filter instead of CSS */}
+          {/* Hardware accelerated drop-shadow instead of SVG feGaussianBlur */}
           <motion.path
             d={scaledPathData}
             stroke={`url(#${gradientId})`}
@@ -212,30 +196,12 @@ export function ContinuousPath({
             strokeLinejoin="miter"
             fill="none"
             pathLength={1}
-            filter="url(#pathGlow)"
             style={{
               pathLength,
               strokeDashoffset,
               strokeOpacity: 0.9,
-              willChange: "auto",
-            }}
-          />
-          {/* Single glow layer - reduced from 2 layers, no CSS blur */}
-          <motion.path
-            d={scaledPathData}
-            stroke="rgba(94, 234, 212, 0.5)"
-            strokeWidth={strokeWidth * 2}
-            vectorEffect="non-scaling-stroke"
-            strokeLinecap="butt"
-            strokeLinejoin="miter"
-            fill="none"
-            pathLength={1}
-            style={{
-              pathLength,
-              strokeDashoffset,
-              opacity: glowOpacity,
-              mixBlendMode: "screen",
-              willChange: "auto",
+              filter: "drop-shadow(0px 0px 8px rgba(94, 234, 212, 0.5))",
+              willChange: "stroke-dashoffset",
             }}
           />
         </svg>

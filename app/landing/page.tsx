@@ -11,7 +11,7 @@ import { ContinuousPath } from "@/components/ui/ContinuousPath";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
 // Lazy load heavy components
-const FeatureStepsDemo = lazy(() => import("@/components/ui/demo").then(mod => ({ default: mod.FeatureStepsDemo })));
+const FeatureStepsDemo = lazy(() => import("@/components/ui/feature-steps-showcase").then(mod => ({ default: mod.FeatureStepsDemo })));
 
 // Loading fallback
 const LoadingFallback = () => (
@@ -62,7 +62,7 @@ export default function LandingPage() {
           >
             {/* Core bright spot - very intense */}
             <div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full"
               style={{
                 background: 'radial-gradient(circle, rgba(94, 234, 212, 1) 0%, rgba(94, 234, 212, 0.9) 20%, rgba(20, 184, 166, 0.6) 50%, transparent 100%)',
                 filter: 'blur(8px)',
@@ -70,7 +70,7 @@ export default function LandingPage() {
             />
             {/* Inner glow layer */}
             <div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full"
               style={{
                 background: 'radial-gradient(circle, rgba(94, 234, 212, 0.8) 0%, rgba(20, 184, 166, 0.5) 40%, transparent 100%)',
                 filter: 'blur(20px)',
@@ -78,7 +78,7 @@ export default function LandingPage() {
             />
             {/* Outer atmospheric glow - smaller */}
             <div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full"
               style={{
                 background: 'radial-gradient(circle, rgba(94, 234, 212, 0.4) 0%, rgba(20, 184, 166, 0.2) 50%, transparent 100%)',
                 filter: 'blur(40px)',

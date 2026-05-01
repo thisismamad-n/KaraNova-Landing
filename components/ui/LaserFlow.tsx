@@ -25,6 +25,15 @@ type Props = {
   color?: string;
 };
 
+const hexToRGB = (hex: string) => {
+  let c = hex.trim();
+  if (c[0] === '#') c = c.slice(1);
+  if (c.length === 3)
+    c = c.split('').map(x => x + x).join('');
+  const n = parseInt(c, 16) || 0xffffff;
+  return { r: ((n >> 16) & 255) / 255, g: ((n >> 8) & 255) / 255, b: (n & 255) / 255 };
+};
+
 export const LaserFlow: React.FC<Props> = ({
   className,
   style,
@@ -55,20 +64,12 @@ export const LaserFlow: React.FC<Props> = ({
   const baseDprRef = useRef<number>(1);
   const currentDprRef = useRef<number>(1);
   const lastSizeRef = useRef({ width: 0, height: 0, dpr: 0 });
-  const fpsSamplesRef = useRef<number[]>([]);
+  const fpsSumRef = useRef<number>(0);
+  const fpsCountRef = useRef<number>(0);
   const lastFpsCheckRef = useRef<number>(performance.now());
   const emaDtRef = useRef<number>(16.7); // ms
   const pausedRef = useRef<boolean>(false);
   const inViewRef = useRef<boolean>(true);
-
-  const hexToRGB = (hex: string) => {
-    let c = hex.trim();
-    if (c[0] === '#') c = c.slice(1);
-    if (c.length === 3)
-      c = c.split('').map(x => x + x).join('');
-    const n = parseInt(c, 16) || 0xffffff;
-    return { r: ((n >> 16) & 255) / 255, g: ((n >> 8) & 255) / 255, b: (n & 255) / 255 };
-  };
 
   useEffect(() => {
     const mount = mountRef.current!;
@@ -178,17 +179,6 @@ export const LaserFlow: React.FC<Props> = ({
     const ro = new ResizeObserver(scheduleResize);
     ro.observe(mount);
 
-    const io = new IntersectionObserver(entries => {
-      inViewRef.current = entries[0]?.isIntersecting ?? true;
-    },
-      { root: null, threshold: 0 });
-    io.observe(mount);
-
-    const onVis = () => {
-      pausedRef.current = document.hidden;
-    };
-    document.addEventListener('visibilitychange', onVis, { passive: true });
-
     const updateMouse = (clientX: number, clientY: number) => {
       const rect = rectRef.current;
       if (!rect) return;
@@ -207,19 +197,6 @@ export const LaserFlow: React.FC<Props> = ({
     canvas.addEventListener('pointerenter', onMove as any, { passive: true });
     canvas.addEventListener('pointerleave', onLeave as any, { passive: true });
 
-    const onCtxLost = (e: Event) => {
-      e.preventDefault();
-      pausedRef.current = true;
-    };
-
-    const onCtxRestored = () => {
-      pausedRef.current = false;
-      scheduleResize();
-    };
-
-    canvas.addEventListener('webglcontextlost', onCtxLost, false);
-    canvas.addEventListener('webglcontextrestored', onCtxRestored, false);
-
     let raf = 0;
     const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
     const dprFloor = 0.6;
@@ -231,38 +208,51 @@ export const LaserFlow: React.FC<Props> = ({
     const adjustDprIfNeeded = (now: number) => {
       const elapsed = now - lastFpsCheckRef.current;
       if (elapsed < 750) return;
-      const samples = fpsSamplesRef.current;
-      if (samples.length === 0) {
+
+      if (fpsCountRef.current === 0) {
         lastFpsCheckRef.current = now;
         return;
       }
-      const avgFps = samples.reduce((a, b) => a + b, 0) / samples.length;
+
+      const avgFps = fpsSumRef.current / fpsCountRef.current;
       let next = currentDprRef.current;
       const base = baseDprRef.current;
+
       if (avgFps < lowerThresh) {
         next = clamp(currentDprRef.current * 0.85, dprFloor, base);
       } else if (avgFps > upperThresh && currentDprRef.current < base) {
         next = clamp(currentDprRef.current * 1.1, dprFloor, base);
       }
+
       if (Math.abs(next - currentDprRef.current) > 0.01 && now - lastDprChangeRef > dprChangeCooldown) {
         currentDprRef.current = next;
         lastDprChangeRef = now;
         setSizeNow();
       }
-      fpsSamplesRef.current = [];
+
+      // Reset accumulators
+      fpsSumRef.current = 0;
+      fpsCountRef.current = 0;
       lastFpsCheckRef.current = now;
     };
 
     const animate = () => {
+      if (pausedRef.current || !inViewRef.current) {
+        raf = 0;
+        return;
+      }
       raf = requestAnimationFrame(animate);
-      if (pausedRef.current || !inViewRef.current) return;
+
       const t = clock.getElapsedTime();
       const dt = Math.max(0, t - prevTime);
       prevTime = t;
       const dtMs = dt * 1000;
       emaDtRef.current = emaDtRef.current * 0.9 + dtMs * 0.1;
       const instFps = 1000 / Math.max(1, emaDtRef.current);
-      fpsSamplesRef.current.push(instFps);
+
+      // Accumulate FPS stats without allocating new array elements
+      fpsSumRef.current += instFps;
+      fpsCountRef.current += 1;
       uniforms.iTime.value = t;
       const cdt = Math.min(0.033, Math.max(0.001, dt));
       (uniforms.uFlowTime.value as number) += cdt;
@@ -281,10 +271,48 @@ export const LaserFlow: React.FC<Props> = ({
       adjustDprIfNeeded(performance.now());
     };
 
-    animate();
+    const startLoop = () => {
+      if (!raf && !pausedRef.current && inViewRef.current) {
+        prevTime = clock.getElapsedTime();
+        raf = requestAnimationFrame(animate);
+      }
+    };
+
+    const io = new IntersectionObserver(entries => {
+      inViewRef.current = entries[0]?.isIntersecting ?? true;
+      if (inViewRef.current) {
+        startLoop();
+      }
+    }, { root: null, threshold: 0 });
+    io.observe(mount);
+
+    const onVis = () => {
+      pausedRef.current = document.hidden;
+      if (!pausedRef.current) {
+        startLoop();
+      }
+    };
+    document.addEventListener('visibilitychange', onVis, { passive: true });
+
+    const onCtxLost = (e: Event) => {
+      e.preventDefault();
+      pausedRef.current = true;
+    };
+
+    const onCtxRestored = () => {
+      pausedRef.current = false;
+      scheduleResize();
+      startLoop();
+    };
+
+    canvas.addEventListener('webglcontextlost', onCtxLost, false);
+    canvas.addEventListener('webglcontextrestored', onCtxRestored, false);
+
+    startLoop();
 
     return () => {
-      cancelAnimationFrame(raf);
+      if (raf) cancelAnimationFrame(raf);
+      if (resizeRaf) cancelAnimationFrame(resizeRaf);
       ro.disconnect();
       io.disconnect();
       document.removeEventListener('visibilitychange', onVis);

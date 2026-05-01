@@ -33,16 +33,8 @@ export const InovaFeatureCard = ({
     >
       {/* Pulsing AI glow effect */}
       <motion.div
-        className="absolute -inset-8 rounded-full bg-gradient-to-br from-emerald-500/25 via-teal-500/20 to-cyan-500/15 blur-3xl opacity-40"
-        animate={isMobile ? undefined : {
-          scale: [1, 1.15, 1],
-          opacity: [0.4, 0.6, 0.4]
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
+        className="absolute -inset-8 rounded-full bg-gradient-to-br from-emerald-500/25 via-teal-500/20 to-cyan-500/15 blur-3xl opacity-50 scale-105"
+
       />
 
       <div className="relative space-y-4">
@@ -55,28 +47,11 @@ export const InovaFeatureCard = ({
           transition={{ delay: 0.1, duration: 0.6 }}
         >
           <motion.div
-            className="relative h-3 w-3 rounded-full bg-emerald-400"
-            animate={isMobile ? undefined : {
-              boxShadow: [
-                "0 0 0 0 rgba(52, 211, 153, 0.7)",
-                "0 0 0 12px rgba(52, 211, 153, 0)",
-              ]
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-            }}
+            className="relative h-3 w-3 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.7)]"
           >
             <motion.div
               className="absolute inset-0 rounded-full bg-emerald-300"
-              animate={isMobile ? undefined : {
-                scale: [1, 0.8, 1],
-                opacity: [1, 0.6, 1]
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-              }}
+
             />
           </motion.div>
           <span className="text-sm font-semibold uppercase tracking-widest text-emerald-300/90 drop-shadow-[0_0_20px_rgba(52,211,153,0.6)]">
@@ -126,15 +101,7 @@ export const InovaFeatureCard = ({
               >
                 <motion.div
                   className="h-full w-full rounded-full bg-gradient-to-r from-emerald-300 to-teal-300"
-                  animate={isMobile ? undefined : {
-                    opacity: [0.5, 1, 0.5]
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: i * 0.2,
-                    ease: "easeInOut"
-                  }}
+
                 />
               </motion.div>
             ))}

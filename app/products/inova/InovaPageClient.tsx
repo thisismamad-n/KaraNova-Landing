@@ -256,7 +256,7 @@ export default function InovaPageClient() {
         gradientFrom="rgb(16, 185, 129)"
         gradientTo="rgb(5, 150, 105)"
         ctaText={t.hero.ctaText}
-        onCtaClick={() => console.log("Request demo clicked")}
+        onCtaClick={() => window.location.href = "https://app.karanovaa.com"}
       />
 
       {/* Features Section */}

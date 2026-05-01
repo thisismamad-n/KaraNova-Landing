@@ -284,7 +284,7 @@ export default function TaskEasePageClient() {
         gradientFrom="rgb(6, 182, 212)"
         gradientTo="rgb(8, 145, 178)"
         ctaText={t.hero.ctaText}
-        onCtaClick={() => console.log("Start trial clicked")}
+        onCtaClick={() => window.location.href = "https://app.karanovaa.com"}
       />
 
       {/* Features Section */}

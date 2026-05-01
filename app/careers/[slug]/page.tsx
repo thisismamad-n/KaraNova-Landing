@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { generatePageMetadata } from "@/lib/seo/metadata";
-import { mockJobs } from "@/app/careers/_data/jobs";
+import { mockJobs, getJobBySlug } from "@/app/careers/_data/jobs";
 import JobDetailClient from "./JobDetailClient";
 
 // Generate static params for all job slugs
@@ -18,7 +18,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const job = mockJobs.find((j) => j.slug === slug);
+  const job = getJobBySlug(slug);
 
   if (!job) {
     return generatePageMetadata({
@@ -47,7 +47,7 @@ export async function generateMetadata({
 
 export default async function JobDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const job = mockJobs.find((j) => j.slug === slug);
+  const job = getJobBySlug(slug);
 
   if (!job) {
     notFound();

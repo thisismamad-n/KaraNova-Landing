@@ -43,8 +43,8 @@ const NAV_ITEMS: CardNavItem[] = [
     textColor: "#e2e8f0",
     links: [
       { label: "ایمیل پشتیبانی", href: "mailto:hello@karanova.io", ariaLabel: "ارسال ایمیل به کارانوا" },
-      { label: "تلگرام", href: "https://t.me/karanova", ariaLabel: "تلگرام کارانوا" },
-      { label: "لینکدین", href: "https://linkedin.com/company/karanova", ariaLabel: "لینکدین کارانوا" },
+      { label: "تلگرام", href: "https://t.me/karanova", ariaLabel: "تلگرام کارانوا (در تب جدید باز می‌شود)" },
+      { label: "لینکدین", href: "https://linkedin.com/company/karanova", ariaLabel: "لینکدین کارانوا (در تب جدید باز می‌شود)" },
     ],
   },
 ];
