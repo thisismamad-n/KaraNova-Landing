@@ -1,0 +1,7 @@
+# Fallow Configuration
+# Fallow is a local-only code quality tool
+# Install it globally: bun install -g fallow
+# Or run with: bunx fallow
+
+# This tool is not included in package.json to avoid build failures on Vercel
+# It's only needed for local development
