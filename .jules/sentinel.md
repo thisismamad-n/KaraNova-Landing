@@ -26,3 +26,8 @@
 **Vulnerability:** API documentation examples used realistic-looking placeholders for sensitive fields like email and password, which can be flagged by security scanners and potentially lead to accidental hardcoding by users.
 **Learning:** Using realistic-looking placeholders in documentation, even if they are clearly fake, can trigger security alerts and set a bad example for developers.
 **Prevention:** Use standardized, obviously non-functional placeholders like `YOUR_EMAIL` or `YOUR_PASSWORD` in all documentation and code examples.
+
+## 2025-02-18 - Remove Sensitive Data Exposure in Console Logging
+**Vulnerability:** Code snippets instruct users to log access tokens to the console, exposing sensitive session data.
+**Learning:** Documentation examples often get copy-pasted into production; logging sensitive tokens can lead to severe security breaches.
+**Prevention:** Never include code in documentation snippets that logs or prints sensitive data like access tokens, passwords, or PII.
