@@ -1,8 +1,9 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { generatePageMetadata } from "@/lib/seo/metadata";
+import { generatePageMetadata, generateJobPostingSchema } from "@/lib/seo/metadata";
 import { mockJobs, getJobBySlug } from "@/app/careers/_data/jobs";
 import JobDetailClient from "./JobDetailClient";
+import StructuredData from "@/app/_components/shared/StructuredData";
 
 // Generate static params for all job slugs
 export async function generateStaticParams() {
@@ -52,9 +53,6 @@ export default async function JobDetailPage({ params }: { params: Promise<{ slug
   if (!job) {
     notFound();
   }
-
-  const { generateJobPostingSchema } = await import("@/lib/seo/metadata");
-  const StructuredData = (await import("@/app/_components/shared/StructuredData")).default;
 
   const jobSchema = generateJobPostingSchema({
     title: job.title,
