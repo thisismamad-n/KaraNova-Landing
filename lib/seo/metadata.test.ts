@@ -248,6 +248,28 @@ describe("Schema Generators", () => {
     expect(schema.mainEntity[0].acceptedAnswer.text).toBe("A1");
   });
 
+  test("generateFAQSchema handles empty array", () => {
+    const schema = generateFAQSchema([]);
+    expect(schema["@type"]).toBe("FAQPage");
+    expect(schema.mainEntity).toHaveLength(0);
+  });
+
+  test("generateFAQSchema handles special characters and HTML", () => {
+    const faqs = [
+      { question: "What is <strong>HTML</strong>?", answer: "It's a markup language & more!" },
+    ];
+    const schema = generateFAQSchema(faqs);
+    expect(schema.mainEntity[0].name).toBe("What is <strong>HTML</strong>?");
+    expect(schema.mainEntity[0].acceptedAnswer.text).toBe("It's a markup language & more!");
+  });
+
+  test("generateFAQSchema handles null or undefined runtime inputs", () => {
+    // @ts-ignore - intentional runtime test
+    expect(() => generateFAQSchema(null)).toThrow(TypeError);
+    // @ts-ignore - intentional runtime test
+    expect(() => generateFAQSchema(undefined)).toThrow(TypeError);
+  });
+
   test("generateProductSchema returns correct structure", () => {
     const config = {
       name: "AI Suite",
