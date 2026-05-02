@@ -21,3 +21,8 @@
 **Vulnerability:** The server-side form validation utility `containsXSS` used regex patterns to detect malicious input but lacked a prior length limit check on string properties.
 **Learning:** Processing unbounded input with regular expressions introduces significant ReDoS (Regular Expression Denial of Service) and general DoS risks, allowing attackers to tie up the server thread by sending overly long strings.
 **Prevention:** Always enforce a maximum length limit on user input *before* evaluating it with regular expressions, keeping string size within reasonable bounds for the application.
+
+## 2026-05-02 - Hardcoded Credential Placeholders in API Examples
+**Vulnerability:** API documentation examples used realistic-looking placeholders for sensitive fields like email and password, which can be flagged by security scanners and potentially lead to accidental hardcoding by users.
+**Learning:** Using realistic-looking placeholders in documentation, even if they are clearly fake, can trigger security alerts and set a bad example for developers.
+**Prevention:** Use standardized, obviously non-functional placeholders like `YOUR_EMAIL` or `YOUR_PASSWORD` in all documentation and code examples.
