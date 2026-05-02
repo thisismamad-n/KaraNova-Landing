@@ -11,6 +11,26 @@ interface ContinuousPathOverlayProps {
   gradientId?: string;
 }
 
+const scalePathCoordinates = (path: string, scaleX: number): string => {
+  // Match all coordinate pairs in the path
+  return path.replace(
+    /([ML])\s*([\d.]+)\s+([\d.]+)|C\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/g,
+    (match, cmd, x1, y1, cx1, cy1, cx2, cy2, x2, y2) => {
+      if (cmd === "M" || cmd === "L") {
+        // Move or Line command
+        const scaledX = parseFloat(x1) * scaleX;
+        return `${cmd} ${scaledX.toFixed(2)} ${y1}`;
+      } else {
+        // Cubic Bezier curve command
+        const scaledCx1 = parseFloat(cx1) * scaleX;
+        const scaledCx2 = parseFloat(cx2) * scaleX;
+        const scaledX2 = parseFloat(x2) * scaleX;
+        return `C ${scaledCx1.toFixed(2)} ${cy1} ${scaledCx2.toFixed(2)} ${cy2} ${scaledX2.toFixed(2)} ${y2}`;
+      }
+    }
+  );
+};
+
 export function ContinuousPathOverlay({
   startSectionId,
   endSectionId,
@@ -41,25 +61,6 @@ export function ContinuousPathOverlay({
   const glowFilterId = `continuous-glow-${filterId}`;
 
   useEffect(() => {
-    const scalePathCoordinates = (path: string, scaleX: number): string => {
-      // Match all coordinate pairs in the path
-      return path.replace(/([ML])\s*([\d.]+)\s+([\d.]+)|C\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)/g, 
-        (match, cmd, x1, y1, cx1, cy1, cx2, cy2, x2, y2) => {
-          if (cmd === 'M' || cmd === 'L') {
-            // Move or Line command
-            const scaledX = parseFloat(x1) * scaleX;
-            return `${cmd} ${scaledX.toFixed(2)} ${y1}`;
-          } else {
-            // Cubic Bezier curve command
-            const scaledCx1 = parseFloat(cx1) * scaleX;
-            const scaledCx2 = parseFloat(cx2) * scaleX;
-            const scaledX2 = parseFloat(x2) * scaleX;
-            return `C ${scaledCx1.toFixed(2)} ${cy1} ${scaledCx2.toFixed(2)} ${cy2} ${scaledX2.toFixed(2)} ${y2}`;
-          }
-        }
-      );
-    };
-
     const updateViewBox = () => {
       const startEl = document.getElementById(startSectionId);
       const endEl = document.getElementById(endSectionId);
