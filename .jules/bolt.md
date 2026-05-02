@@ -42,3 +42,6 @@
 ## 2026-05-02 - [Static Import Optimization]
 **Learning:** Dynamic imports in Server Components introduce micro-task overhead and asynchronous resolution on every request, even when the module is already cached. Switching to static imports for unconditional dependencies eliminates this overhead.
 **Action:** Prefer static imports for modules that are required for the primary rendering path of a Server Component, especially when the module is already imported elsewhere in the same file.
+## 2025-05-15 - [Static Import Optimization in Server Components]
+**Learning:** Dynamic `await import()` calls inside Next.js Server Components introduce micro-task overhead and asynchronous resolution ticks on every request, even when the module is already cached or imported elsewhere in the same file.
+**Action:** Replace dynamic imports with static ES module imports at the top of the file for unconditional dependencies in Server Components to eliminate asynchronous overhead and optimize the rendering path.

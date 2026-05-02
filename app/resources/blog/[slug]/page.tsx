@@ -1,7 +1,8 @@
 import { Metadata } from "next";
-import { generatePageMetadata } from "@/lib/seo/metadata";
+import { generatePageMetadata, generateArticleSchema } from "@/lib/seo/metadata";
 import BlogPostClient from "@/app/resources/blog/[slug]/BlogPostClient";
 import { mockBlogs } from "@/app/resources/blog/_data/blogs";
+import StructuredData from "@/app/_components/shared/StructuredData";
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -46,9 +47,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   if (!post) {
     return <BlogPostClient slug={slug} />;
   }
-
-  const { generateArticleSchema } = await import("@/lib/seo/metadata");
-  const StructuredData = (await import("@/app/_components/shared/StructuredData")).default;
 
   const articleSchema = generateArticleSchema({
     title: post.title,
