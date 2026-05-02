@@ -154,6 +154,66 @@ describe("generateBlogMetadata", () => {
     expect(metadata.openGraph.modifiedTime).toBe(modifiedDate.toISOString());
     expect(metadata.other?.["last-modified"]).toBe(modifiedDate.toISOString());
   });
+
+  test("should handle missing optional fields with defaults", () => {
+    const minimalConfig = {
+      title: "Minimal Post",
+      description: "Minimal Description",
+      author: "John Doe",
+      publishedDate: new Date("2023-01-01T12:00:00Z"),
+    };
+    const metadata = generateBlogMetadata(minimalConfig);
+
+    // @ts-ignore
+    expect(metadata.openGraph.tags).toEqual([]);
+    // @ts-ignore
+    expect(metadata.openGraph.images[0].url).toBe("/og-default.jpg");
+    // @ts-ignore
+    expect(metadata.twitter.images[0]).toBe("/og-default.jpg");
+  });
+
+  test("should use publishedDate for last-modified when modifiedDate is not provided", () => {
+    const date = new Date("2023-01-01T12:00:00Z");
+    const metadata = generateBlogMetadata({
+      title: "No Modified Date",
+      description: "Desc",
+      author: "John Doe",
+      publishedDate: date,
+    });
+
+    expect(metadata.other?.["last-modified"]).toBe(date.toISOString());
+    // @ts-ignore
+    expect(metadata.openGraph.modifiedTime).toBeUndefined();
+  });
+
+  test("should correctly handle custom featuredImage", () => {
+    const customImage = "/custom-blog-image.jpg";
+    const metadata = generateBlogMetadata({
+      title: "Custom Image",
+      description: "Desc",
+      author: "John Doe",
+      publishedDate: new Date("2023-01-01T12:00:00Z"),
+      featuredImage: customImage,
+    });
+
+    // @ts-ignore
+    expect(metadata.openGraph.images[0].url).toBe(customImage);
+    // @ts-ignore
+    expect(metadata.twitter.images[0]).toBe(customImage);
+  });
+
+  test("should handle canonical URL", () => {
+    const canonical = "https://karanova.io/blog/custom-canonical";
+    const metadata = generateBlogMetadata({
+      title: "Canonical Post",
+      description: "Desc",
+      author: "John Doe",
+      publishedDate: new Date("2023-01-01T12:00:00Z"),
+      canonical,
+    });
+
+    expect(metadata.alternates?.canonical).toBe(canonical);
+  });
 });
 
 describe("Schema Generators", () => {
