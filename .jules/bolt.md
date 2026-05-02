@@ -38,3 +38,7 @@
 ## 2025-02-19 - Optimize MultiSectionOverlay inside components/ui/multi-section-path-designer.tsx
 **Learning:** O(N*M) algorithmic overhead happens easily within React render mapping functions when looking up indices dynamically (e.g., `allPoints.findIndex`).
 **Action:** Pre-compute array indices alongside the elements they refer to using single O(N) pass inside `useMemo` hooks, instead of resolving them dynamically inside `.map()` iterations.
+
+## 2026-05-02 - [Static Import Optimization]
+**Learning:** Dynamic imports in Server Components introduce micro-task overhead and asynchronous resolution on every request, even when the module is already cached. Switching to static imports for unconditional dependencies eliminates this overhead.
+**Action:** Prefer static imports for modules that are required for the primary rendering path of a Server Component, especially when the module is already imported elsewhere in the same file.
