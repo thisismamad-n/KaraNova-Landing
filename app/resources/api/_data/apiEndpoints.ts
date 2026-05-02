@@ -68,8 +68,7 @@ export const apiEndpoints: APIEndpoint[] = [
   })
 });
 
-const data = await response.json();
-console.log(data.access_token);`,
+const data = await response.json();`,
       },
       {
         language: "python",
@@ -84,8 +83,7 @@ response = requests.post(
     }
 )
 
-data = response.json()
-print(data['access_token'])`,
+data = response.json()`,
       },
       {
         language: "curl",
