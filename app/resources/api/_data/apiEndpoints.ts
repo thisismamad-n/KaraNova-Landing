@@ -39,8 +39,8 @@ export const apiEndpoints: APIEndpoint[] = [
     requestBody: {
       contentType: "application/json",
       example: `{
-  "email": "user@example.com",
-  "password": "your_password"
+  "email": "YOUR_EMAIL",
+  "password": "YOUR_PASSWORD"
 }`,
     },
     responseExample: {
@@ -63,8 +63,8 @@ export const apiEndpoints: APIEndpoint[] = [
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-    email: 'user@example.com',
-    password: 'your_password'
+    email: 'YOUR_EMAIL',
+    password: 'YOUR_PASSWORD'
   })
 });
 
@@ -79,8 +79,8 @@ console.log(data.access_token);`,
 response = requests.post(
     'https://api.karanova.io/v1/auth/login',
     json={
-        'email': 'user@example.com',
-        'password': 'your_password'
+        'email': 'YOUR_EMAIL',
+        'password': 'YOUR_PASSWORD'
     }
 )
 
@@ -93,8 +93,8 @@ print(data['access_token'])`,
         code: `curl -X POST https://api.karanova.io/v1/auth/login \\
   -H "Content-Type: application/json" \\
   -d '{
-    "email": "user@example.com",
-    "password": "your_password"
+    "email": "YOUR_EMAIL",
+    "password": "YOUR_PASSWORD"
   }'`,
       },
     ],
