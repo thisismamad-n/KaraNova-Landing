@@ -127,6 +127,32 @@ describe("submitFormWithRetry", () => {
     expect(result.success).toBe(true);
     expect(global.fetch).toHaveBeenCalledTimes(2);
   });
+
+  test("should handle standard errors thrown by fetch and retry", async () => {
+    global.fetch = mock(() =>
+      Promise.reject(new Error("Custom fetch error"))
+    ) as any;
+
+    const result = await submitFormWithRetry({ endpoint, data, maxRetries: 1, retryDelay: 1 });
+
+    expect(result.success).toBe(false);
+    expect(result.error?.code).toBe("NETWORK_ERROR");
+    expect(result.error?.message).toBe("Custom fetch error");
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+  });
+
+  test("should handle non-Error objects thrown in try block", async () => {
+    global.fetch = mock(() =>
+      Promise.reject("Just a string error")
+    ) as any;
+
+    const result = await submitFormWithRetry({ endpoint, data, maxRetries: 1, retryDelay: 1 });
+
+    expect(result.success).toBe(false);
+    expect(result.error?.code).toBe("NETWORK_ERROR");
+    expect(result.error?.message).toBe("Unknown error");
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+  });
 });
 
 describe("validateFormServerSide", () => {
