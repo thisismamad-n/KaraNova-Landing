@@ -30,3 +30,8 @@
 **Vulnerability:** The `StructuredData` component rendered JSON-LD schemas inside a script tag using `dangerouslySetInnerHTML`. The underlying implementation relied on a simple string replacement `.replace(/</g, "\\u003c")`, leaving it vulnerable to parser-breaking characters and bypasses like `\u2028`, `\u2029`, and `>` which could cause structural XSS or syntax errors if unsanitized data was ingested.
 **Learning:** Simple single-character replacements are insufficient to protect script-tag enclosed data, especially since JS string literals can break out using various unicode entities or unescaped quotes depending on context.
 **Prevention:** Use a comprehensive unicode escape map replacing `<`, `>`, `\u2028`, and `\u2029` with their exact escaped hex equivalents (`\\u003c`, `\\u003e`, `\\u2028`, `\\u2029`) when interpolating dynamic data into `<script>` tags, especially for `application/ld+json`.
+
+## 2025-02-18 - Insecure File Upload Validation
+**Vulnerability:** The ApplicationForm lacked client-side file size and type validation for resumes, creating a Denial of Service (DoS) vector and potential for malicious file uploads.
+**Learning:** Relying solely on the presence of a file without validating its properties exposes the application to oversized payloads and unsupported file types.
+**Prevention:** Always implement explicit file size limits and whitelist allowed MIME types on the client-side before submission, in addition to robust server-side validation.

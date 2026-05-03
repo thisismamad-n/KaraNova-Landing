@@ -81,6 +81,19 @@ export default function ApplicationForm({ job, language }: ApplicationFormProps)
     // Resume validation
     if (!formData.resume) {
       newErrors.resume = t.errors.fileRequired;
+    } else {
+      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+      const ALLOWED_TYPES = [
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      ];
+
+      if (formData.resume.size > MAX_FILE_SIZE) {
+        newErrors.resume = language === "fa" ? "حجم فایل باید کمتر از ۵ مگابایت باشد" : "File size must be less than 5MB";
+      } else if (!ALLOWED_TYPES.includes(formData.resume.type)) {
+        newErrors.resume = language === "fa" ? "فقط فایل‌های PDF و Word مجاز هستند" : "Only PDF and Word documents are allowed";
+      }
     }
 
     setErrors(newErrors);
