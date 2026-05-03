@@ -51,7 +51,20 @@ export async function submitFormWithRetry<T = unknown>(
 
       // Server-side validation errors (400)
       if (response.status === 400) {
-        const errorData = await response.json();
+        let errorData: Record<string, any> = {};
+        try {
+          // Clone the response so we can read text if json fails
+          const responseClone = response.clone();
+          try {
+            errorData = await response.json();
+          } catch (e) {
+            errorData = { message: await responseClone.text() };
+          }
+        } catch (e) {
+          // Fallback if both fail
+          errorData = { message: "Validation error" };
+        }
+
         return {
           success: false,
           error: {
