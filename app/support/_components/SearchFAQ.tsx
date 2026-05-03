@@ -71,6 +71,7 @@ export default function SearchFAQ({ onSearch, language }: SearchFAQProps) {
         {/* Clear Button */}
         {query && (
           <button
+            type="button"
             onClick={handleClear}
             className={cn(
               "absolute left-4 p-1 rounded-md",
