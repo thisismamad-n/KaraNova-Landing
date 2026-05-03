@@ -45,3 +45,6 @@
 ## 2025-05-15 - [Static Import Optimization in Server Components]
 **Learning:** Dynamic `await import()` calls inside Next.js Server Components introduce micro-task overhead and asynchronous resolution ticks on every request, even when the module is already cached or imported elsewhere in the same file.
 **Action:** Replace dynamic imports with static ES module imports at the top of the file for unconditional dependencies in Server Components to eliminate asynchronous overhead and optimize the rendering path.
+## 2026-05-03 - Prevent Async Wait on Form Validation
+**Learning:** Double nested setTimeouts interacting with state updaters to sniff for changed state create artificial latency and unnecessary function allocations on the main thread, lowering Time-to-Interactive metrics on forms.
+**Action:** When validating a form, always return the validation outcome (the error map) synchronously from the validation function rather than simply updating state, allowing immediate side-effects (like focusing the first error input) to execute without waiting for a subsequent render cycle.

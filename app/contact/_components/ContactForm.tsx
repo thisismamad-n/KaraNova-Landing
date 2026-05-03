@@ -186,11 +186,11 @@ export default function ContactForm({ language }: ContactFormProps) {
 
   const currentContent = content[language];
 
-  const validateForm = (): boolean => {
+  const validateForm = (): FormErrors | null => {
     try {
       contactFormSchema.parse(formData);
       setErrors({});
-      return true;
+      return null;
     } catch (error) {
       if (error instanceof z.ZodError) {
         const newErrors: FormErrors = {};
@@ -226,38 +226,26 @@ export default function ContactForm({ language }: ContactFormProps) {
           }
         });
         setErrors(newErrors);
+        return newErrors;
       }
-      return false;
+      return { _general: "An unknown error occurred" } as unknown as FormErrors;
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    const validationErrors = validateForm();
+    if (validationErrors) {
       // Focus on the first field with an error
-      // validateForm updates the errors state synchronously, but to be safe and ensure
-      // the DOM is updated (e.g. error messages rendered), we use a small timeout,
-      // and we access the latest state using a functional update, BUT we execute the
-      // side effect outside of the updater function to avoid React anti-patterns.
-      setTimeout(() => {
-        setErrors((currentErrors) => {
-          // We only use the updater to GET the current errors reliably,
-          // we don't modify them. The side effect is safe here because
-          // we are just reading and calling .focus() on a ref.
-          // A better approach would be validateForm returning the errors,
-          // but this works with the current architecture.
-          const firstErrorField = Object.keys(currentErrors)[0] as keyof FormErrors;
-          if (firstErrorField && fieldRefs[firstErrorField]?.current) {
-             // Use setTimeout to push the focus action to the end of the event loop,
-             // ensuring it happens AFTER the render cycle triggered by any state updates.
-             setTimeout(() => {
-               fieldRefs[firstErrorField]!.current!.focus();
-             }, 0);
-          }
-          return currentErrors;
-        });
-      }, 10);
+      const firstErrorField = Object.keys(validationErrors)[0] as keyof FormErrors;
+      if (firstErrorField && fieldRefs[firstErrorField]?.current) {
+         // Push the focus action to the end of the event loop to ensure
+         // it happens AFTER the render cycle triggered by setErrors.
+         setTimeout(() => {
+           fieldRefs[firstErrorField]!.current!.focus();
+         }, 0);
+      }
       return;
     }
 
