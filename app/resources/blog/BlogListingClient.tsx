@@ -9,37 +9,40 @@ import BlogCard from "@/app/resources/blog/_components/BlogCard";
 import BlogFilter from "@/app/resources/blog/_components/BlogFilter";
 import { mockBlogs, blogTranslations, BlogCategory } from "@/app/resources/blog/_data/blogs";
 
+// Bilingual content
+const content = {
+  en: {
+    hero: {
+      title: "Blog",
+      subtitle:
+        "Insights, tutorials, and updates about AI-powered business management and industry trends",
+    },
+    breadcrumbs: [
+      { label: "Home", href: "/" },
+      { label: "Resources", href: "/resources" },
+      { label: "Blog", href: "/resources/blog" },
+    ],
+  },
+  fa: {
+    hero: {
+      title: "وبلاگ",
+      subtitle:
+        "بینش‌ها، آموزش‌ها و بروزرسانی‌ها درباره مدیریت کسب‌وکار مبتنی بر هوش مصنوعی و روندهای صنعتی",
+    },
+    breadcrumbs: [
+      { label: "خانه", href: "/" },
+      { label: "منابع", href: "/resources" },
+      { label: "وبلاگ", href: "/resources/blog" },
+    ],
+  },
+};
+
+// Get unique categories
+const categories = Array.from(new Set(mockBlogs.map((blog) => blog.category))) as BlogCategory[];
+
 export default function BlogListingClient() {
   const { language } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<BlogCategory | "all">("all");
-
-  // Bilingual content
-  const content = {
-    en: {
-      hero: {
-        title: "Blog",
-        subtitle:
-          "Insights, tutorials, and updates about AI-powered business management and industry trends",
-      },
-      breadcrumbs: [
-        { label: "Home", href: "/" },
-        { label: "Resources", href: "/resources" },
-        { label: "Blog", href: "/resources/blog" },
-      ],
-    },
-    fa: {
-      hero: {
-        title: "وبلاگ",
-        subtitle:
-          "بینش‌ها، آموزش‌ها و بروزرسانی‌ها درباره مدیریت کسب‌وکار مبتنی بر هوش مصنوعی و روندهای صنعتی",
-      },
-      breadcrumbs: [
-        { label: "خانه", href: "/" },
-        { label: "منابع", href: "/resources" },
-        { label: "وبلاگ", href: "/resources/blog" },
-      ],
-    },
-  };
 
   const currentContent = content[language];
 
@@ -50,9 +53,6 @@ export default function BlogListingClient() {
     }
     return mockBlogs.filter((blog) => blog.category === selectedCategory);
   }, [selectedCategory]);
-
-  // Get unique categories
-  const categories = Array.from(new Set(mockBlogs.map((blog) => blog.category))) as BlogCategory[];
 
   return (
     <div
