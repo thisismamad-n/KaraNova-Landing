@@ -45,3 +45,6 @@
 ## 2025-05-15 - [Static Import Optimization in Server Components]
 **Learning:** Dynamic `await import()` calls inside Next.js Server Components introduce micro-task overhead and asynchronous resolution ticks on every request, even when the module is already cached or imported elsewhere in the same file.
 **Action:** Replace dynamic imports with static ES module imports at the top of the file for unconditional dependencies in Server Components to eliminate asynchronous overhead and optimize the rendering path.
+## 2026-05-03 - Component-level derived state bottlenecks
+**Learning:** This codebase frequently relies on static mock data arrays imported directly into components, causing O(N) derived state calculations (like unique sets) to run on every render.
+**Action:** Always hoist derived operations on static data arrays and static configuration objects to the module level to avoid recalculation.
