@@ -24,6 +24,22 @@ describe("submitFormWithRetry", () => {
     expect(global.fetch).toHaveBeenCalledTimes(1);
   });
 
+  test("should handle 400 validation error with invalid JSON (fallback to text)", async () => {
+    global.fetch = mock(() => {
+      return Promise.resolve(new Response("Plain text error message", {
+        status: 400,
+        headers: { "Content-Type": "text/plain" },
+      }));
+    }) as any;
+
+    const result = await submitFormWithRetry({ endpoint, data });
+
+    expect(result.success).toBe(false);
+    expect(result.error?.code).toBe("VALIDATION_ERROR");
+    expect(result.error?.message).toBe("Plain text error message");
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+  });
+
   test("should handle 400 validation error without retry", async () => {
     global.fetch = mock(() =>
       Promise.resolve(new Response(JSON.stringify({ message: "Invalid email", field: "email" }), {
