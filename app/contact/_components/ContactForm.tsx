@@ -6,40 +6,16 @@ import { Send, CheckCircle, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { z } from "zod";
 
+import { content } from "./contact-form.content";
+import {
+  contactFormSchema,
+  ContactFormData,
+  FormErrors,
+  getLocalizedErrors
+} from "./contact-form.schema";
+
 interface ContactFormProps {
   language: "en" | "fa";
-}
-
-// Zod validation schema
-const contactFormSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters").max(100, "Name must be at most 100 characters"),
-  email: z.string().email("Please enter a valid email address").max(254, "Email must be at most 254 characters"),
-  phone: z
-    .string()
-    .regex(/^[0-9+\-\s()]+$/, "Invalid phone number")
-    .max(50, "Phone number must be at most 50 characters")
-    .optional()
-    .or(z.literal("")),
-  company: z.string().max(100, "Company name must be at most 100 characters").optional(),
-  subject: z.string().min(3, "Subject must be at least 3 characters").max(200, "Subject must be at most 200 characters"),
-  message: z.string().min(10, "Message must be at least 10 characters").max(2000, "Message must be at most 2000 characters"),
-  preferredContact: z.enum(["email", "phone"]),
-  consent: z.boolean().refine((val) => val === true, {
-    message: "You must accept the privacy policy",
-  }),
-});
-
-type ContactFormData = z.infer<typeof contactFormSchema>;
-
-interface FormErrors {
-  name?: string;
-  email?: string;
-  phone?: string;
-  company?: string;
-  subject?: string;
-  message?: string;
-  preferredContact?: string;
-  consent?: string;
 }
 
 export default function ContactForm({ language }: ContactFormProps) {
@@ -79,6 +55,7 @@ export default function ContactForm({ language }: ContactFormProps) {
     message: messageRef,
     preferredContact: preferredContactRef,
     consent: consentRef,
+    _general: { current: null },
   };
 
   useEffect(() => {
@@ -86,103 +63,6 @@ export default function ContactForm({ language }: ContactFormProps) {
       successRef.current.focus();
     }
   }, [submitStatus]);
-
-  const content = {
-    fa: {
-      title: "فرم تماس",
-      subtitle: "برای ارتباط با ما فرم زیر را تکمیل کنید",
-      fields: {
-        name: "نام و نام خانوادگی",
-        email: "ایمیل",
-        phone: "تلفن (اختیاری)",
-        company: "نام شرکت (اختیاری)",
-        subject: "موضوع",
-        message: "پیام",
-        preferredContact: "روش ارتباط ترجیحی",
-        consent: "سیاست حفظ حریم خصوصی را می‌پذیرم",
-      },
-      contactMethods: {
-        email: "ایمیل",
-        phone: "تلفن",
-      },
-      placeholders: {
-        name: "نام خود را وارد کنید",
-        email: "example@email.com",
-        phone: "+98 912 345 6789",
-        company: "نام شرکت خود را وارد کنید",
-        subject: "موضوع پیام خود را بنویسید",
-        message: "پیام خود را اینجا بنویسید...",
-      },
-      submit: "ارسال پیام",
-      submitting: "در حال ارسال...",
-      success: "پیام شما با موفقیت ارسال شد!",
-      successMessage: "ما در اسرع وقت با شما تماس خواهیم گرفت.",
-      error: "خطا در ارسال پیام",
-      errorMessage: "لطفاً دوباره تلاش کنید یا با ما تماس بگیرید.",
-      validation: {
-        nameMin: "نام باید حداقل ۲ کاراکتر باشد",
-        nameMax: "نام نباید بیشتر از ۱۰۰ کاراکتر باشد",
-        emailRequired: "ایمیل الزامی است",
-        emailInvalid: "ایمیل معتبر نیست",
-        emailMax: "ایمیل نباید بیشتر از ۲۵۴ کاراکتر باشد",
-        phoneInvalid: "شماره تلفن معتبر نیست",
-        phoneMax: "شماره تلفن نباید بیشتر از ۵۰ کاراکتر باشد",
-        companyMax: "نام شرکت نباید بیشتر از ۱۰۰ کاراکتر باشد",
-        subjectMin: "موضوع باید حداقل ۳ کاراکتر باشد",
-        subjectMax: "موضوع نباید بیشتر از ۲۰۰ کاراکتر باشد",
-        messageMin: "پیام باید حداقل ۱۰ کاراکتر باشد",
-        messageMax: "پیام نباید بیشتر از ۲۰۰۰ کاراکتر باشد",
-        consentRequired: "باید سیاست حفظ حریم خصوصی را بپذیرید",
-      },
-    },
-    en: {
-      title: "Contact Form",
-      subtitle: "Fill out the form below to get in touch with us",
-      fields: {
-        name: "Full Name",
-        email: "Email",
-        phone: "Phone (Optional)",
-        company: "Company Name (Optional)",
-        subject: "Subject",
-        message: "Message",
-        preferredContact: "Preferred Contact Method",
-        consent: "I accept the privacy policy",
-      },
-      contactMethods: {
-        email: "Email",
-        phone: "Phone",
-      },
-      placeholders: {
-        name: "Enter your name",
-        email: "example@email.com",
-        phone: "+98 912 345 6789",
-        company: "Enter your company name",
-        subject: "Enter your message subject",
-        message: "Write your message here...",
-      },
-      submit: "Send Message",
-      submitting: "Sending...",
-      success: "Your message has been sent successfully!",
-      successMessage: "We will get back to you as soon as possible.",
-      error: "Error sending message",
-      errorMessage: "Please try again or contact us directly.",
-      validation: {
-        nameMin: "Name must be at least 2 characters",
-        nameMax: "Name must be at most 100 characters",
-        emailRequired: "Email is required",
-        emailInvalid: "Invalid email address",
-        emailMax: "Email must be at most 254 characters",
-        phoneInvalid: "Invalid phone number",
-        phoneMax: "Phone number must be at most 50 characters",
-        companyMax: "Company name must be at most 100 characters",
-        subjectMin: "Subject must be at least 3 characters",
-        subjectMax: "Subject must be at most 200 characters",
-        messageMin: "Message must be at least 10 characters",
-        messageMax: "Message must be at most 2000 characters",
-        consentRequired: "You must accept the privacy policy",
-      },
-    },
-  };
 
   const currentContent = content[language];
 
@@ -193,42 +73,11 @@ export default function ContactForm({ language }: ContactFormProps) {
       return null;
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const newErrors: FormErrors = {};
-        error.issues.forEach((err) => {
-          const field = err.path[0] as keyof FormErrors;
-          // Map Zod error messages to localized messages
-          if (field === "name" && err.message.includes("at least 2")) {
-            newErrors[field] = currentContent.validation.nameMin;
-          } else if (field === "name" && err.message.includes("at most")) {
-            newErrors[field] = currentContent.validation.nameMax;
-          } else if (field === "email" && err.message.includes("email")) {
-            newErrors[field] = currentContent.validation.emailInvalid;
-          } else if (field === "email" && err.message.includes("at most")) {
-            newErrors[field] = currentContent.validation.emailMax;
-          } else if (field === "phone" && err.message.includes("Invalid")) {
-            newErrors[field] = currentContent.validation.phoneInvalid;
-          } else if (field === "phone" && err.message.includes("at most")) {
-            newErrors[field] = currentContent.validation.phoneMax;
-          } else if (field === "company" && err.message.includes("at most")) {
-            newErrors[field] = currentContent.validation.companyMax;
-          } else if (field === "subject" && err.message.includes("at least 3")) {
-            newErrors[field] = currentContent.validation.subjectMin;
-          } else if (field === "subject" && err.message.includes("at most")) {
-            newErrors[field] = currentContent.validation.subjectMax;
-          } else if (field === "message" && err.message.includes("at least 10")) {
-            newErrors[field] = currentContent.validation.messageMin;
-          } else if (field === "message" && err.message.includes("at most")) {
-            newErrors[field] = currentContent.validation.messageMax;
-          } else if (field === "consent") {
-            newErrors[field] = currentContent.validation.consentRequired;
-          } else {
-            newErrors[field] = err.message;
-          }
-        });
+        const newErrors = getLocalizedErrors(error, currentContent.validation);
         setErrors(newErrors);
         return newErrors;
       }
-      return { _general: "An unknown error occurred" } as unknown as FormErrors;
+      return { _general: "An unknown error occurred" };
     }
   };
 
@@ -240,8 +89,6 @@ export default function ContactForm({ language }: ContactFormProps) {
       // Focus on the first field with an error
       const firstErrorField = Object.keys(validationErrors)[0] as keyof FormErrors;
       if (firstErrorField && fieldRefs[firstErrorField]?.current) {
-         // Push the focus action to the end of the event loop to ensure
-         // it happens AFTER the render cycle triggered by setErrors.
          setTimeout(() => {
            fieldRefs[firstErrorField]!.current!.focus();
          }, 0);
@@ -295,6 +142,61 @@ export default function ContactForm({ language }: ContactFormProps) {
     }
   };
 
+  const renderInput = (
+    name: keyof Omit<ContactFormData, 'preferredContact' | 'consent' | 'message'>,
+    type: string,
+    isRequired: boolean,
+    inputRef: React.RefObject<HTMLInputElement | null>
+  ) => {
+    const errorMsg = errors[name];
+    return (
+      <div>
+        <label
+          htmlFor={name}
+          className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
+        >
+          {currentContent.fields[name]}
+          {isRequired && (
+            <span className="text-red-500 mx-1" aria-hidden="true">*</span>
+          )}
+        </label>
+        <input
+          ref={inputRef}
+          type={type}
+          id={name}
+          name={name}
+          value={formData[name]}
+          onChange={handleChange}
+          placeholder={currentContent.placeholders[name]}
+          aria-invalid={!!errorMsg}
+          aria-required={isRequired ? "true" : "false"}
+          aria-describedby={errorMsg ? `${name}-error` : undefined}
+          className={cn(
+            "w-full px-4 py-3 rounded-lg",
+            "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
+            "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
+            "border",
+            errorMsg ? "border-red-500/50" : "border-slate-700/50",
+            "focus:outline-none focus:border-teal-500/50 focus:ring-2 focus:ring-teal-500/20",
+            "transition-all duration-300"
+          )}
+        />
+        {errorMsg && (
+          <motion.p
+            id={`${name}-error`}
+            role="alert"
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
+          >
+            <AlertCircle className="w-3 h-3" aria-hidden="true" />
+            {errorMsg}
+          </motion.p>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-4">
       {/* Header */}
@@ -321,244 +223,46 @@ export default function ContactForm({ language }: ContactFormProps) {
               tabIndex={-1}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="text-center py-12 focus:outline-none"
+              className={cn(
+                "flex flex-col items-center justify-center py-12 text-center",
+                "focus:outline-none focus:ring-2 focus:ring-teal-500/50 rounded-xl"
+              )}
             >
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full backdrop-blur-md bg-teal-500/20 border border-teal-500/30 mb-6 shadow-[0_0_30px_rgba(20,184,166,0.3)]">
-                <CheckCircle className="w-10 h-10 text-teal-400" />
-              </div>
-              <h3 className="text-2xl font-bold text-slate-100 mb-3">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{
+                  delay: 0.2,
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 15,
+                }}
+              >
+                <CheckCircle className="w-16 h-16 text-teal-400 mb-4" />
+              </motion.div>
+              <h3 className="text-xl font-bold text-slate-100 mb-2">
                 {currentContent.success}
               </h3>
-              <p className="text-slate-400 mb-6">
+              <p className="text-slate-400">
                 {currentContent.successMessage}
               </p>
               <button
                 onClick={() => setSubmitStatus("idle")}
-                className={cn(
-                  "px-6 py-2.5 rounded-lg",
-                  "backdrop-blur-md bg-slate-800/40",
-                  "border border-slate-700/50",
-                  "text-teal-400 font-semibold",
-                  "hover:bg-slate-800/60 hover:border-teal-500/50",
-                  "transition-all duration-300"
-                )}
+                className="mt-8 text-teal-400 hover:text-teal-300 font-medium transition-colors"
               >
-                {language === "fa" ? "ارسال پیام جدید" : "Send New Message"}
+                {language === "fa" ? "ارسال پیام دیگر" : "Send another message"}
               </button>
             </motion.div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Name & Email */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Name */}
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
-                  >
-                    {currentContent.fields.name} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
-                  </label>
-                  <input
-                    ref={nameRef}
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder={currentContent.placeholders.name}
-                    aria-invalid={!!errors.name}
-                    aria-required="true"
-                    aria-describedby={errors.name ? "name-error" : undefined}
-                    className={cn(
-                      "w-full px-4 py-3 rounded-lg",
-                      "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
-                      "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
-                      "border",
-                      errors.name
-                        ? "border-red-500/50"
-                        : "border-slate-700/50",
-                      "focus:outline-none focus:border-teal-500/50 focus:ring-2 focus:ring-teal-500/20",
-                      "transition-all duration-300"
-                    )}
-                  />
-                  {errors.name && (
-                    <motion.p
-                      id="name-error"
-                      role="alert"
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
-                    >
-                      <AlertCircle className="w-3 h-3" aria-hidden="true" />
-                      {errors.name}
-                    </motion.p>
-                  )}
-                </div>
-
-                {/* Email */}
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
-                  >
-                    {currentContent.fields.email} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
-                  </label>
-                  <input
-                    ref={emailRef}
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    placeholder={currentContent.placeholders.email}
-                    aria-invalid={errors.email ? "true" : "false"}
-                    aria-required="true"
-                    aria-describedby={errors.email ? "email-error" : undefined}
-                    className={cn(
-                      "w-full px-4 py-3 rounded-lg",
-                      "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
-                      "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
-                      "border",
-                      errors.email
-                        ? "border-red-500/50"
-                        : "border-slate-700/50",
-                      "focus:outline-none focus:border-teal-500/50 focus:ring-2 focus:ring-teal-500/20",
-                      "transition-all duration-300"
-                    )}
-                  />
-                  {errors.email && (
-                    <motion.p
-                      id="email-error"
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
-                      role="alert"
-                    >
-                      <AlertCircle className="w-3 h-3" aria-hidden="true" />
-                      {errors.email}
-                    </motion.p>
-                  )}
-                </div>
+            <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {renderInput("name", "text", true, nameRef)}
+                {renderInput("email", "email", true, emailRef)}
+                {renderInput("phone", "tel", false, phoneRef)}
+                {renderInput("company", "text", false, companyRef)}
               </div>
 
-              {/* Phone & Company */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Phone */}
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
-                  >
-                    {currentContent.fields.phone}
-                  </label>
-                  <input
-                    ref={phoneRef}
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder={currentContent.placeholders.phone}
-                    aria-invalid={!!errors.phone}
-                    aria-describedby={errors.phone ? "phone-error" : undefined}
-                    className={cn(
-                      "w-full px-4 py-3 rounded-lg",
-                      "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
-                      "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
-                      "border",
-                      errors.phone
-                        ? "border-red-500/50"
-                        : "border-slate-700/50",
-                      "focus:outline-none focus:border-teal-500/50 focus:ring-2 focus:ring-teal-500/20",
-                      "transition-all duration-300"
-                    )}
-                  />
-                  {errors.phone && (
-                    <motion.p
-                      id="phone-error"
-                      role="alert"
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
-                    >
-                      <AlertCircle className="w-3 h-3" aria-hidden="true" />
-                      {errors.phone}
-                    </motion.p>
-                  )}
-                </div>
-
-                {/* Company */}
-                <div>
-                  <label
-                    htmlFor="company"
-                    className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
-                  >
-                    {currentContent.fields.company}
-                  </label>
-                  <input
-                    ref={companyRef}
-                    type="text"
-                    id="company"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                    placeholder={currentContent.placeholders.company}
-                    className={cn(
-                      "w-full px-4 py-3 rounded-lg",
-                      "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
-                      "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
-                      "border border-slate-700/50",
-                      "focus:outline-none focus:border-teal-500/50 focus:ring-2 focus:ring-teal-500/20",
-                      "transition-all duration-300"
-                    )}
-                  />
-                </div>
-              </div>
-
-              {/* Subject */}
-              <div>
-                <label
-                  htmlFor="subject"
-                  className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wide"
-                >
-                  {currentContent.fields.subject} <span className="text-red-500 mx-1" aria-hidden="true">*</span>
-                </label>
-                <input
-                  ref={subjectRef}
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  placeholder={currentContent.placeholders.subject}
-                  aria-invalid={!!errors.subject}
-                  aria-required="true"
-                  aria-describedby={errors.subject ? "subject-error" : undefined}
-                  className={cn(
-                    "w-full px-4 py-3 rounded-lg",
-                    "min-h-[44px] text-base", // Ensure minimum touch target and prevent zoom on iOS
-                    "backdrop-blur-md bg-slate-800/40 text-slate-100 placeholder-slate-500",
-                    "border",
-                    errors.subject
-                      ? "border-red-500/50"
-                      : "border-slate-700/50",
-                    "focus:outline-none focus:border-teal-500/50 focus:ring-2 focus:ring-teal-500/20",
-                    "transition-all duration-300"
-                  )}
-                />
-                {errors.subject && (
-                  <motion.p
-                    id="subject-error"
-                    role="alert"
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-1.5 text-xs text-red-400 flex items-center gap-1"
-                  >
-                    <AlertCircle className="w-3 h-3" aria-hidden="true" />
-                    {errors.subject}
-                  </motion.p>
-                )}
-              </div>
+              {renderInput("subject", "text", true, subjectRef)}
 
               {/* Message */}
               <div>
