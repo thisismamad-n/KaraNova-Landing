@@ -42,6 +42,7 @@ export default function FAQAccordion({ items, language }: FAQAccordionProps) {
         >
           {/* Question Button */}
           <button
+            type="button"
             onClick={() => toggleItem(item.id)}
             className={cn(
               "w-full flex items-center justify-between gap-4",
